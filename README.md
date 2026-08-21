@@ -1,118 +1,286 @@
-# Awesome Claude Skills [![Awesome](https://awesome.re/badge-flat.svg)](https://awesome.re)
+<div align="center">
 
-> A curated blueprint of the best Claude **Skills**, **MCP servers**, and **Claude Code plugins** on GitHub — from official Anthropic repositories to the heaviest-hitting community directories.
+# ClaudeCode-OneShot
 
-Skills are *procedural knowledge*: reusable instruction sets that Claude loads on demand. MCP servers are *access*: connections to databases, APIs, and tools. Plugins *extend the CLI*. This repo keeps the three cleanly separated so you can find what you need fast.
+### The curated blueprint for building the ultimate Claude Skills repository
 
-## Contents
+*Skills tell Claude **how** to work. MCP servers decide **what** it can reach. Plugins extend **where** it runs.*
+*This repo curates the best of all three — and shows you how to write your own.*
 
-- [How Skills Work](#how-skills-work)
-- [Core Mega-Repositories](#core-mega-repositories-the-hall-of-fame)
-- [Top Standalone Skills](#top-standalone-skills)
-  - [Development & Code](#development--code)
-  - [Research & Data Analysis](#research--data-analysis)
-  - [Communication & Branding](#communication--branding)
-- [Essential MCP Servers](#essential-mcp-servers)
-- [Claude Code Plugins](#claude-code-plugins)
-- [Repository Layout](#repository-layout)
-- [Writing Your Own Skill](#writing-your-own-skill)
-- [Contributing](#contributing)
+[![Awesome](https://awesome.re/badge-flat2.svg)](https://awesome.re)
+[![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg?style=flat-square)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
+[![Skills](https://img.shields.io/badge/skills-8_curated-8A63D2?style=flat-square)](#-the-skill-index)
+[![MCP](https://img.shields.io/badge/MCP-4_servers-0EA5E9?style=flat-square)](#-mcp-servers)
 
-## How Skills Work
+[**Quick Start**](#-quick-start) · [**Hall of Fame**](#-hall-of-fame) · [**Skill Index**](#-the-skill-index) · [**MCP Servers**](#-mcp-servers) · [**Write a Skill**](#-anatomy-of-a-skill-that-actually-fires) · [**Contribute**](CONTRIBUTING.md)
 
-Skills use a **progressive disclosure architecture**: the metadata (name + description) loads first, and the full instruction set loads only when Claude determines the skill applies to the task at hand. That makes the `description` field the single most important line in a skill — it is the trigger.
+</div>
 
-Keep instructions declarative, keep them scoped, and include few-shot examples so Claude knows what success looks like. See [`templates/SKILL_TEMPLATE.md`](templates/SKILL_TEMPLATE.md).
+---
 
-## Core Mega-Repositories (The Hall of Fame)
+## Why this exists
 
-The primary source repositories driving the Claude ecosystem.
+Claude's ecosystem has three moving parts that everyone conflates. Skills are markdown files
+containing procedural knowledge. MCP servers are processes granting access to the outside world.
+Plugins are CLI extensions. Confusing them is the single most common reason people's setups don't
+work.
 
-| Repository | What's in it |
-| --- | --- |
-| [anthropics/skills](https://github.com/anthropics/skills) | **Official.** The standard agent skills specification, document-creation skills (`docx`, `pdf`, `pptx`, `xlsx`), and skill templates. |
-| [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills) | A massive directory of 1,000+ practical skills and plugins, handling auth and connections to 1,000+ apps via the Composio gateway. |
-| [GetBindu/awesome-claude-code-and-skills](https://github.com/GetBindu/awesome-claude-code-and-skills) | 67 MIT-licensed skills, 368 persona-based skills (e.g. `startup-cto`), 76 expert agents, and 859 Python tools. |
-| [travisvn/awesome-claude-skills](https://github.com/travisvn/awesome-claude-skills) | Heavily starred community list covering progressive disclosure architecture, UI workflows, and skill vetting. |
-| [ai-for-developers/awesome-claude](https://github.com/ai-for-developers/awesome-claude) | SDKs, agent frameworks (LangGraph, CrewAI), and prompt architectures for Claude. |
-| [win4r/Awesome-Claude-MCP-Servers](https://github.com/win4r/Awesome-Claude-MCP-Servers) | The premier curated list of Model Context Protocol servers optimized for Claude. |
+|  | **Skills** | **MCP Servers** | **Plugins** |
+|---|---|---|---|
+| **Answers** | *How* should Claude do this? | *What* can Claude reach? | *Where* does Claude run? |
+| **Format** | `SKILL.md` + frontmatter | A running process (stdio/HTTP) | CLI package |
+| **Gives you** | Procedure, standards, taste | Data, APIs, side effects | Commands, hooks, bundled tools |
+| **Loads** | On demand, when relevant | At session start | At install time |
+| **Example** | "Profile any CSV like this" | "Query this Postgres DB" | "Persist tasks across sessions" |
+| **Lives in** | [`skills/`](skills) | [`mcp-servers/`](mcp-servers) | [`claude-code-plugins/`](claude-code-plugins) |
 
-## Top Standalone Skills
+> [!TIP]
+> If you're deciding which one you need: reach for a **skill** when Claude *can* already do the task
+> but does it inconsistently. Reach for an **MCP server** when Claude simply cannot see the thing
+> you're talking about.
 
-### Development & Code
+---
 
-- **web-artifacts-builder** — Instructs Claude on building complex web apps for the claude.ai interface using React, Tailwind CSS, and shadcn/ui.
-- **root-cause-tracing** — A methodical skill for when errors surface deep in execution: forces Claude to trace backward to the original trigger instead of patching the symptom.
-- **ios-simulator-skill** — Lets Claude Code drive the iOS Simulator directly, preferring navigation via accessibility APIs over screenshots for better performance.
-- **test-fixing** — Detects failing tests automatically and proposes patches or fixes.
+## 🚀 Quick Start
 
-### Research & Data Analysis
+Skills are just folders. Drop one in the right place and Claude finds it.
 
-- **recursive-research** — Autonomous research up to PhD level, with source tiering, Munger inversion for autonomous decisions, and disk checkpointing to survive context compaction.
-- **csv-data-summarizer-claude-skill** — Analyzes CSV files for columns, distributions, missing data, and correlations without requiring user prompts.
+```bash
+# Personal — available in every project
+mkdir -p ~/.claude/skills/my-skill && cp templates/SKILL_TEMPLATE.md ~/.claude/skills/my-skill/SKILL.md
 
-### Communication & Branding
-
-- **brand-guidelines** — Applies official brand colors, fonts, and typography to artifacts for a consistent visual identity.
-- **internal-comms** — Writes company newsletters, status reports, and FAQs using company-specific formats.
-
-## Essential MCP Servers
-
-| Integration | Description |
-| --- | --- |
-| [`@modelcontextprotocol/server-postgres`](https://github.com/modelcontextprotocol/servers) | Executes safe, read-only SQL queries against PostgreSQL databases with schema inspection. |
-| [`@modelcontextprotocol/server-memory`](https://github.com/modelcontextprotocol/servers) | Gives Claude a knowledge-graph-based persistent memory system. |
-| [`@modelcontextprotocol/server-github`](https://github.com/modelcontextprotocol/servers) | Official integration for reading repositories, issues, and PRs via the GitHub API. |
-| [exa-labs/exa-mcp-server](https://github.com/exa-labs/exa-mcp-server) | Real-time web search using the Exa AI Search API. |
-
-## Claude Code Plugins
-
-- **backlog** — Pure TypeScript plugin providing persistent cross-session task management, with 24 MCP tools for managing dependencies and docs.
-- **AgentLint** — Runs 33 evidence-backed checks across your repository to ensure it is optimized for AI-agent compatibility.
-- **mcp-builder** — Guides the creation of high-quality MCP servers for integrating external APIs and services with LLMs.
-
-## Repository Layout
-
-```text
-ClaudeCode-OneShot/
-├── README.md
-├── CONTRIBUTING.md
-├── CODE_OF_CONDUCT.md
-├── skills/
-│   ├── development/
-│   ├── data-and-analysis/
-│   ├── business-and-comms/
-│   └── security-and-qa/
-├── mcp-servers/
-│   ├── databases/
-│   └── tools-and-utils/
-├── claude-code-plugins/
-└── templates/
-    └── SKILL_TEMPLATE.md
+# Project — committed to the repo, shared with your team
+mkdir -p .claude/skills/my-skill && cp templates/SKILL_TEMPLATE.md .claude/skills/my-skill/SKILL.md
 ```
 
-Procedural knowledge (Skills) stays separate from external integrations (MCPs) and terminal workflows (Plugins).
+Then edit the frontmatter. That's the whole install step — no build, no registry, no restart.
 
-## Writing Your Own Skill
+<details>
+<summary><b>Adding an MCP server instead</b></summary>
 
-Every skill must follow the official YAML frontmatter specification so it works in both the Claude web interface and the Claude Code CLI:
+MCP servers need a config entry so Claude knows how to launch them:
+
+```json
+{
+  "mcpServers": {
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "${DATABASE_URL}"]
+    }
+  }
+}
+```
+
+Keep credentials in environment variables and reference them with `${VAR}` — never paste a live
+connection string into a file you intend to commit.
+
+</details>
+
+---
+
+## 🧠 How Skills Actually Work
+
+Skills use **progressive disclosure**. Claude does not read your whole skill library on every turn —
+it reads only the metadata, then pulls the full instruction set for the one skill that matches.
+
+```mermaid
+flowchart LR
+    A["User request"] --> B["Scan skill<br/>metadata only"]
+    B -->|"name + description<br/>~100 tokens each"| C{"Does any<br/>description<br/>match?"}
+    C -->|"No"| D["Answer normally"]
+    C -->|"Yes"| E["Load full SKILL.md<br/>instructions, examples, scripts"]
+    E --> F["Execute the procedure"]
+
+    style B fill:#1F2937,stroke:#111827,color:#fff
+    style A fill:#8A63D2,stroke:#6D28D9,color:#fff
+    style C fill:#0EA5E9,stroke:#0369A1,color:#fff
+    style E fill:#10B981,stroke:#047857,color:#fff
+    style D fill:#6B7280,stroke:#374151,color:#fff
+    style F fill:#10B981,stroke:#047857,color:#fff
+```
+
+**The consequence, and it is the whole ballgame:** the `description` field is the only part of your
+skill Claude sees when deciding whether to use it. A brilliant skill with a vague description is a
+skill that never runs.
+
+---
+
+## 🏆 Hall of Fame
+
+The mega-repositories driving the Claude ecosystem. Start here.
+
+| Repository | Why it matters |
+|---|---|
+| **[anthropics/skills](https://github.com/anthropics/skills)** <br/> `official` | The canonical agent-skills specification, the document-creation skills (`docx`, `pdf`, `pptx`, `xlsx`), and reference templates. When the spec and a blog post disagree, this repo wins. |
+| **[ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills)** <br/> `1000+ skills` | Vast directory of practical skills and plugins, with auth and connections to 1,000+ apps handled through the Composio gateway. |
+| **[GetBindu/awesome-claude-code-and-skills](https://github.com/GetBindu/awesome-claude-code-and-skills)** <br/> `personas` | 67 MIT-licensed skills, 368 persona-based skills (`startup-cto` and friends), 76 expert agents, 859 Python tools. |
+| **[travisvn/awesome-claude-skills](https://github.com/travisvn/awesome-claude-skills)** <br/> `community` | Heavily starred list with genuinely good writing on progressive-disclosure architecture, UI workflows, and how to vet a skill before trusting it. |
+| **[ai-for-developers/awesome-claude](https://github.com/ai-for-developers/awesome-claude)** <br/> `frameworks` | SDKs, agent frameworks (LangGraph, CrewAI), and prompt architectures. Zoom out from skills to whole-system design. |
+| **[win4r/Awesome-Claude-MCP-Servers](https://github.com/win4r/Awesome-Claude-MCP-Servers)** <br/> `MCP` | The premier curated MCP list, filtered specifically for Claude compatibility. |
+
+---
+
+## 📚 The Skill Index
+
+### 💻 Development & Code
+
+| Skill | What it does | Reach for it when |
+|---|---|---|
+| **web-artifacts-builder** | Builds complex web apps for the claude.ai interface using React, Tailwind, and shadcn/ui | You want an artifact that looks designed, not defaulted |
+| **root-cause-tracing** | Traces backward from a deep stack error to the original trigger | The exception fires four layers below the actual bug |
+| **ios-simulator-skill** | Drives the iOS Simulator, preferring accessibility APIs over screenshots | You need real device interaction, not a static render |
+| **test-fixing** | Detects failing tests and proposes patches | The suite is red and you want a diagnosis, not a rerun |
+
+> [!NOTE]
+> **root-cause-tracing** is the sleeper hit of this category. Most debugging failures aren't reasoning
+> failures — they're the model patching the first symptom it sees. A skill that mandates tracing
+> backward changes the outcome more than a smarter model does.
+
+### 📊 Research & Data Analysis
+
+| Skill | What it does | Reach for it when |
+|---|---|---|
+| **recursive-research** | Autonomous multi-hop research with source tiering, Munger inversion for decisions, and disk checkpointing that survives context compaction | The question needs 40 sources, not 4 |
+| **[csv-data-summarizer](skills/data-and-analysis/csv-data-summarizer)** ✅ | Profiles a CSV for dtypes, distributions, null density, and correlations — unprompted | Someone hands you a file and says "what's in this?" |
+
+✅ = full implementation included in this repo, ready to copy.
+
+### 💬 Communication & Branding
+
+| Skill | What it does | Reach for it when |
+|---|---|---|
+| **brand-guidelines** | Applies official brand colors, fonts, and typography to artifacts | Every deck and artifact should look like it came from one company |
+| **internal-comms** | Drafts newsletters, status reports, and FAQs in house format | You write the same update every week in a slightly different voice |
+
+### 🔒 Security & QA
+
+Open for contributions — threat modeling, dependency auditing, and test-strategy skills all belong
+here. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+---
+
+## 🔌 MCP Servers
+
+| Server | Capability | Notes |
+|---|---|---|
+| [`server-postgres`](https://github.com/modelcontextprotocol/servers) | Read-only SQL + schema inspection | Read-only by design — a safe default for pointing an agent at production |
+| [`server-memory`](https://github.com/modelcontextprotocol/servers) | Knowledge-graph persistent memory | State that survives across sessions |
+| [`server-github`](https://github.com/modelcontextprotocol/servers) | Repos, issues, PRs via the GitHub API | Official integration |
+| [`exa-mcp-server`](https://github.com/exa-labs/exa-mcp-server) | Real-time web search | Exa AI Search API; needs `EXA_API_KEY` |
+
+> [!WARNING]
+> An MCP server runs with whatever credentials you hand it. Scope the database user, prefer
+> read-only, and keep keys in the environment — not in a committed config file.
+
+Config examples: [`mcp-servers/databases`](mcp-servers/databases) · [`mcp-servers/tools-and-utils`](mcp-servers/tools-and-utils)
+
+---
+
+## 🧩 Claude Code Plugins
+
+| Plugin | What it adds |
+|---|---|
+| **backlog** | Persistent cross-session task management in pure TypeScript, exposing 24 MCP tools for dependencies and docs |
+| **AgentLint** | 33 evidence-backed checks scoring how agent-ready your repository is |
+| **mcp-builder** | Guided workflow for building high-quality MCP servers around external APIs |
+
+---
+
+## ✍️ Anatomy of a Skill That Actually Fires
+
+Every skill needs valid YAML frontmatter to work in both the Claude web interface and the Claude
+Code CLI:
 
 ```markdown
 ---
 name: your-skill-name
-description: A clear, concise description of what the skill does and exactly when Claude should invoke it (max 200 characters).
+description: What it does, and exactly when Claude should invoke it. Max 200 characters.
 dependencies: python>=3.8, pandas>=1.5.0
 ---
 
 # Detailed Instructions
 ```
 
-Copy [`templates/SKILL_TEMPLATE.md`](templates/SKILL_TEMPLATE.md) into the right category folder under `skills/` and fill it in.
+### The description is the trigger
 
-## Contributing
+| | Description | Outcome |
+|---|---|---|
+| ❌ | `A powerful skill for working with data.` | Never fires. Matches everything, so it means nothing. |
+| ❌ | `Data analysis helper.` | Never fires. States a category, not a condition. |
+| ✅ | `Profiles a CSV for column types, distributions, missing data, and correlations. Use when a user shares a tabular file or asks for a data profile.` | Fires reliably. Names the trigger *and* the artifact. |
 
-PRs welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) first — every submission is vetted against the template and the description-quality bar. By participating you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).
+The pattern: **what it does** + **when to invoke it**. Both halves, under 200 characters.
 
-## License
+### Structure of the body
 
-Content in this repository is released under [CC0 1.0](LICENSE) (public domain). Linked projects retain their own licenses.
+| Section | Purpose | Skippable? |
+|---|---|---|
+| `# Detailed Instructions` | Declarative rules, imperative voice | No |
+| `## Overview` | The goal and the knowledge enclosed | No |
+| `## Workflow Rules` | Numbered, ordered steps | No |
+| `## Anti-Patterns` | What Claude must *not* do | **No — this is the load-bearing one** |
+| `## Examples` | Few-shot: a request and the exact expected output | No |
+
+> [!IMPORTANT]
+> Skills without an **Anti-Patterns** section fail in the field more often than skills with weak
+> instructions. Stating what not to do removes the failure modes that positive instructions alone
+> never quite eliminate.
+
+Start from [`templates/SKILL_TEMPLATE.md`](templates/SKILL_TEMPLATE.md), and read
+[`csv-data-summarizer`](skills/data-and-analysis/csv-data-summarizer/SKILL.md) as a worked example.
+
+---
+
+## 🗂 Repository Layout
+
+Procedural knowledge, external access, and terminal tooling stay strictly separated.
+
+```text
+ClaudeCode-OneShot/
+├── README.md
+├── CONTRIBUTING.md              # submission rules + review bar
+├── CODE_OF_CONDUCT.md
+├── skills/                      # procedural knowledge
+│   ├── development/
+│   ├── data-and-analysis/       # ← csv-data-summarizer lives here
+│   ├── business-and-comms/
+│   └── security-and-qa/
+├── mcp-servers/                 # external access
+│   ├── databases/
+│   └── tools-and-utils/
+├── claude-code-plugins/         # CLI extensions
+└── templates/
+    └── SKILL_TEMPLATE.md        # start every skill here
+```
+
+---
+
+## 🤝 Contributing
+
+Two kinds of PR: **a link** for the curated lists, or **a skill** that lives in this repo.
+
+Every submission is vetted against the template, and the `description` field gets the most scrutiny —
+it decides whether the skill is ever used. Read [CONTRIBUTING.md](CONTRIBUTING.md) for the full
+checklist. By participating you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+<details>
+<summary><b>The 60-second version of the review bar</b></summary>
+
+- `name` is kebab-case and matches the folder name
+- `description` is under 200 characters and names its trigger condition
+- Frontmatter parses as valid YAML
+- Every template section is filled in — an empty `## Examples` is an automatic request for changes
+- You have run the skill at least once in Claude Code or the web interface
+
+</details>
+
+---
+
+<div align="center">
+
+**[⬆ Back to top](#claudecode-oneshot)**
+
+Released under [CC0 1.0](LICENSE) — public domain. Linked projects keep their own licenses.
+
+</div>
