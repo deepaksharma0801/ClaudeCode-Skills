@@ -81,7 +81,7 @@ connection string into a file you intend to commit.
 
 ## 🧠 How Skills Actually Work
 
-Skills use **progressive disclosure**. Claude does not read your whole skill library on every turn —
+The Skills use **progressive disclosure**. Claude does not read your whole skill library on every turn —
 it reads only the metadata, then pulls the full instruction set for the one skill that matches.
 
 ```mermaid
