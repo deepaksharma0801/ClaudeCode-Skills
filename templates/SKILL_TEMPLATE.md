@@ -17,7 +17,7 @@ dependencies: python>=3.8, pandas>=1.5.0
 1. [Step one]
 2. [Step two]
 
-## Anti-Patterns (What NOT to do)
+## Anti-Patterns (What NOT to do) (even more important that you deifne it properly)
 
 * [Rule one]
 
