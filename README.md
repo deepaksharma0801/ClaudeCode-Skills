@@ -19,7 +19,7 @@
 
 ---
 
-## Why this exists
+## Why this exists in this day n age
 
 Claude's ecosystem has three moving parts that everyone conflates. Skills are markdown files
 containing procedural knowledge. MCP servers are processes granting access to the outside world.
