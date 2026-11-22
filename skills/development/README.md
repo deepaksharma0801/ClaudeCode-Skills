@@ -10,6 +10,7 @@ Skills for writing, debugging, and shipping code.
 - **[dockerfile-optimizer](dockerfile-optimizer)** — Rewrite a Dockerfile for cached builds, multi-stage size savings, and a non-root user.
 - **[regex-builder](regex-builder)** — Build a regex from a description and prove it against matching and non-matching cases.
 - **[api-design-review](api-design-review)** — Review an API design for naming, status codes, errors, pagination, and breaking changes.
+- **[performance-investigation](performance-investigation)** — Measure, profile the hot path, and prove each speedup with before/after numbers.
 
 More from the community (web-artifacts-builder, systematic-debugging, test-fixing, ios-simulator-skill)
 is listed in the [main README](../../README.md#community-picks).
