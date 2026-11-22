@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="#skills"><img src="https://img.shields.io/badge/skills-30-D97757?style=flat-square&labelColor=16141F" alt="30 skills"></a>
+  <a href="#skills"><img src="https://img.shields.io/badge/skills-38-D97757?style=flat-square&labelColor=16141F" alt="38 skills"></a>
   <a href=".github/workflows/validate-skills.yml"><img src="https://img.shields.io/github/actions/workflow/status/deepaksharma0801/ClaudeCode-Skills/validate-skills.yml?branch=main&style=flat-square&label=validate&labelColor=16141F" alt="Validate skills"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-CC0_1.0-8B8798?style=flat-square&labelColor=16141F" alt="CC0 1.0"></a>
   <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-8B8798?style=flat-square&labelColor=16141F" alt="PRs welcome"></a>
@@ -252,10 +252,10 @@ and keep keys in environment variables, never in a committed config. More in
 ```text
 ClaudeCode-Skills/
 ├── skills/
-│   ├── development/            9 skills
-│   ├── data-and-analysis/      7 skills
-│   ├── security-and-qa/        8 skills
-│   └── business-and-comms/     6 skills
+│   ├── development/            11 skills
+│   ├── data-and-analysis/      9 skills
+│   ├── security-and-qa/        10 skills
+│   └── business-and-comms/     8 skills
 ├── templates/SKILL_TEMPLATE.md
 ├── scripts/validate_skills.py  runs in CI on every PR
 ├── mcp-servers/                MCP config examples
