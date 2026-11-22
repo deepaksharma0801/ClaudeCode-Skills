@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="#skills"><img src="https://img.shields.io/badge/skills-30-D97757?style=flat-square&labelColor=16141F" alt="30 skills"></a>
+  <a href="#skills"><img src="https://img.shields.io/badge/skills-38-D97757?style=flat-square&labelColor=16141F" alt="38 skills"></a>
   <a href=".github/workflows/validate-skills.yml"><img src="https://img.shields.io/github/actions/workflow/status/deepaksharma0801/ClaudeCode-Skills/validate-skills.yml?branch=main&style=flat-square&label=validate&labelColor=16141F" alt="Validate skills"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-CC0_1.0-8B8798?style=flat-square&labelColor=16141F" alt="CC0 1.0"></a>
   <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-8B8798?style=flat-square&labelColor=16141F" alt="PRs welcome"></a>
@@ -70,6 +70,8 @@ No build step and no registry. Claude picks the skill up on the next session.
 | [`regex-builder`](skills/development/regex-builder/SKILL.md) | Builds a regex from a description and proves it against passing and failing cases |
 | [`api-design-review`](skills/development/api-design-review/SKILL.md) | Reviews an API design for naming, status codes, errors, pagination, and breaking changes |
 | [`performance-investigation`](skills/development/performance-investigation/SKILL.md) | Measures first, profiles the hot path, and proves each speedup with before/after numbers |
+| [`db-migration-safety`](skills/development/db-migration-safety/SKILL.md) | Lints Postgres migrations for locks and breaking changes and rewrites them as safe steps. Ships `scripts/lint_migration.py` |
+| [`ci-failure-debugger`](skills/development/ci-failure-debugger/SKILL.md) | Finds the first real error in a failing CI run, classifies it, and fixes the cause |
 
 ### Data & Analysis
 
@@ -82,6 +84,8 @@ No build step and no registry. Claude picks the skill up on the next session.
 | [`log-triage`](skills/data-and-analysis/log-triage/SKILL.md) | Groups log lines into patterns, ranks them by count and onset, and finds the likely cause |
 | [`data-quality-checks`](skills/data-and-analysis/data-quality-checks/SKILL.md) | Designs freshness, volume, uniqueness, and integrity tests for a table or pipeline |
 | [`chart-critique`](skills/data-and-analysis/chart-critique/SKILL.md) | Catches misleading scales and wrong chart types, then proposes a clearer redesign |
+| [`cohort-retention-analysis`](skills/data-and-analysis/cohort-retention-analysis/SKILL.md) | Builds cohort retention tables without fake drop-off from unfinished periods. Ships `scripts/retention.py` |
+| [`funnel-analysis`](skills/data-and-analysis/funnel-analysis/SKILL.md) | Ordered funnels with conversion windows, the biggest leak, and the segment where it is worst |
 
 ### Security & QA
 
@@ -95,6 +99,8 @@ No build step and no registry. Claude picks the skill up on the next session.
 | [`accessibility-audit`](skills/security-and-qa/accessibility-audit/SKILL.md) | Audits a page against WCAG 2.2 AA with located issues and code fixes |
 | [`flaky-test-investigator`](skills/security-and-qa/flaky-test-investigator/SKILL.md) | Reproduces an intermittent test failure, classifies the cause, and makes it deterministic |
 | [`privacy-data-review`](skills/security-and-qa/privacy-data-review/SKILL.md) | Traces personal data through a change and flags leaks, over-collection, and missing deletion |
+| [`security-headers-check`](skills/security-and-qa/security-headers-check/SKILL.md) | Grades security headers and cookies, then writes the config that fixes them. Ships `scripts/check_headers.py` |
+| [`security-finding-triage`](skills/security-and-qa/security-finding-triage/SKILL.md) | Traces scanner findings from source to sink to separate real bugs from false positives |
 
 ### Business & Communication
 
@@ -106,6 +112,8 @@ No build step and no registry. Claude picks the skill up on the next session.
 | [`release-notes-writer`](skills/business-and-comms/release-notes-writer/SKILL.md) | Turns commits and PRs into user-facing release notes, breaking changes first |
 | [`design-doc-writer`](skills/business-and-comms/design-doc-writer/SKILL.md) | Writes a design doc with goals, non-goals, alternatives, risks, and a rollout plan |
 | [`decision-memo`](skills/business-and-comms/decision-memo/SKILL.md) | Frames a choice, compares options on agreed criteria, and leads with a recommendation |
+| [`explain-for-stakeholders`](skills/business-and-comms/explain-for-stakeholders/SKILL.md) | Rewrites technical updates for non-engineers, with the bottom line first and a clear ask |
+| [`code-review-comments`](skills/business-and-comms/code-review-comments/SKILL.md) | Writes labeled, kind, actionable review comments so authors know what blocks the merge |
 
 <br>
 
@@ -250,10 +258,10 @@ and keep keys in environment variables, never in a committed config. More in
 ```text
 ClaudeCode-Skills/
 ├── skills/
-│   ├── development/            9 skills
-│   ├── data-and-analysis/      7 skills
-│   ├── security-and-qa/        8 skills
-│   └── business-and-comms/     6 skills
+│   ├── development/            11 skills
+│   ├── data-and-analysis/      9 skills
+│   ├── security-and-qa/        10 skills
+│   └── business-and-comms/     8 skills
 ├── templates/SKILL_TEMPLATE.md
 ├── scripts/validate_skills.py  runs in CI on every PR
 ├── mcp-servers/                MCP config examples
