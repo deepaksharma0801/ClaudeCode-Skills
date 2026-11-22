@@ -68,6 +68,8 @@ No build step and no registry. Claude picks the skill up on the next session.
 | [`pr-description-writer`](skills/development/pr-description-writer/SKILL.md) | Writes a PR title and description — summary, changes, risk, testing — from the real diff |
 | [`dockerfile-optimizer`](skills/development/dockerfile-optimizer/SKILL.md) | Rewrites a Dockerfile for cached builds, multi-stage size savings, and a non-root user |
 | [`regex-builder`](skills/development/regex-builder/SKILL.md) | Builds a regex from a description and proves it against passing and failing cases |
+| [`api-design-review`](skills/development/api-design-review/SKILL.md) | Reviews an API design for naming, status codes, errors, pagination, and breaking changes |
+| [`performance-investigation`](skills/development/performance-investigation/SKILL.md) | Measures first, profiles the hot path, and proves each speedup with before/after numbers |
 
 ### Data & Analysis
 
@@ -78,6 +80,8 @@ No build step and no registry. Claude picks the skill up on the next session.
 | [`metric-definition-writer`](skills/data-and-analysis/metric-definition-writer/SKILL.md) | Turns a vague KPI into a precise definition with edge cases and reference SQL |
 | [`ab-test-readout`](skills/data-and-analysis/ab-test-readout/SKILL.md) | Checks the experiment, computes lift with confidence intervals, and makes a ship call |
 | [`log-triage`](skills/data-and-analysis/log-triage/SKILL.md) | Groups log lines into patterns, ranks them by count and onset, and finds the likely cause |
+| [`data-quality-checks`](skills/data-and-analysis/data-quality-checks/SKILL.md) | Designs freshness, volume, uniqueness, and integrity tests for a table or pipeline |
+| [`chart-critique`](skills/data-and-analysis/chart-critique/SKILL.md) | Catches misleading scales and wrong chart types, then proposes a clearer redesign |
 
 ### Security & QA
 
@@ -89,6 +93,8 @@ No build step and no registry. Claude picks the skill up on the next session.
 | [`dependency-audit`](skills/security-and-qa/dependency-audit/SKILL.md) | Runs the right audit tool per ecosystem and ranks fixes with exact upgrade commands |
 | [`test-plan-writer`](skills/security-and-qa/test-plan-writer/SKILL.md) | Risk-based test plan with level and priority per case, then writes the must-haves |
 | [`accessibility-audit`](skills/security-and-qa/accessibility-audit/SKILL.md) | Audits a page against WCAG 2.2 AA with located issues and code fixes |
+| [`flaky-test-investigator`](skills/security-and-qa/flaky-test-investigator/SKILL.md) | Reproduces an intermittent test failure, classifies the cause, and makes it deterministic |
+| [`privacy-data-review`](skills/security-and-qa/privacy-data-review/SKILL.md) | Traces personal data through a change and flags leaks, over-collection, and missing deletion |
 
 ### Business & Communication
 
@@ -98,6 +104,8 @@ No build step and no registry. Claude picks the skill up on the next session.
 | [`meeting-notes-to-actions`](skills/business-and-comms/meeting-notes-to-actions/SKILL.md) | Pulls decisions, owned and dated action items, and open questions from a transcript |
 | [`incident-postmortem`](skills/business-and-comms/incident-postmortem/SKILL.md) | Writes a blameless postmortem with impact, timeline, root cause, and owned actions |
 | [`release-notes-writer`](skills/business-and-comms/release-notes-writer/SKILL.md) | Turns commits and PRs into user-facing release notes, breaking changes first |
+| [`design-doc-writer`](skills/business-and-comms/design-doc-writer/SKILL.md) | Writes a design doc with goals, non-goals, alternatives, risks, and a rollout plan |
+| [`decision-memo`](skills/business-and-comms/decision-memo/SKILL.md) | Frames a choice, compares options on agreed criteria, and leads with a recommendation |
 
 <br>
 
