@@ -1,10 +1,11 @@
-# Development & Code Skills
+# Development Skills
 
 Skills for writing, debugging, and shipping code.
 
-- **web-artifacts-builder** — Building complex web apps for the claude.ai interface with React, Tailwind CSS, and shadcn/ui.
-- **root-cause-tracing** — When an error surfaces deep in execution, trace backward to the original trigger instead of patching the symptom.
-- **ios-simulator-skill** — Drive the iOS Simulator from Claude Code, preferring accessibility APIs over screenshots.
-- **test-fixing** — Detect failing tests and propose patches.
-- **[root-cause-debugging](root-cause-debugging)** ✅ — Trace a bug backward to the line that first produced the bad state, and fix it there.
-- **[pr-description-writer](pr-description-writer)** ✅ — Write a PR title and description from the actual diff: summary, changes, risk, testing.
+- **[root-cause-debugging](root-cause-debugging)** — Trace a bug backward to the line that first produced the bad state, and fix it there.
+- **[safe-refactor](safe-refactor)** — Pin behavior with tests, then refactor in small steps with the suite green after each.
+- **[commit-message-writer](commit-message-writer)** — Write a commit message from the staged diff in the repo's existing style.
+- **[pr-description-writer](pr-description-writer)** — Write a PR title and description from the actual diff: summary, changes, risk, testing.
+
+More from the community (web-artifacts-builder, systematic-debugging, test-fixing, ios-simulator-skill)
+is listed in the [main README](../../README.md#-community-picks).

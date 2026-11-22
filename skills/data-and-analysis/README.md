@@ -1,6 +1,7 @@
-# Research & Data Analysis Skills
+# Data & Analysis Skills
 
-Skills for profiling data, running research, and producing analysis.
+Skills for profiling data, checking queries, and reading experiment results.
 
-- **recursive-research** — Autonomous research with source tiering, Munger inversion, and disk checkpointing to survive context compaction.
-- **csv-data-summarizer** — Profile a CSV for columns, distributions, missing data, and correlations without being prompted for each step. (Reference implementation included in this folder.)
+- **[csv-data-summarizer](csv-data-summarizer)** — Profile a CSV for columns, distributions, missing data, and correlations in one pass.
+- **[sql-query-reviewer](sql-query-reviewer)** — Catch join fan-out, NULL traps, and date-filter bugs, then flag slow patterns.
+- **[ab-test-readout](ab-test-readout)** — Sanity-check an experiment, compute lift with confidence intervals, and make a ship call.
