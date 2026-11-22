@@ -1,0 +1,27 @@
+{
+  "skill_name": "funnel-analysis",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I counted users per event last month: 10k signup_started, 6k email_verified, 7k onboarding_completed. Why do more people complete onboarding than verify email?",
+      "expected_output": "Explains that independent event counts are not a funnel (no ordering or window, and some users did steps outside the period), and rewrites it as an ordered funnel with a window.",
+      "files": [],
+      "expectations": [
+        "Identifies counting events independently of order as the problem",
+        "Proposes an ordered funnel with an explicit conversion window",
+        "Mentions that onboarding_completed may fire without email_verified or be double counted, and suggests checking tracking"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Write the SQL for a signup funnel in BigQuery: landing_view -> signup_started -> signup_completed within 1 day, for users who landed in October. Table: analytics.events(user_id, event_name, event_ts).",
+      "expected_output": "SQL that takes each user's first landing_view in October and requires each later step to occur after the previous one and within 1 day of landing_view, then reports step and overall conversion.",
+      "files": [],
+      "expectations": [
+        "Enforces step order with timestamp comparisons",
+        "Bounds the window at 1 day from the first step",
+        "Counts distinct users, not events"
+      ]
+    }
+  ]
+}
