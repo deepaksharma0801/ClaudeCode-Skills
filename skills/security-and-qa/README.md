@@ -10,3 +10,4 @@ Skills for keeping secrets out of repos, finding risky dependencies, and testing
 - **[accessibility-audit](accessibility-audit)** — Audit a page or component against WCAG 2.2 AA with located issues and code fixes.
 - **[flaky-test-investigator](flaky-test-investigator)** — Reproduce an intermittent test failure, classify the cause, and make it deterministic.
 - **[privacy-data-review](privacy-data-review)** — Trace personal data through a change and flag leaks, over-collection, and missing deletion.
+- **[security-headers-check](security-headers-check)** — Grade security headers and cookies, then write the server config that fixes them.
