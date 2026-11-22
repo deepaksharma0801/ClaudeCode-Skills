@@ -10,7 +10,7 @@
 [![Awesome](https://awesome.re/badge-flat2.svg)](https://awesome.re)
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg?style=flat-square)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
-[![Skills](https://img.shields.io/badge/skills-8_curated-8A63D2?style=flat-square)](#-the-skill-index)
+[![Skills](https://img.shields.io/badge/skills-13_curated-8A63D2?style=flat-square)](#-the-skill-index)
 [![MCP](https://img.shields.io/badge/MCP-4_servers-0EA5E9?style=flat-square)](#-mcp-servers)
 
 [**Quick Start**](#-quick-start) · [**Hall of Fame**](#-hall-of-fame) · [**Skill Index**](#-the-skill-index) · [**MCP Servers**](#-mcp-servers) · [**Write a Skill**](#-anatomy-of-a-skill-that-actually-fires) · [**Contribute**](CONTRIBUTING.md)
@@ -131,6 +131,8 @@ The mega-repositories driving the Claude ecosystem. Start here.
 | **root-cause-tracing** | Traces backward from a deep stack error to the original trigger | The exception fires four layers below the actual bug |
 | **ios-simulator-skill** | Drives the iOS Simulator, preferring accessibility APIs over screenshots | You need real device interaction, not a static render |
 | **test-fixing** | Detects failing tests and proposes patches | The suite is red and you want a diagnosis, not a rerun |
+| **[root-cause-debugging](skills/development/root-cause-debugging)** ✅ | Walks a bug backward hop by hop to the line that first created the bad state, then fixes it there | You're tempted to add a null check where the error surfaced |
+| **[pr-description-writer](skills/development/pr-description-writer)** ✅ | Writes a PR title and description (summary, changes, risk, testing) from the real diff | You're about to open a PR titled "fixes" |
 
 > [!NOTE]
 > **root-cause-tracing** is the sleeper hit of this category. Most debugging failures aren't reasoning
@@ -152,11 +154,17 @@ The mega-repositories driving the Claude ecosystem. Start here.
 |---|---|---|
 | **brand-guidelines** | Applies official brand colors, fonts, and typography to artifacts | Every deck and artifact should look like it came from one company |
 | **internal-comms** | Drafts newsletters, status reports, and FAQs in house format | You write the same update every week in a slightly different voice |
+| **[weekly-status-update](skills/business-and-comms/weekly-status-update)** ✅ | Turns git history or notes into an outcome-first weekly update with blockers and next steps | Your manager wants an update and all you have is `git log` |
 
 ### 🔒 Security & QA
 
-Open for contributions — threat modeling, dependency auditing, and test-strategy skills all belong
-here. See [CONTRIBUTING.md](CONTRIBUTING.md).
+| Skill | What it does | Reach for it when |
+|---|---|---|
+| **[secrets-precommit-check](skills/security-and-qa/secrets-precommit-check)** ✅ | Scans staged changes for keys, tokens, private keys, and `.env` files, and blocks the commit until they're resolved | You're about to push to a public repo |
+| **[dependency-audit](skills/security-and-qa/dependency-audit)** ✅ | Runs the ecosystem's audit tool and triages results into a prioritized fix list with exact upgrade commands | Before a launch, or when the scanner output is 200 lines long |
+
+Threat-modeling and test-strategy skills are still open for contributions. See
+[CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
@@ -242,14 +250,16 @@ ClaudeCode-OneShot/
 ├── CONTRIBUTING.md              # submission rules + review bar
 ├── CODE_OF_CONDUCT.md
 ├── skills/                      # procedural knowledge
-│   ├── development/
-│   ├── data-and-analysis/       # ← csv-data-summarizer lives here
-│   ├── business-and-comms/
-│   └── security-and-qa/
+│   ├── development/             # root-cause-debugging, pr-description-writer
+│   ├── data-and-analysis/       # csv-data-summarizer
+│   ├── business-and-comms/      # weekly-status-update
+│   └── security-and-qa/         # secrets-precommit-check, dependency-audit
 ├── mcp-servers/                 # external access
 │   ├── databases/
 │   └── tools-and-utils/
 ├── claude-code-plugins/         # CLI extensions
+├── scripts/
+│   └── validate_skills.py       # checks every SKILL.md against the review bar (runs in CI)
 └── templates/
     └── SKILL_TEMPLATE.md        # start every skill here
 ```
@@ -272,6 +282,7 @@ checklist. By participating you agree to the [Code of Conduct](CODE_OF_CONDUCT.m
 - Frontmatter parses as valid YAML
 - Every template section is filled in — an empty `## Examples` is an automatic request for changes
 - You have run the skill at least once in Claude Code or the web interface
+- `python3 scripts/validate_skills.py` passes (CI runs it on every PR)
 
 </details>
 

@@ -44,6 +44,7 @@ Bad: `A powerful skill for data work.`
 ## Checklist before opening a PR
 
 - [ ] Frontmatter parses as valid YAML
+- [ ] `python3 scripts/validate_skills.py` passes
 - [ ] `description` is under 200 characters and names its trigger condition
 - [ ] Folder name matches `name`
 - [ ] All template sections filled in
