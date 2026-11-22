@@ -48,7 +48,11 @@ def parse_frontmatter(text):
         key, sep, value = line.partition(":")
         if not sep:
             raise ValueError(f"frontmatter line is not 'key: value': {line!r}")
-        fields[key.strip()] = value.strip().strip("\"'")
+        value = value.strip()
+        if value and value[0] not in "\"'|>" and (": " in value or " #" in value):
+            raise ValueError(f"{key.strip()}: unquoted value contains ': ' or ' #', which YAML "
+                             "parsers reject or truncate; rephrase or wrap it in quotes")
+        fields[key.strip()] = value.strip("\"'")
     return fields, text[end + 4:]
 
 
