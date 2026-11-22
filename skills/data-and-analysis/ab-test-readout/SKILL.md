@@ -1,7 +1,7 @@
 ---
 name: ab-test-readout
 description: Analyzes A/B test results with sanity checks, effect size, confidence intervals, and a plain-English call. Use when a user shares experiment data or asks whether a variant won.
-dependencies: python>=3.8, scipy>=1.9
+compatibility: Requires Python 3.8+ with scipy 1.9+ for the statistical tests.
 ---
 
 # Detailed Instructions
