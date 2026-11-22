@@ -9,6 +9,7 @@ Skills for status updates, meeting follow-ups, and consistent writing.
 - **[design-doc-writer](design-doc-writer)** — Write a design doc with goals, non-goals, alternatives, risks, and a rollout plan.
 - **[decision-memo](decision-memo)** — Frame a choice, compare options on agreed criteria, and lead with a recommendation.
 - **[explain-for-stakeholders](explain-for-stakeholders)** — Rewrite technical updates for non-engineers, with the bottom line first and a clear ask.
+- **[code-review-comments](code-review-comments)** — Write labeled, kind, actionable review comments so authors know what blocks the merge.
 
 brand-guidelines and internal-comms from [anthropics/skills](https://github.com/anthropics/skills) are
 listed in the [main README](../../README.md#community-picks).
