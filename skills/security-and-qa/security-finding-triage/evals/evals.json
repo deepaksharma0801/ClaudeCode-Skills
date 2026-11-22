@@ -1,0 +1,27 @@
+{
+  "skill_name": "security-finding-triage",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Semgrep flags `cursor.execute(\"SELECT * FROM plans WHERE tier = '%s'\" % TIER)` in billing/plans.py, where TIER = 'pro' is a module constant. Real issue?",
+      "expected_output": "Traces the source to a constant, classifies it as a false positive for injection, still recommends parameterizing for safety, and shows a nosemgrep suppression with a reason if they keep it.",
+      "files": [],
+      "expectations": [
+        "Identifies the source as a constant, not user input",
+        "Classifies it as FALSE POSITIVE with that reason",
+        "Shows a suppression comment that includes the rule id and a justification, or recommends parameterizing"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "CodeQL reported 41 'path injection' alerts. They all go through our `safe_join(base, user_path)` helper. Can you triage them?",
+      "expected_output": "Triages the helper once instead of 41 times, checks whether safe_join normalizes the path and verifies it stays under base on every path, and then classifies all alerts based on that.",
+      "files": [],
+      "expectations": [
+        "Groups the 41 alerts by the shared helper",
+        "Checks the helper for normalization (realpath/resolve) and a base-directory containment check",
+        "Does not mark them false positive without reading safe_join"
+      ]
+    }
+  ]
+}
