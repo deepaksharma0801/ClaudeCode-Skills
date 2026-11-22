@@ -1,7 +1,7 @@
 ---
 name: your-skill-name
 description: A clear, concise description of what the skill does and exactly when Claude should invoke it (maximum 200 characters).
-dependencies: python>=3.8, pandas>=1.5.0
+compatibility: Optional. Delete this line unless the skill needs specific tools, e.g. "Requires Python 3.8+ with pandas."
 ---
 
 # Detailed Instructions

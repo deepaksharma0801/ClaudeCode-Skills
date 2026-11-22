@@ -1,7 +1,7 @@
 ---
 name: csv-data-summarizer
 description: Profiles a CSV or TSV file for column types, distributions, missing data, and correlations. Use when a user shares a tabular data file or asks what is in their data.
-dependencies: python>=3.8, pandas>=1.5.0
+compatibility: Requires Python 3.8+ with pandas 1.5+.
 ---
 
 # Detailed Instructions

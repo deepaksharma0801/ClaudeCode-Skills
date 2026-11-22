@@ -156,8 +156,9 @@ Copy [`templates/SKILL_TEMPLATE.md`](templates/SKILL_TEMPLATE.md) to
 
 ```markdown
 ---
-name: your-skill                # kebab-case, same as the folder
+name: your-skill                # lowercase + hyphens, same as the folder
 description: What it does, and exactly when Claude should use it. Max 200 characters.
+compatibility: Requires Python 3.8+ with pandas.   # optional
 ---
 
 # Detailed Instructions        # the one or two rules that matter most
@@ -177,6 +178,11 @@ description: What it does, and exactly when Claude should use it. Max 200 charac
 
 **Anti-patterns are load-bearing.** Listing the mistakes Claude makes without the skill changes
 behavior more than adding more instructions.
+
+**Bundle what can be automated.** Put repeatable checks in `scripts/`, long reference material in
+`references/`, and realistic test prompts in `evals/evals.json`, so `SKILL.md` stays under 500
+lines. Frontmatter follows the [Agent Skills specification](https://agentskills.io/specification);
+see [CONTRIBUTING.md](CONTRIBUTING.md#frontmatter-rules) for every allowed field.
 
 Check your work before opening a PR:
 
