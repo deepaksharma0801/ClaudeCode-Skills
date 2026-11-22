@@ -10,3 +10,4 @@ Skills for profiling data, checking queries, and reading experiment results.
 - **[data-quality-checks](data-quality-checks)** — Design freshness, volume, uniqueness, and integrity tests for a table or pipeline.
 - **[chart-critique](chart-critique)** — Catch misleading scales and wrong chart types, then propose a clearer redesign.
 - **[cohort-retention-analysis](cohort-retention-analysis)** — Build cohort retention tables without fake drop-off from incomplete periods.
+- **[funnel-analysis](funnel-analysis)** — Ordered funnels with conversion windows, the biggest leak, and the segment where it's worst.
