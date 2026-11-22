@@ -1,6 +1,6 @@
 ---
 name: data-quality-checks
-description: Designs automated data quality tests for a table or pipeline: freshness, volume, uniqueness, nulls, ranges, and referential integrity. Use when building a pipeline or after bad data reached a report.
+description: Designs automated data quality tests for a table or pipeline, covering freshness, volume, uniqueness, nulls, ranges, and integrity. Use when building a pipeline or after bad data reached a report.
 ---
 
 # Detailed Instructions
