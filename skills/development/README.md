@@ -11,4 +11,4 @@ Skills for writing, debugging, and shipping code.
 - **[regex-builder](regex-builder)** — Build a regex from a description and prove it against matching and non-matching cases.
 
 More from the community (web-artifacts-builder, systematic-debugging, test-fixing, ios-simulator-skill)
-is listed in the [main README](../../README.md#-community-picks).
+is listed in the [main README](../../README.md#community-picks).

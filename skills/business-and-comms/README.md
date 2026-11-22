@@ -8,4 +8,4 @@ Skills for status updates, meeting follow-ups, and consistent writing.
 - **[release-notes-writer](release-notes-writer)** — Turn commits and PRs into user-facing release notes, breaking changes first.
 
 brand-guidelines and internal-comms from [anthropics/skills](https://github.com/anthropics/skills) are
-listed in the [main README](../../README.md#-community-picks).
+listed in the [main README](../../README.md#community-picks).

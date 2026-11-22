@@ -7,17 +7,17 @@
 *Skills tell Claude **how** to work. MCP servers decide **what** it can reach. Plugins extend **where** it runs.*
 
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg?style=flat-square)](LICENSE)
-[![Skills](https://img.shields.io/badge/skills_included-13-8A63D2?style=flat-square)](#-skills-in-this-repo)
+[![Skills](https://img.shields.io/badge/skills_included-13-8A63D2?style=flat-square)](#skills-in-this-repo)
 [![Validate skills](https://github.com/deepaksharma0801/ClaudeCode-Skills/actions/workflows/validate-skills.yml/badge.svg)](.github/workflows/validate-skills.yml)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 
-[**Install**](#-install) · [**Skills**](#-skills-in-this-repo) · [**How skills work**](#-how-skills-work) · [**Community picks**](#-community-picks) · [**Write a skill**](#%EF%B8%8F-write-a-skill-that-actually-fires) · [**Contribute**](CONTRIBUTING.md)
+[**Install**](#install) · [**Skills**](#skills-in-this-repo) · [**How skills work**](#how-skills-work) · [**Community picks**](#community-picks) · [**Write a skill**](#write-a-skill-that-actually-fires) · [**Contribute**](CONTRIBUTING.md)
 
 </div>
 
 ---
 
-## 🚀 Install
+## Install
 
 A skill is a folder with a `SKILL.md` inside. Copy it into a skills directory and Claude picks it
 up — no build step, no registry.
@@ -41,12 +41,12 @@ for d in ~/ClaudeCode-Skills/skills/*/*/; do cp -R "${d%/}" ~/.claude/skills/; d
 
 ---
 
-## 📦 Skills in this repo
+## Skills in this repo
 
 Every skill below is fully written, follows the [template](templates/SKILL_TEMPLATE.md), and passes
 [`scripts/validate_skills.py`](scripts/validate_skills.py).
 
-### 💻 Development
+### Development
 
 | Skill | What it does | Reach for it when |
 |---|---|---|
@@ -55,7 +55,7 @@ Every skill below is fully written, follows the [template](templates/SKILL_TEMPL
 | [commit-message-writer](skills/development/commit-message-writer/SKILL.md) | Writes a commit message from the staged diff in the repo's existing style, and suggests splits | Your history is full of `fix` and `wip` |
 | [pr-description-writer](skills/development/pr-description-writer/SKILL.md) | Writes a PR title and description (summary, changes, risk, testing) from the real diff | You're about to open a PR titled "updates" |
 
-### 📊 Data & Analysis
+### Data & Analysis
 
 | Skill | What it does | Reach for it when |
 |---|---|---|
@@ -63,7 +63,7 @@ Every skill below is fully written, follows the [template](templates/SKILL_TEMPL
 | [sql-query-reviewer](skills/data-and-analysis/sql-query-reviewer/SKILL.md) | Catches join fan-out, NULL traps, and date-filter bugs, then flags slow patterns | The query runs fine but the numbers look wrong |
 | [ab-test-readout](skills/data-and-analysis/ab-test-readout/SKILL.md) | Checks sample ratio and duration, computes lift with confidence intervals, and makes a ship call | "Did the variant win?" |
 
-### 🔒 Security & QA
+### Security & QA
 
 | Skill | What it does | Reach for it when |
 |---|---|---|
@@ -72,7 +72,7 @@ Every skill below is fully written, follows the [template](templates/SKILL_TEMPL
 | [threat-model-lite](skills/security-and-qa/threat-model-lite/SKILL.md) | One-page STRIDE model: data flow, trust boundaries, ranked threats, concrete mitigations | A feature touches auth, user data, payments, or uploads |
 | [test-plan-writer](skills/security-and-qa/test-plan-writer/SKILL.md) | Risk-based test plan with level, inputs, and priority per case, then writes the P1 tests | "What should I test for this?" |
 
-### 💬 Business & Communication
+### Business & Communication
 
 | Skill | What it does | Reach for it when |
 |---|---|---|
@@ -81,7 +81,7 @@ Every skill below is fully written, follows the [template](templates/SKILL_TEMPL
 
 ---
 
-## 🧠 How skills work
+## How skills work
 
 Claude doesn't read your whole skill library every turn. It sees only each skill's `name` and
 `description`, and loads the full `SKILL.md` for the one that matches the request.
@@ -107,7 +107,7 @@ description never runs.
 
 ### Skills vs MCP servers vs plugins
 
-|  | **Skills** | **MCP servers** | **Plugins** |
+| | **Skills** | **MCP servers** | **Plugins** |
 |---|---|---|---|
 | **Answers** | *How* should Claude do this? | *What* can Claude reach? | *Where* does Claude run? |
 | **Format** | `SKILL.md` + frontmatter | A running process (stdio/HTTP) | CLI package |
@@ -121,7 +121,7 @@ description never runs.
 
 ---
 
-## 🌍 Community picks
+## Community picks
 
 Skills and collections maintained elsewhere. Each keeps its own license.
 
@@ -165,7 +165,7 @@ config examples in [`mcp-servers/`](mcp-servers).
 
 ---
 
-## ✍️ Write a skill that actually fires
+## Write a skill that actually fires
 
 Start from [`templates/SKILL_TEMPLATE.md`](templates/SKILL_TEMPLATE.md):
 
@@ -187,9 +187,9 @@ dependencies: python>=3.8      # optional
 
 | | Description | Result |
 |---|---|---|
-| ❌ | `A powerful skill for working with data.` | Never fires — matches everything, so it means nothing |
-| ❌ | `Data analysis helper.` | Never fires — names a category, not a condition |
-| ✅ | `Profiles a CSV for column types, distributions, missing data, and correlations. Use when a user shares a tabular file or asks for a data profile.` | Fires reliably — says what it does **and** when |
+| Bad | `A powerful skill for working with data.` | Never fires — matches everything, so it means nothing |
+| Bad | `Data analysis helper.` | Never fires — names a category, not a condition |
+| Good | `Profiles a CSV for column types, distributions, missing data, and correlations. Use when a user shares a tabular file or asks for a data profile.` | Fires reliably — says what it does **and** when |
 
 ### The body
 
@@ -206,7 +206,7 @@ python3 scripts/validate_skills.py
 
 ---
 
-## 🗂 Repository layout
+## Repository layout
 
 ```text
 ClaudeCode-Skills/
@@ -224,7 +224,7 @@ ClaudeCode-Skills/
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Two kinds of PR are welcome: **a link** for the community lists, or **a new skill** under
 `skills/<category>/`. The `description` gets the most review — it decides whether the skill is ever
@@ -237,6 +237,6 @@ used. See [CONTRIBUTING.md](CONTRIBUTING.md) for the checklist and the
 
 Released under [CC0 1.0](LICENSE) — public domain. Linked projects keep their own licenses.
 
-**[⬆ Back to top](#claudecode-skills)**
+**[Back to top](#claudecode-skills)**
 
 </div>
