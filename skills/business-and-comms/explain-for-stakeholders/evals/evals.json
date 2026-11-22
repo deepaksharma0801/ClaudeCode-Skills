@@ -1,0 +1,28 @@
+{
+  "skill_name": "explain-for-stakeholders",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write a customer status page update: 'Primary Postgres failover at 14:02 UTC caused 23 min of 5xx on the API; no data loss confirmed; RCA pending.'",
+      "expected_output": "A short status-page update in plain language stating what customers experienced, for how long, that no data was lost, and when the next update will come, without jargon like Postgres, failover, or 5xx.",
+      "files": [],
+      "expectations": [
+        "Leads with customer impact and duration",
+        "Removes jargon (no 'Postgres', 'failover', or '5xx')",
+        "States that no data was lost and does not claim a root cause",
+        "Says when the next update or postmortem will be shared"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I need the VP to approve 2 extra weeks to migrate us off Python 3.8 before it loses security updates. Write the Slack message.",
+      "expected_output": "A brief Slack message that leads with the ask and deadline, explains the risk of not doing it in business terms, and states the cost of the two weeks.",
+      "files": [],
+      "expectations": [
+        "Puts the approval request in the first two lines with a decision date",
+        "Explains the risk (no security fixes) in business terms",
+        "Stays under about 8 lines"
+      ]
+    }
+  ]
+}
