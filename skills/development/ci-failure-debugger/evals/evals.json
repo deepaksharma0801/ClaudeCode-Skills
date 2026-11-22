@@ -1,0 +1,38 @@
+{
+  "skill_name": "ci-failure-debugger",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "My GitHub Actions build fails with `Error: Process completed with exit code 1.` What's wrong?",
+      "expected_output": "Fetches the failed job log with gh run view --log-failed, finds the earliest real error above the exit code line, and classifies it before proposing a fix.",
+      "files": [],
+      "expectations": [
+        "Uses gh run view --log-failed or gh pr checks to get the log",
+        "Explains that the exit code line is not the cause and looks for the first earlier error",
+        "Does not suggest simply rerunning the workflow"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our deploy job works on branches but fails on PRs from contributors' forks with 'Input required and not supplied: token'.",
+      "expected_output": "Identifies that secrets are not passed to workflows triggered by pull requests from forks and proposes a safe pattern, without exposing secrets to untrusted code.",
+      "files": [],
+      "expectations": [
+        "Names forked-PR secret handling as the cause",
+        "Does not recommend pull_request_target with checkout of untrusted PR code without warning about the risk",
+        "Suggests skipping the deploy step for fork PRs or running it after merge"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "CI test job gets 'Killed' with exit code 137 halfway through the Jest run.",
+      "expected_output": "Classifies exit 137 as the process being killed for memory, and proposes limiting Jest workers or memory use rather than rerunning.",
+      "files": [],
+      "expectations": [
+        "Identifies exit code 137 as out-of-memory / SIGKILL",
+        "Suggests --maxWorkers or --runInBand or splitting the suite",
+        "Proposes verifying the fix with a passing run"
+      ]
+    }
+  ]
+}
