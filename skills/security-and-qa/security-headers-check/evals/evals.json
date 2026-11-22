@@ -1,0 +1,28 @@
+{
+  "skill_name": "security-headers-check",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Here are the response headers from our staging site (pasted below). Anything we should fix before launch?\n\nHTTP/2 200\nserver: nginx/1.18.0\ncontent-security-policy: default-src *\nset-cookie: sid=abc; Path=/",
+      "expected_output": "Saves the headers to a file, runs scripts/check_headers.py --headers-file, and reports missing HSTS, the permissive CSP, missing nosniff/framing protection, and the session cookie flags, with config to fix them.",
+      "files": [],
+      "expectations": [
+        "Uses scripts/check_headers.py with --headers-file",
+        "Flags default-src * as allowing scripts from any host",
+        "Flags the sid cookie as missing Secure, HttpOnly and SameSite",
+        "Recommends a report-only phase before enforcing CSP"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our CSP keeps breaking the Stripe checkout. Should I just add unsafe-inline and unsafe-eval?",
+      "expected_output": "Advises against it, explains the trade-off, and shows how to allow Stripe's documented domains and use nonces instead, rolled out in report-only mode first.",
+      "files": [],
+      "expectations": [
+        "Recommends against adding 'unsafe-inline' and 'unsafe-eval'",
+        "Suggests allow-listing the specific third-party origins and using nonces or hashes",
+        "Mentions Content-Security-Policy-Report-Only for testing changes"
+      ]
+    }
+  ]
+}
