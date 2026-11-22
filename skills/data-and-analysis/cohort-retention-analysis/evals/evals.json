@@ -1,0 +1,27 @@
+{
+  "skill_name": "cohort-retention-analysis",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Our retention dashboard shows last month's signups dropping to 5% in month 1, way worse than older cohorts. Are we in trouble? It's the 20th today.",
+      "expected_output": "Points out that the most recent cohort's month 1 has not finished, so the low number is an incomplete period, and recomputes or explains how to compare complete periods only.",
+      "files": [],
+      "expectations": [
+        "Identifies the incomplete period as the likely cause",
+        "Does not conclude retention collapsed",
+        "Recommends blanking or excluding incomplete periods"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I have orders.csv with customer_id, order_date. Build me a monthly retention table for repeat purchases.",
+      "expected_output": "Uses scripts/retention.py with --period month on the order data, states the definition (cohort = first order month, active = placed an order), and presents the table with findings.",
+      "files": [],
+      "expectations": [
+        "Runs scripts/retention.py with --user-col customer_id --time-col order_date --period month",
+        "States the cohort and activity definitions",
+        "Gives findings tied to specific numbers from the table"
+      ]
+    }
+  ]
+}
