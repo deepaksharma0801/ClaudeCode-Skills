@@ -1,0 +1,27 @@
+{
+  "skill_name": "code-review-comments",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Make this review comment less harsh but keep the point: 'This is wrong. Why are you storing passwords in plain text?? Did you even read the security guidelines?'",
+      "expected_output": "A labeled blocking comment that states the risk of plaintext passwords neutrally, recommends a specific password hashing approach, and drops the personal criticism.",
+      "files": [],
+      "expectations": [
+        "Uses the label 'issue (blocking):'",
+        "Removes rhetorical questions and personal criticism",
+        "Recommends bcrypt, scrypt, or Argon2 (or the framework's built-in hasher)"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Review this diff and write my comments: renames 12 variables, adds a new endpoint without auth check, and has inconsistent quote styles.",
+      "expected_output": "A review summary that requests changes, with a blocking issue for the missing authorization check, and the style points batched into one non-blocking nitpick or left to the formatter.",
+      "files": [],
+      "expectations": [
+        "Marks the missing auth check as 'issue (blocking)'",
+        "Does not block on quote style; batches or defers it to a formatter",
+        "Starts with a summary stating the verdict"
+      ]
+    }
+  ]
+}
