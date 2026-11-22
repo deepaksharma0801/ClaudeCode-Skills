@@ -1,0 +1,39 @@
+{
+  "skill_name": "db-migration-safety",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Can I run this on prod? users has 12M rows.\n\nALTER TABLE users ADD COLUMN email_verified boolean NOT NULL DEFAULT false;\nCREATE INDEX users_email_verified_idx ON users (email_verified);",
+      "expected_output": "Says the ADD COLUMN with a constant default is fast on PG 11+, flags the non-concurrent index, and rewrites it as CREATE INDEX CONCURRENTLY outside a transaction with a lock_timeout.",
+      "files": [],
+      "expectations": [
+        "Runs or cites scripts/lint_migration.py output",
+        "Does not claim the constant DEFAULT false rewrites the table on PostgreSQL 11+",
+        "Rewrites the index as CREATE INDEX CONCURRENTLY and notes it cannot run in a transaction",
+        "Adds SET lock_timeout before the ALTER TABLE"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I want to rename the column `fullname` to `display_name` on accounts. Django project. Write the migration.",
+      "expected_output": "Explains that a rename breaks the running app during deploy and proposes an expand/contract plan across multiple deploys instead of a single RenameField.",
+      "files": [],
+      "expectations": [
+        "Does not output a single RenameField / RENAME COLUMN migration as the final answer",
+        "Describes add new column, dual write, backfill in batches, switch reads, drop old column later",
+        "States the deploy order of migrations and code changes"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Add a foreign key from payments.invoice_id to invoices.id. payments is 90M rows and gets writes all day.",
+      "expected_output": "Uses ADD CONSTRAINT ... NOT VALID followed by a separate VALIDATE CONSTRAINT, with a lock_timeout, and checks for orphaned rows first.",
+      "files": [],
+      "expectations": [
+        "Uses NOT VALID on the ADD CONSTRAINT",
+        "Validates in a separate step with VALIDATE CONSTRAINT",
+        "Suggests checking for orphaned payments rows before validating"
+      ]
+    }
+  ]
+}
