@@ -22,9 +22,27 @@ Thanks for helping build this. Two kinds of contributions are accepted:
 
 | Field | Required | Rules |
 | --- | --- | --- |
-| `name` | yes | lowercase, kebab-case, matches the folder name |
-| `description` | yes | ≤ 200 characters; states **what it does** and **when Claude should invoke it** |
-| `dependencies` | no | comma-separated, with version constraints (`python>=3.8, pandas>=1.5.0`) |
+| `name` | yes | 1–64 characters: lowercase letters, digits, and single hyphens; no leading or trailing hyphen; matches the folder name |
+| `description` | yes | ≤ 200 characters in this repo (the spec allows 1,024); states **what it does** and **when Claude should use it** |
+| `compatibility` | no | ≤ 500 characters; only when the skill needs specific tools, e.g. `Requires Python 3.8+ with pandas.` |
+| `license` | no | short license name, or a bundled license file |
+| `metadata` | no | string-to-string map, e.g. `version`, `author` |
+| `allowed-tools` | no | experimental; space-separated tool list, e.g. `Bash(git:*) Read` |
+
+These follow the [Agent Skills specification](https://agentskills.io/specification). Any other
+frontmatter field fails validation.
+
+### Bundled files
+
+A skill folder can include more than `SKILL.md`. Keep `SKILL.md` under 500 lines and move detail
+into these, referenced one level deep:
+
+| Folder | For |
+| --- | --- |
+| `scripts/` | Code Claude runs for deterministic steps (stdlib-only where possible; print helpful errors) |
+| `references/` | Longer docs Claude reads only when needed |
+| `assets/` | Templates, schemas, and data files used in the output |
+| `evals/evals.json` | Realistic test prompts and expectations, in the [skill-creator format](https://github.com/anthropics/skills/blob/main/skills/skill-creator/references/schemas.md) |
 
 The `description` is the trigger. Because of progressive disclosure, Claude reads only the metadata
 until it decides the skill applies — a vague description means the skill never fires, no matter how
