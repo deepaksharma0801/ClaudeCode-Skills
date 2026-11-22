@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="320" viewBox="0 0 1280 320" role="img" aria-labelledby="title desc">
+  <title id="title">ClaudeCode-Skills</title>
+  <desc id="desc">Ready-to-use skills for Claude Code and claude.ai</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#16141F"/>
+      <stop offset="1" stop-color="#0E0D14"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.82" cy="0.2" r="0.6">
+      <stop offset="0" stop-color="#D97757" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#D97757" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#FFFFFF" fill-opacity="0.06"/>
+    </pattern>
+  </defs>
+
+  <rect width="1280" height="320" rx="16" fill="url(#bg)"/>
+  <rect width="1280" height="320" rx="16" fill="url(#dots)"/>
+  <rect width="1280" height="320" rx="16" fill="url(#glow)"/>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="15" fill="#8B8798">
+    <text x="88" y="92" letter-spacing="2">SKILLS / SKILL.md</text>
+  </g>
+
+  <g font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+    <text x="86" y="170" font-size="68" font-weight="700" fill="#F4F1EA" letter-spacing="-1.5">ClaudeCode<tspan fill="#D97757">-</tspan>Skills</text>
+    <text x="88" y="218" font-size="24" fill="#B9B4C4">Ready-to-use skills for Claude Code and claude.ai,</text>
+    <text x="88" y="250" font-size="24" fill="#B9B4C4">plus a field guide to writing your own.</text>
+  </g>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14">
+    <g transform="translate(900 118)">
+      <rect width="292" height="132" rx="10" fill="#1E1B29" stroke="#2E2A3B"/>
+      <circle cx="20" cy="18" r="4.5" fill="#3A3548"/>
+      <circle cx="36" cy="18" r="4.5" fill="#3A3548"/>
+      <circle cx="52" cy="18" r="4.5" fill="#3A3548"/>
+      <text x="20" y="56" fill="#8B8798">---</text>
+      <text x="20" y="78" fill="#D97757">name<tspan fill="#B9B4C4">: root-cause-debugging</tspan></text>
+      <text x="20" y="100" fill="#D97757">description<tspan fill="#B9B4C4">: Traces a bug…</tspan></text>
+      <text x="20" y="122" fill="#8B8798">---</text>
+    </g>
+  </g>
+</svg>
