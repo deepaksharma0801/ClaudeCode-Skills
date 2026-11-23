@@ -7,6 +7,18 @@ description: Finds why a test passes sometimes and fails other times by reproduc
 
 A flaky test is a real bug — in the test or the code — until proven otherwise. Reproduce the
 failure reliably before fixing it, and never "fix" a flake with a retry or a longer sleep alone.
+Flaky tests erode trust in the whole suite: people rerun CI until it's green and stop reading
+failures. A retry hides the flake — and sometimes a real race condition in product code.
+
+## When to Use
+
+- A test fails intermittently in CI, or passes locally but fails in CI sometimes
+- "Rerun fixed it" happens regularly
+- A test fails only when run with others, or in a different order
+- Quarantining or deleting tests is being proposed
+
+**Don't use when:** the test fails every time (use `root-cause-debugging`), or the whole pipeline
+fails for config/env reasons (use `ci-failure-debugger`).
 
 ## Overview
 
@@ -43,6 +55,32 @@ classifies the cause into a known category, and fixes the root cause so the test
    failure rate (e.g. 7/200 → 0/500).
 6. If the bug is in the product code (a real race), say so — the test was right.
 
+## Checklist
+
+```text
+- [ ] Failure logs, rate, and pattern (time of day, worker, neighbors) collected
+- [ ] Reproduced by repetition, random order, or CI-like conditions
+- [ ] Cause classified (order/state, timing, time/date, randomness, concurrency, network, resources)
+- [ ] Root cause fixed (not retried or slept around)
+- [ ] Same repetition re-run: before/after failure rate reported
+- [ ] Product bug called out if the test was right
+```
+
+## Red Flags
+
+- "Add `@retry(3)`."
+- "Bump the sleep from 1s to 5s."
+- "Skip it for now." (no issue, no owner)
+- "Passed once locally — fixed."
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "It's just CI being slow." | Timing-dependent tests are wrong tests; wait for conditions, not durations. |
+| "Retries are standard practice." | Retries hide real intermittent product bugs (races, ordering) that users then hit. |
+| "Can't reproduce, so can't fix." | Repetition, random order, and CI-like constraints reproduce most flakes. |
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not add retries, `@flaky`, or longer timeouts as the only fix.
@@ -52,6 +90,8 @@ classifies the cause into a known category, and fixes the root cause so the test
 * Do not assume the test is wrong; intermittent failures often expose real race conditions.
 
 ## Examples
+
+### Example 1: a once-a-week failure
 
 **User:** "`test_invoice_due_dates` fails maybe once a week in CI. Can't reproduce locally."
 
@@ -79,3 +119,41 @@ invoice.due_date uses datetime.now(timezone.utc).date(). Between 23:00 and midni
 ## Proof
 Swept the frozen clock across every hour of 3 days, including month end: 0 failures in 72 cases.
 ```
+
+### Example 2: order-dependent failure
+
+**User:** "`test_user_count` fails in CI about 1 in 5 runs. We run pytest with xdist and random order."
+
+**Expected output:**
+
+```text
+## Reproduce
+pytest -p random_order --random-order-seed=<seed from failing CI run> tests/ → fails
+pytest tests/test_users.py::test_user_count alone, 200 runs → 0 failures
+→ order-dependent.
+
+## Find the polluter
+Bisected the tests that ran before it with that seed:
+test_signup.py::test_creates_user leaves 1 user row behind (commits instead of using the
+transactional db fixture).
+
+## Category: shared state
+## Fix
+test_creates_user: use the `db` fixture (transaction rolled back per test) instead of `real_db`.
+test_user_count: assert on users it created, not a global count.
+
+## Proof
+50 runs with random order and -n 4: 0 failures (before: 11/50).
+```
+
+## Quick Reference
+
+| Category | Signature | Fix |
+|---|---|---|
+| Order / state | Fails only after certain tests | Isolate state; rollback per test |
+| Timing | Sleeps, polling without condition | Wait for a condition |
+| Time/date | Midnight, month end, DST, TZ | Freeze/inject the clock |
+| Randomness | Unseeded data, set ordering | Seed; sort before comparing |
+| Concurrency | Parallel workers collide | Unique ports, dirs, schemas per worker |
+| Network | Real external calls | Stub or record |
+| Resources | Timeouts on slow runners | Remove the timing dependence |
