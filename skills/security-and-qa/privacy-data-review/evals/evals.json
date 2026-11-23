@@ -1,0 +1,38 @@
+{
+  "skill_name": "privacy-data-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We're adding Sentry to our app. Anything privacy-related to configure?",
+      "expected_output": "Recommends disabling default PII capture, scrubbing request bodies, headers, and cookies in before_send, avoiding user emails in user context (use IDs), and checking retention and data region.",
+      "files": [],
+      "expectations": [
+        "Disables default PII sending",
+        "Scrubs bodies, headers, or cookies before sending",
+        "Uses user IDs rather than emails in error context"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our 'export my data' feature only includes the users table. Is that enough?",
+      "expected_output": "Explains that an access/export should cover personal data across all stores (orders, support tickets, logs where feasible, analytics, files), maps where data lives, and lists gaps.",
+      "files": [],
+      "expectations": [
+        "Identifies other stores holding the user's personal data",
+        "Lists specific gaps in the export",
+        "Does not declare legal compliance"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Put the user's email in the password reset URL so the page can pre-fill it.",
+      "expected_output": "Advises against personal data in URLs (logged by servers, proxies, analytics, referrers), and suggests using only the opaque token and looking up the email server-side.",
+      "files": [],
+      "expectations": [
+        "Explains why emails in URLs leak",
+        "Proposes using only the reset token in the URL",
+        "Looks up the email server-side"
+      ]
+    }
+  ]
+}
