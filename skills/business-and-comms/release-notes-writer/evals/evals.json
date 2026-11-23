@@ -1,0 +1,37 @@
+{
+  "skill_name": "release-notes-writer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Generate release notes from these 40 commits between v1.4.0 and v1.5.0.",
+      "expected_output": "Classifies commits, drops internal ones (counted), writes user-facing lines grouped by section with breaking changes first and migration steps, and links PRs.",
+      "files": [],
+      "expectations": [
+        "Drops internal-only commits and reports their count",
+        "Puts breaking changes first with migration steps",
+        "Writes each line in user terms"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our API v3.0 removes the `legacy_id` field. Write the release notes section for it.",
+      "expected_output": "Writes a Breaking entry explaining the removal, what to use instead, and a before/after example, plus any deprecation timeline.",
+      "files": [],
+      "expectations": [
+        "Places it under Breaking",
+        "Names the replacement field or approach",
+        "Includes a before/after or migration example"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write the App Store notes for this release; the changes are mostly internal refactors plus one small fix.",
+      "expected_output": "Produces a short user-facing note mentioning only the user-visible fix (or a brief 'performance and stability improvements' line), without listing internal refactors.",
+      "files": [],
+      "expectations": [
+        "Does not list internal refactors",
+        "Keeps the note short and user-facing"
+      ]
+    }
+  ]
+}
