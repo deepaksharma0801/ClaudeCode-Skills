@@ -1,0 +1,27 @@
+{
+  "skill_name": "customer-support-reply",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Customer asks: 'When will you support exporting to Excel? We need it by end of month or we'll switch.' We have no roadmap commitment for it. Draft a reply.",
+      "expected_output": "An honest reply that says there is no committed date, offers the best current workaround (e.g. CSV export opened in Excel) with steps, and offers to record their request, without promising the feature.",
+      "files": [],
+      "expectations": [
+        "Does not promise a date or that the feature will ship",
+        "Offers a concrete workaround with steps",
+        "Keeps the reply under about 150 words"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Ticket: 'I can't log in, password reset email never arrives. I've checked spam.' Draft the reply.",
+      "expected_output": "Acknowledges they checked spam, gives specific next steps (verify the email address on file, allowlist the sender domain, try again after a set time), and flags for the agent to check email delivery logs.",
+      "files": [],
+      "expectations": [
+        "Does not tell them to check spam again",
+        "Gives numbered, specific next steps",
+        "Includes an agent note to check email delivery or bounce logs"
+      ]
+    }
+  ]
+}
