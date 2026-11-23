@@ -7,6 +7,20 @@ description: Writes clear, kind, actionable code review comments labeled by inte
 
 Every comment says what you noticed, why it matters, and what would resolve it — and whether it
 blocks the merge. The author should never have to guess how serious a comment is.
+The author reads each comment asking "do I have to change this, and how?" Labels answer the
+first question and a concrete suggestion answers the second; tone decides whether they ask
+follow-up questions or get defensive.
+
+## When to Use
+
+- Writing or polishing review comments on a pull request
+- Turning rough review notes into clear feedback
+- Softening comments without losing the point
+- Writing the overall review summary (approve / request changes)
+
+**Don't use when:** the task is finding bugs in the code (review it first — e.g. with
+`auth-code-review`, `sql-query-reviewer`, or `api-design-review` — then use this to word the
+findings), or writing the PR description (use `pr-description-writer`).
 
 ## Overview
 
@@ -37,6 +51,28 @@ intent is explicit, anchors each one to code, and suggests a concrete change.
 8. **Summarize** at the top of the review: the overall verdict (approve, approve with suggestions,
    request changes), the blocking items, and one line of genuine praise if earned.
 
+## Output shape
+
+```text
+Summary: verdict (approve / approve with suggestions / request changes) + blocking items + one
+genuine praise if earned.
+
+<label> (<decoration>): <file:line> — <observation>. <why it matters>. <concrete fix or question>
+```
+
+## Checklist
+
+```text
+- [ ] Whole diff and PR description read first
+- [ ] Correctness/security before design before style
+- [ ] Every comment labeled (issue/suggestion/question/nitpick/praise/thought)
+- [ ] Blocking vs non-blocking explicit
+- [ ] Each comment: observation → why → concrete fix
+- [ ] About the code, not the person; no sarcasm or rhetorical questions
+- [ ] Repeated nits batched into one comment
+- [ ] Summary with verdict at the top
+```
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not leave unlabeled comments; the author can't tell a blocker from a preference.
@@ -47,6 +83,8 @@ intent is explicit, anchors each one to code, and suggests a concrete change.
 * Do not use sarcasm, "just", "obviously", or "simply".
 
 ## Examples
+
+### Example 1: rough notes into comments
 
 **User:** "Help me word my review. Draft notes: 'n+1 in get_orders. why no tests?? also var names bad. retry loop has no limit'"
 
@@ -82,3 +120,35 @@ a test with a client that always raises `TransientError` would pin the new limit
 
 **praise:** `paginate()` is a clear, reusable helper — nice to see the three copies of that logic go.
 ````
+
+### Example 2: a large PR with only style issues
+
+**User:** "This 600-line PR looks fine logically, I just have a bunch of naming and formatting nits. How should I review it?"
+
+**Expected output:**
+
+```markdown
+**Summary:** Approve. Logic and tests look good; a few non-blocking naming suggestions below.
+Formatting differences should be handled by the formatter, not review.
+
+**suggestion (non-blocking):** Could we run `ruff format` in pre-commit so quote style and line
+length stop showing up in reviews? Happy to add it in a follow-up.
+
+**nitpick (non-blocking):** A few names are hard to scan — `tmp2` (export.py:41), `d` (export.py:88),
+`res2` (export.py:120). Maybe `filtered_rows`, `due_date`, `csv_rows`?
+
+**praise:** The streaming writer keeps memory flat for large exports — nice.
+```
+
+One batched nitpick instead of fifteen separate comments, and nothing blocking that a tool should own.
+
+## Quick Reference
+
+| Label | Use for | Blocks merge? |
+|---|---|---|
+| `issue (blocking):` | Bugs, security, data loss, broken contracts | Yes |
+| `suggestion:` | A better approach, with the change | No (unless marked) |
+| `question:` | You genuinely don't know | Usually no |
+| `nitpick (non-blocking):` | Preference, naming | No |
+| `praise:` | Specific good work | — |
+| Style/formatting | Formatter or linter | Shouldn't need review |
