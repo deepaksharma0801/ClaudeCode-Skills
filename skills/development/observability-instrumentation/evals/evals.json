@@ -22,6 +22,17 @@
         "Propagates trace context through SQS message attributes",
         "Adds trace_id to logs on both services"
       ]
+    },
+    {
+      "id": 3,
+      "prompt": "To debug faster, log the full request and response (headers + body) for every API call in production.",
+      "expected_output": "Pushes back: full bodies and headers contain tokens and personal data and inflate cost; proposes structured per-request summary logs with IDs, status, duration, and a redaction safety net, plus traces for detail.",
+      "files": [],
+      "expectations": [
+        "Warns that headers and bodies contain secrets and personal data",
+        "Proposes structured summary logs with request/trace IDs instead",
+        "Suggests redaction of sensitive fields"
+      ]
     }
   ]
 }
