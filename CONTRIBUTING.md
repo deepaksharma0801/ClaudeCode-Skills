@@ -54,10 +54,16 @@ Bad: `A powerful skill for data work.`
 
 ### Body rules
 
-- Write instructions as directives, not prose.
-- Include an **Anti-Patterns** section. What Claude should *not* do is often more load-bearing than what it should.
-- Include at least one worked example with the exact expected output format.
-- Keep the full instruction set tight. Push reference material into separate files the skill can point to.
+Every skill is written against the quality bar in [docs/QUALITY.md](docs/QUALITY.md). In short:
+
+- State the core principle and **why** it matters; Claude follows reasons more reliably than bare rules.
+- Say when to use the skill **and when not to**.
+- Steps explain their purpose and give exact commands where a step is fragile.
+- Include a copyable checklist, and for discipline skills, red flags and a rationalizations table.
+- Every anti-pattern has a one-line why.
+- At least two examples (a full worked example plus an edge case), with numbers that add up.
+- End with a quick-reference table. Keep `SKILL.md` under 500 lines; move depth to `references/`.
+- `evals/evals.json` with at least three prompts, one targeting the failure the skill prevents.
 
 ## Checklist before opening a PR
 

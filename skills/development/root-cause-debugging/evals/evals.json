@@ -1,0 +1,39 @@
+{
+  "skill_name": "root-cause-debugging",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Getting `AttributeError: 'NoneType' object has no attribute 'email'` in notifications.py line 40 (user.email). Just add a None check there so it stops crashing.",
+      "expected_output": "Reproduces the error, traces where `user` became None (e.g. a lookup that returns None for deleted users), names the origin with evidence, writes a failing test, and fixes at the origin — mentioning that a None guard alone would hide the bug.",
+      "files": [],
+      "expectations": [
+        "Does not stop at adding a None check at notifications.py:40",
+        "Traces backward to where the None value originates and names that location",
+        "Provides evidence (assertion, log, or failing test) before fixing",
+        "Writes or proposes a failing test before the fix"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "The monthly report total was right last week and is wrong now. Nothing in report.py changed.",
+      "expected_output": "Reproduces the wrong total, checks recent changes outside report.py (data, dependencies, config, upstream functions), uses git bisect or comparison with a known-good run, and traces the wrong number to its origin.",
+      "files": [],
+      "expectations": [
+        "Checks recent changes beyond report.py (git log, dependency or data changes)",
+        "Suggests git bisect or comparing against a known-good state",
+        "States the symptom precisely before proposing a cause"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I've tried three different fixes for this race in the order processor and each one makes a different test fail. What should the fourth fix be?",
+      "expected_output": "Does not propose a fourth patch; explains that three failed fixes that move the failure indicate a design problem (shared state, ownership, concurrency model), investigates that, and proposes discussing a structural change.",
+      "files": [],
+      "expectations": [
+        "Does not immediately propose another point fix",
+        "Identifies repeated failing fixes as a sign of a design or architecture problem",
+        "Proposes examining shared state or the concurrency design and discussing it with the user"
+      ]
+    }
+  ]
+}

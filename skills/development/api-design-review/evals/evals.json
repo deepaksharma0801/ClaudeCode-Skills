@@ -1,0 +1,38 @@
+{
+  "skill_name": "api-design-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Here's our new endpoint: GET /getUserOrders?userId=5 returns all orders as an array. Looks fine?",
+      "expected_output": "Flags the verb in the URL, missing pagination, and casing inconsistent with house style; proposes GET /users/{id}/orders or /orders?user_id= with cursor pagination and a stable sort.",
+      "files": [],
+      "expectations": [
+        "Removes the verb from the URL",
+        "Requires pagination with a maximum page size",
+        "Checks or asks about the API's existing conventions"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Can we change the `status` field in our public order API from an integer (1,2,3) to a string ('pending','paid','shipped')?",
+      "expected_output": "Classifies it as a breaking change, and proposes an additive path (new field such as status_name or a new version) with deprecation headers and usage monitoring before removal.",
+      "files": [],
+      "expectations": [
+        "Identifies the type change as breaking",
+        "Proposes an additive or versioned alternative",
+        "Mentions deprecation and monitoring usage before removing the old form"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Review this payment endpoint: POST /payments with body { amount: 19.99 } returns 200 {ok:false, error:'card declined'} on failure.",
+      "expected_output": "Flags float money, 200-with-error, and missing idempotency; proposes amount in minor units with currency, a proper 4xx status with the standard error shape, and an Idempotency-Key header.",
+      "files": [],
+      "expectations": [
+        "Replaces the float amount with integer minor units and currency",
+        "Uses a 4xx status instead of 200 for the failure",
+        "Recommends an Idempotency-Key header for payment creation"
+      ]
+    }
+  ]
+}

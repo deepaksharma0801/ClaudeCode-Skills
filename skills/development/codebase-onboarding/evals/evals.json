@@ -1,0 +1,39 @@
+{
+  "skill_name": "codebase-onboarding",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm new on this team. Explain how this Django project is put together.",
+      "expected_output": "Reads manifests and settings, finds urls.py and the main apps, traces one request from URL to view to model to template or serializer with file and function names, gives run/test commands from CI or the README, and lists unknowns.",
+      "files": [],
+      "expectations": [
+        "Traces one request end to end with file and function names",
+        "Gives exact run and test commands",
+        "Lists required environment variable names without values",
+        "Includes an Unknowns section"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Give me a list of every file in this repo and what it does.",
+      "expected_output": "Explains that a per-file index isn't useful for onboarding and instead gives the structured map (stack, entry points, one flow, architecture, run commands, where code mass is), offering to go deeper on any area.",
+      "files": [],
+      "expectations": [
+        "Does not produce an exhaustive file-by-file list",
+        "Groups code by component or directory with sizes",
+        "Offers a deeper dive on specific areas"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "The README says to run `make setup` but that fails. How do I get this running?",
+      "expected_output": "Checks the Makefile, CI workflow, and manifests to find the commands that actually work, reports the README drift, and gives working setup steps.",
+      "files": [],
+      "expectations": [
+        "Uses the CI configuration as the source of truth for working commands",
+        "Reports the mismatch between README and code",
+        "Does not run migrations or deploy scripts against shared environments"
+      ]
+    }
+  ]
+}

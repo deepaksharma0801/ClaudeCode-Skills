@@ -1,0 +1,39 @@
+{
+  "skill_name": "performance-investigation",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Our dashboard API is slow. Can you add Redis caching to speed it up?",
+      "expected_output": "Measures and profiles first to find where time goes (e.g. query count, slow queries), fixes the root cause, and only considers caching afterwards if the work is inherently expensive, reporting before/after numbers.",
+      "files": [],
+      "expectations": [
+        "Establishes a baseline measurement before changing anything",
+        "Profiles or counts queries to find the biggest contributor",
+        "Does not add caching as the first step",
+        "Reports before/after numbers"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "This Python function that processes our CSV is slow. Here's the code with a nested loop over rows. Make it faster.",
+      "expected_output": "Times it on a realistic file size, profiles it, identifies the actual hot spot (e.g. quadratic lookup in the nested loop), replaces it with a dictionary/set lookup or vectorized approach, re-measures, and confirms identical output.",
+      "files": [],
+      "expectations": [
+        "Benchmarks with realistic data size",
+        "Uses a profiler or timing to confirm the hot spot",
+        "Verifies the output is unchanged after the optimization"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "p50 latency is fine (80ms) but p99 is 3 seconds. What do we look at?",
+      "expected_output": "Focuses on tail-latency causes — lock contention, connection pool waits, GC pauses, cold caches, slow outlier queries, retries — and uses traces or per-request logs of slow requests to find which applies.",
+      "files": [],
+      "expectations": [
+        "Distinguishes tail latency from average latency causes",
+        "Mentions pool exhaustion, lock waits, GC, or outlier queries",
+        "Recommends examining traces or logs of the slowest requests specifically"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "skill_name": "safe-refactor",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "utils.py is a 900-line grab bag. Split it into sensible modules. There are no tests for it.",
+      "expected_output": "Adds characterization tests for the functions being moved before splitting, plans moves module by module, runs tests after each move, keeps import paths working (re-exports or updated callers), and reports what is unverified.",
+      "files": [],
+      "expectations": [
+        "Writes characterization tests before moving code",
+        "Moves code in small steps with tests between them",
+        "Preserves existing import paths for callers or updates every caller",
+        "Does not change behavior during the split"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Clean up this checkout function, and while you're at it fix the bug where discounts apply twice.",
+      "expected_output": "Separates the two: pins current behavior and refactors first (or fixes the bug first) as distinct changes, so the bug fix is its own reviewable commit with its own test.",
+      "files": [],
+      "expectations": [
+        "Keeps the bug fix and the refactor in separate commits or changes",
+        "Adds a test that demonstrates the double-discount bug for the fix",
+        "Runs tests after each refactoring step"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Rename the `customerId` field to `customer_id` across the codebase for consistency.",
+      "expected_output": "Checks whether the field is part of a public API, database column, serialized payload, or event schema before renaming, and proposes a compatibility path if so, instead of a blind find-and-replace.",
+      "files": [],
+      "expectations": [
+        "Searches for all usages including API responses, database columns, and serialized data",
+        "Flags external consumers or stored data that would break",
+        "Does not do a blind find-and-replace across the codebase"
+      ]
+    }
+  ]
+}

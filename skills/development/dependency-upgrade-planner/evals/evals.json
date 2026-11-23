@@ -23,6 +23,17 @@
         "Uses 2.0 deprecation warnings (SQLALCHEMY_WARN_20) to find issues before upgrading",
         "Runs tests between steps"
       ]
+    },
+    {
+      "id": 3,
+      "prompt": "Python 3.8 is end of life. Move our service to 3.12 — just change the Dockerfile base image?",
+      "expected_output": "Checks that every dependency has 3.12-compatible releases (some pins may need bumping), runs tests with deprecation warnings as errors on the new version, updates CI and local tooling versions together, and rolls out via staging.",
+      "files": [],
+      "expectations": [
+        "Checks dependency compatibility with Python 3.12 before switching",
+        "Updates CI, Dockerfile, and local version files consistently",
+        "Runs the test suite on 3.12 and a staging rollout before production"
+      ]
     }
   ]
 }

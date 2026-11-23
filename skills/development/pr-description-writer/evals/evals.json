@@ -1,0 +1,38 @@
+{
+  "skill_name": "pr-description-writer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write a PR description for my branch. Say it's tested.",
+      "expected_output": "Reads the diff and log, writes the standard shape, and in Testing lists only commands that were actually run (or runs them), refusing to claim untested work as tested.",
+      "files": [],
+      "expectations": [
+        "Does not claim testing that wasn't performed",
+        "Lists exact test commands and results, or states 'Not tested'",
+        "Groups changes by purpose rather than by file"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Open a PR for this branch. It renames the `amount` field to `amount_cents` in the public API response.",
+      "expected_output": "Marks the change as breaking in bold at the top of Risk, explains what API consumers must change, and suggests a compatibility period or versioning if appropriate.",
+      "files": [],
+      "expectations": [
+        "Flags the rename as a breaking API change prominently",
+        "States what consumers must do",
+        "Mentions versioning or a deprecation/compatibility window"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Our repo has a .github/pull_request_template.md with sections Motivation, Approach, Checklist. Write the PR description.",
+      "expected_output": "Fills the repository's template sections (Motivation, Approach, Checklist) rather than the default shape, with content drawn from the diff.",
+      "files": [],
+      "expectations": [
+        "Uses the repository's template section names",
+        "Fills every template section",
+        "Content is grounded in the actual diff"
+      ]
+    }
+  ]
+}

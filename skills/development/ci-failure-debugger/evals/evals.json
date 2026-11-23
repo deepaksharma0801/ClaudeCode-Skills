@@ -33,6 +33,17 @@
         "Suggests --maxWorkers or --runInBand or splitting the suite",
         "Proposes verifying the fix with a passing run"
       ]
+    },
+    {
+      "id": 4,
+      "prompt": "Our test job keeps failing randomly. Can you just add a retry step so it reruns failed tests automatically?",
+      "expected_output": "Declines to add blanket retries as the fix; checks whether the same commit both passes and fails, classifies the failure, and fixes the cause (or hands off to flaky-test investigation), explaining that retries hide real defects.",
+      "files": [],
+      "expectations": [
+        "Does not add automatic retries as the solution",
+        "Checks whether failures occur on the same commit to confirm flakiness",
+        "Looks for the first real error in the failing logs"
+      ]
     }
   ]
 }

@@ -8,6 +8,19 @@ description: Adds structured logs, metrics, and traces to a service so failures 
 Instrument for the questions you will ask during an incident: is it broken, for whom, since when,
 and where. Every log line should be searchable, every metric cheap to store, and every request
 traceable across services.
+Instrumentation you add during an outage is too late — and instrumentation that logs secrets or
+explodes metric cardinality becomes its own incident.
+
+## When to Use
+
+- A service with little or no logging, metrics, or tracing
+- "We couldn't tell what happened during the outage"
+- Adding a new service, endpoint, queue consumer, or cron job
+- Errors that can't be connected across services
+- Designing alerts or SLOs
+
+**Don't use when:** the task is reading existing logs to find a problem (use `log-triage`), or
+finding why something is slow (use `performance-investigation` — it may then add instrumentation).
 
 ## Overview
 
@@ -39,6 +52,21 @@ tracing across boundaries, and a small set of symptom-based alerts.
 6. **Verify:** trigger a request and an error locally or in staging; show the log line, the metric,
    and the trace that result, connected by the same `trace_id`.
 
+## Checklist
+
+```text
+- [ ] Entry points and outbound calls mapped; existing libraries identified
+- [ ] JSON logs with timestamp, level, service, trace_id, request_id
+- [ ] One log per meaningful event; levels used consistently
+- [ ] No secrets, tokens, or personal data in logs
+- [ ] RED metrics per entry point, labeled by route template, method, status class
+- [ ] No unbounded labels (user ID, email, raw URL, error text)
+- [ ] OpenTelemetry auto-instrumentation for framework, HTTP clients, DB drivers
+- [ ] Trace context propagated across services and queues; trace_id in logs
+- [ ] Symptom-based alerts with owner, threshold rationale, runbook link
+- [ ] Verified: one request shows the same trace_id in log, metric exemplar/trace
+```
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not log full request or response bodies, headers with tokens, or personal data.
@@ -48,6 +76,8 @@ tracing across boundaries, and a small set of symptom-based alerts.
 * Do not log and rethrow the same error at every layer; log it once where it is handled.
 
 ## Examples
+
+### Example 1: a service with nothing
 
 **User:** "Our FastAPI orders service has basically no observability. Add some."
 
@@ -103,3 +133,43 @@ Verified in staging: POST /orders → log line {"event":"request_completed","rou
 "status":201,"trace_id":"4bf9…"} → same trace_id in Jaeger shows FastAPI → SQLAlchemy INSERT →
 httpx POST payments. Request bodies are not logged.
 ```
+
+### Example 2: noisy logs that still don't help
+
+**User:** "We log a ton but still can't debug anything. Here's a sample:
+`INFO here`, `INFO got data {…full JSON body…}`, `ERROR Error: Error`."
+
+**Expected output:**
+
+```text
+## What's wrong
+- Unstructured strings: can't filter by order or customer.
+- No request or trace ID: lines from concurrent requests interleave with no way to group them.
+- Full request bodies logged: they include emails and addresses (personal data) and card
+  last-4s; they also make up most of the log volume.
+- "Error: Error": the exception type, message, and stack trace are lost.
+
+## Changes
+1. Switch to structured JSON logs with request_id + trace_id bound per request (middleware).
+2. Replace debug breadcrumbs ("here", "got data") with one event per outcome:
+   log.info("order_created", order_id=o.id, items=len(o.items), total_cents=o.total_cents)
+3. Log exceptions once, where they're handled, with the stack:
+   log.exception("payment_failed", order_id=o.id, provider="stripe")
+4. Remove body logging; add a redaction processor that drops keys named password, token,
+   authorization, card, email as a safety net.
+
+Result in staging: log volume down 78%; searching order_id=81723 returns the 4 lines for that
+order across API and worker, joined by one trace_id.
+```
+
+## Quick Reference
+
+| Signal | Default |
+|---|---|
+| Logs | JSON; timestamp, level, service, trace_id, request_id + event fields |
+| Levels | ERROR = action needed, WARN = degraded, INFO = business events, DEBUG off in prod |
+| Metrics | RED per entry point; labels = route template, method, status class |
+| Traces | OpenTelemetry auto-instrumentation first; propagate `traceparent` |
+| Alerts | On user-facing symptoms (errors, latency, queue age) with runbooks |
+| Never | Secrets/PII in logs; user IDs or raw URLs as metric labels |
+
