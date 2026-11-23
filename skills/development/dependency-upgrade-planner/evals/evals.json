@@ -1,0 +1,28 @@
+{
+  "skill_name": "dependency-upgrade-planner",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We're on Next.js 12. Can you just bump it to the latest in package.json and fix whatever breaks?",
+      "expected_output": "Proposes a stepwise plan through each major version, reads the official upgrade guides, uses the Next.js codemods, checks the React and Node version requirements, and verifies tests and build between steps.",
+      "files": [],
+      "expectations": [
+        "Does not jump directly to the latest major in one step",
+        "Mentions reading each version's official upgrade guide",
+        "Uses or recommends npx @next/codemod",
+        "Checks companion requirements such as React and Node versions"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Plan an upgrade from SQLAlchemy 1.3 to 2.0 for our Flask app.",
+      "expected_output": "Uses the official 2.0 migration path: move to 1.4 first, enable SQLALCHEMY_WARN_20 / future mode to surface deprecations, fix them, then switch to 2.0, testing at each step.",
+      "files": [],
+      "expectations": [
+        "Goes through 1.4 as an intermediate step",
+        "Uses 2.0 deprecation warnings (SQLALCHEMY_WARN_20) to find issues before upgrading",
+        "Runs tests between steps"
+      ]
+    }
+  ]
+}
