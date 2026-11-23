@@ -1,0 +1,27 @@
+{
+  "skill_name": "leaked-secret-response",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Oops, I committed my OpenAI API key to our private repo last week. I'll just delete the file in a new commit, right?",
+      "expected_output": "Explains that deleting the file leaves the key in history and that private repos still expose it to everyone with access and their clones, and says to rotate the key at the provider first, then check usage, then clean up.",
+      "files": [],
+      "expectations": [
+        "Says to rotate/revoke the key at the provider before any git cleanup",
+        "Explains the key remains in git history after deleting the file",
+        "Suggests checking the provider's usage logs for abuse during the exposure window"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our Stripe live secret key showed up in a CI log that's visible to the whole org. What's the plan?",
+      "expected_output": "An ordered response: roll the Stripe key, update consumers, check Stripe logs and events for unexpected activity, delete or restrict the CI log, and prevent recurrence by masking secrets in CI.",
+      "files": [],
+      "expectations": [
+        "Starts with rolling the Stripe key",
+        "Includes checking Stripe logs/events for abuse",
+        "Includes preventing secrets from being printed in CI logs"
+      ]
+    }
+  ]
+}
