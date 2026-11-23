@@ -1,0 +1,28 @@
+{
+  "skill_name": "dataset-anonymizer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm going to paste our support tickets export into ChatGPT to find common complaints. Columns: ticket_id, customer_email, customer_name, created_at, subject, body. Can you clean it first?",
+      "expected_output": "Drops or hashes the direct identifiers, redacts the free-text subject and body with scripts/anonymize.py, generalizes created_at, and recommends spot-checking redacted text because body often contains personal data.",
+      "files": [],
+      "expectations": [
+        "Uses scripts/anonymize.py with a rules.json covering every column",
+        "Applies 'redact' (or drop) to subject and body, and warns that redaction is pattern-based",
+        "Drops customer_name and drops or hashes customer_email",
+        "Recommends spot-checking output rows before sharing"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Is it fine to just SHA-256 the email column before sending the file to our vendor?",
+      "expected_output": "Explains that unsalted hashes of emails can be reversed by hashing guessed emails, and recommends a keyed HMAC (the script's hash action) with a secret key kept out of the shared data.",
+      "files": [],
+      "expectations": [
+        "Says plain SHA-256 of emails is reversible by guessing",
+        "Recommends a keyed HMAC with a secret key",
+        "Says the key must not be shared with the recipient"
+      ]
+    }
+  ]
+}
