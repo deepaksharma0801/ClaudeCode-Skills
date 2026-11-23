@@ -1,0 +1,39 @@
+{
+  "skill_name": "metric-definition-writer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Define churn rate for our SaaS subscriptions dashboard.",
+      "expected_output": "States purpose, chooses customer vs revenue churn, defines numerator and denominator (customers at period start who cancelled), handles trials, downgrades, paused accounts, reactivations, and time zone, lists edge cases, and provides versioned reference SQL.",
+      "files": [],
+      "expectations": [
+        "Defines both numerator and denominator explicitly",
+        "Addresses trials, downgrades or pauses, and reactivations",
+        "States the time window and time zone",
+        "Provides reference SQL with comments for each choice"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Finance says October revenue was $1.82M, our dashboard says $1.95M. Help.",
+      "expected_output": "Compares the two definitions choice by choice (gross vs net of refunds, tax, currency conversion, recognition date vs payment date, time zone) and quantifies which choices account for the gap, rather than declaring one number correct.",
+      "files": [],
+      "expectations": [
+        "Compares definitions choice by choice",
+        "Considers refunds, tax, currency, and timing differences",
+        "Attributes the gap to specific choices"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Let's count active users as anyone who logged in this month, it's easiest.",
+      "expected_output": "Notes that login-based activity overstates engagement and is affected by auto-login and background sessions, recommends a key-action definition tied to the metric's purpose, and asks what decision the metric informs.",
+      "files": [],
+      "expectations": [
+        "Explains why login-based activity is a weak definition",
+        "Recommends a key-action definition",
+        "Asks about or states the metric's purpose"
+      ]
+    }
+  ]
+}
