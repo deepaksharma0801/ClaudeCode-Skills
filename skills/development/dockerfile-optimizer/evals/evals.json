@@ -1,0 +1,40 @@
+{
+  "skill_name": "dockerfile-optimizer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Make this Dockerfile smaller:\n\nFROM python:3.12\nCOPY . .\nRUN pip install -r requirements.txt\nCMD python app.py",
+      "expected_output": "Rewrites with a slim pinned base, requirements copied before source, no-cache pip install, a non-root user, exec-form CMD, and a .dockerignore, and says to measure before/after size rather than promising a number.",
+      "files": [],
+      "expectations": [
+        "Copies requirements.txt and installs before copying the source",
+        "Adds a non-root USER",
+        "Uses exec-form CMD",
+        "Adds a .dockerignore",
+        "Does not claim a specific size reduction without measuring"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our build needs a private npm token. Right now we do ARG NPM_TOKEN and write it to .npmrc. Is that fine?",
+      "expected_output": "Explains that build args and files written in layers persist in image history, and replaces it with a BuildKit secret mount used only during npm ci.",
+      "files": [],
+      "expectations": [
+        "States that ARG values or written files can be recovered from image layers/history",
+        "Uses RUN --mount=type=secret for the token",
+        "Ensures the token is not present in the final image"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Switch our Rails app image to distroless to cut size.",
+      "expected_output": "Checks whether the app relies on a shell (entrypoint scripts, rake tasks), native gems, or tools at runtime before recommending distroless, and proposes a slim multi-stage alternative if those exist.",
+      "files": [],
+      "expectations": [
+        "Checks for shell usage and native library needs before switching",
+        "Explains the risk of runtime failures with distroless",
+        "Recommends measuring and smoke-testing the result"
+      ]
+    }
+  ]
+}
