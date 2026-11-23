@@ -1,0 +1,39 @@
+{
+  "skill_name": "design-doc-writer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write a design doc for adding SSO (SAML) to our app.",
+      "expected_output": "Starts with the problem and evidence, states goals and non-goals, covers the design (IdP config, user provisioning, account linking, session handling) with failure modes, evaluates real alternatives (build vs auth provider), and includes rollout and rollback.",
+      "files": [],
+      "expectations": [
+        "States the problem before the solution",
+        "Includes at least two real alternatives",
+        "Covers failure modes such as IdP outage or account linking conflicts",
+        "Includes a rollout and rollback plan"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Here's my design doc draft. It describes the solution in detail but has no alternatives section. Review it.",
+      "expected_output": "Points out the missing alternatives (and do-nothing option), explains why reviewers need them, and drafts candidate alternatives with reasons they lose, plus any other gaps.",
+      "files": [],
+      "expectations": [
+        "Flags the missing alternatives section",
+        "Drafts realistic alternatives including do nothing",
+        "Checks for rollout and risks sections"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Design doc for migrating our Postgres database from one AWS region to another with no downtime.",
+      "expected_output": "Covers replication approach, cutover steps, data consistency checks, rollback, monitoring, and risks, with assumptions marked and an effort estimate.",
+      "files": [],
+      "expectations": [
+        "Includes a cutover and rollback plan",
+        "Addresses data consistency verification",
+        "Marks assumptions rather than inventing facts"
+      ]
+    }
+  ]
+}
