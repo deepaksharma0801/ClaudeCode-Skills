@@ -1,0 +1,39 @@
+{
+  "skill_name": "data-quality-checks",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Add data tests to every column in our dim_customers dbt model — not_null and unique on all of them.",
+      "expected_output": "Pushes back on blanket tests, identifies the grain key and the columns consumers rely on, proposes a focused set with severities (unique/not_null on the key, accepted values and relationships where they matter, freshness), and explains alert fatigue.",
+      "files": [],
+      "expectations": [
+        "Does not add unique and not_null to every column",
+        "Applies uniqueness to the grain key",
+        "Assigns error vs warn severities",
+        "Includes a freshness or volume check"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Last week a duplicate load doubled revenue on the exec dashboard and nobody noticed for 3 days. How do we prevent that?",
+      "expected_output": "Adds a blocking uniqueness test on the grain key and a volume check against recent history, named after the incident, plus alerting to an owner, and explains where in the pipeline they run.",
+      "files": [],
+      "expectations": [
+        "Adds a uniqueness check on the grain that would catch duplicate loads",
+        "Adds a volume anomaly check based on history",
+        "Makes the grain check blocking and routes alerts to an owner"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write a volume check: the events table must have exactly 2,000,000 rows per day.",
+      "expected_output": "Replaces the exact count with a range derived from recent history (e.g. within ±30% of the trailing 7-day median, accounting for weekly seasonality) and a never-zero check, noting the threshold should be tuned.",
+      "files": [],
+      "expectations": [
+        "Does not use an exact row-count equality",
+        "Uses a history-based range",
+        "Mentions weekly seasonality or tuning the threshold"
+      ]
+    }
+  ]
+}

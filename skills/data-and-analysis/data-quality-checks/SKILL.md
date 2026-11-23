@@ -7,6 +7,19 @@ description: Designs automated data quality tests for a table or pipeline, cover
 
 Test the assumptions downstream users rely on, and make every check fail loudly with a clear
 message. Each check states the rule, why it matters, and what happens when it fails.
+Bad data almost never crashes a pipeline; it flows quietly into dashboards and decisions. The goal
+is a small set of checks that would have caught the failures that actually happen — duplicate
+loads, stale feeds, broken joins, unit changes — without so many alerts that people stop reading them.
+
+## When to Use
+
+- Building or reviewing a pipeline, dbt model, or warehouse table
+- "The dashboard doubled overnight" / "numbers were wrong for a week and nobody noticed"
+- Adding monitoring to a data source that others depend on
+- Writing tests after a data incident
+
+**Don't use when:** you need a one-time look at a file (use `csv-data-summarizer`), or the problem
+is a query that computes the wrong number from good data (use `sql-query-reviewer`).
 
 ## Overview
 
@@ -39,6 +52,37 @@ Expectations, Soda, or plain SQL assertions.
 7. If investigating a past incident, add a check that would have caught it, and name it after the
    failure mode.
 
+## Checklist
+
+```text
+- [ ] Table grain, consumers, and load pattern identified
+- [ ] Freshness check with an expected lag
+- [ ] Volume check against recent history, never-zero
+- [ ] Uniqueness on the grain key
+- [ ] Not-null on required columns; null-rate thresholds on optional ones
+- [ ] Accepted values / ranges / date sanity where they matter
+- [ ] Foreign keys checked against parent tables
+- [ ] Reconciliation with the source for key totals
+- [ ] Severity (error vs warn) set per check; thresholds' origin noted
+- [ ] Where each check runs and who gets alerted
+- [ ] A check named after each past incident
+```
+
+## Red Flags
+
+- "Add not_null and unique to every column."
+- "Make all tests blocking, to be safe."
+- "Row count must equal 48,211."
+- "We'll add tests after the next incident."
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "More tests is safer." | Dozens of low-value tests produce alert fatigue; the one failure that matters gets ignored with the rest. |
+| "Everything should block the pipeline." | Blocking on a minor warning delays every downstream consumer. Block on grain and freshness; warn on the rest. |
+| "Thresholds can be exact." | Data grows and has weekly cycles. Use ranges from history, or the check fails on a normal Monday. |
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not add `not_null` and `unique` to every column by reflex. Test the assumptions that matter.
@@ -48,6 +92,8 @@ Expectations, Soda, or plain SQL assertions.
 * Do not invent column names; use the schema provided or say what is assumed.
 
 ## Examples
+
+### Example 1: tests for a dbt model after an incident
 
 **User:** "Add tests to our `fct_orders` dbt model. Last week a duplicate load doubled revenue on the dashboard."
 
@@ -107,3 +153,51 @@ where d = current_date - 1
 
 Runs: `dbt build --select fct_orders` after each hourly load; `error` tests block downstream
 models, `warn` tests post to #data-alerts.
+
+### Example 2: plain SQL checks for a vendor feed
+
+**User:** "We get a daily CSV of exchange rates from a vendor into `fx_rates(date, currency, rate)`. No dbt. What should we check?"
+
+**Expected output:**
+
+```sql
+-- Run after each load; any returned row = failure. Severity in brackets.
+
+-- [error] freshness: yesterday's rates must exist
+SELECT 'missing_yesterday' AS check_name
+WHERE NOT EXISTS (SELECT 1 FROM fx_rates WHERE date = CURRENT_DATE - 1);
+
+-- [error] grain: one rate per currency per day
+SELECT date, currency, COUNT(*) FROM fx_rates
+WHERE date >= CURRENT_DATE - 7 GROUP BY 1, 2 HAVING COUNT(*) > 1;
+
+-- [error] completeness: every currency we bill in is present
+SELECT c.code FROM billing_currencies c
+LEFT JOIN fx_rates r ON r.currency = c.code AND r.date = CURRENT_DATE - 1
+WHERE r.currency IS NULL;
+
+-- [warn] plausibility: day-over-day move > 10% (vendor unit or decimal errors)
+SELECT t.currency, y.rate AS prev, t.rate AS curr
+FROM fx_rates t JOIN fx_rates y ON y.currency = t.currency AND y.date = t.date - 1
+WHERE t.date = CURRENT_DATE - 1 AND ABS(t.rate / y.rate - 1) > 0.10;
+```
+
+```text
+Why these four: a missing day, a duplicated load, a missing currency, and a decimal-shift error are
+the failures that actually corrupt invoices. The 10% threshold is an initial guess; tune it from
+the last year of day-over-day moves (exotic currencies may need a wider band).
+Run them in the loading job; on [error], stop invoicing and page the data on-call; on [warn], post to #data-alerts.
+```
+
+## Quick Reference
+
+| Dimension | Typical check | Usual severity |
+|---|---|---|
+| Freshness | max(loaded_at) within expected lag | error |
+| Volume | latest load within ±X% of recent median; never zero | warn |
+| Uniqueness | grain key unique | error |
+| Completeness | required not null; optional null rate < threshold | error / warn |
+| Validity | accepted values, ranges, sane dates | warn |
+| Integrity | foreign keys exist in parent | warn |
+| Consistency | totals reconcile with source | error for finance data |
+
