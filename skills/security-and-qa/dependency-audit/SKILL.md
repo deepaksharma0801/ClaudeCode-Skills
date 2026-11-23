@@ -125,7 +125,7 @@ Found 7 advisories: 1 critical, 2 high, 3 moderate, 1 low
 
 ### Example 2: "are we affected by this CVE?"
 
-**User:** "There's a new critical in `requests` — are we affected?" *(Python service)*
+**User:** "There's a new security advisory for `requests` — are we affected?" *(Python service)*
 
 **Expected output:**
 
@@ -139,7 +139,7 @@ to the same host on the same Session. grep shows one Session with verify=False i
 scripts/legacy_sync.py (internal tool, not the service). The service never disables verification.
 
 Verdict: affected package, low practical exposure. Upgrade anyway (patch-level, low risk):
-  pip install "requests>=2.32.0" && pip freeze > requirements.txt
+  change the pin in requirements.txt to requests==2.32.3, then pip install -r requirements.txt
 and remove verify=False from scripts/legacy_sync.py.
 ```
 
