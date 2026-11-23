@@ -7,6 +7,17 @@ description: Writes an engineering blog post that leads with a concrete problem,
 
 A technical post earns attention with a specific problem and evidence, not adjectives. Every
 claim is backed by a number, a code sample that runs, or a clearly stated opinion.
+Engineers share posts that teach them something they can use — with numbers they can trust and code
+they can run. Marketing language and hidden trade-offs make readers stop trusting the rest.
+
+## When to Use
+
+- Engineering blog posts, "how we built/fixed X", launch write-ups for developers
+- Turning a postmortem, design doc, or benchmark into a public post
+- Conference talk abstracts or dev newsletters
+
+**Don't use when:** the audience is customers who need to know what changed (use
+`release-notes-writer`), or it's internal documentation (use `design-doc-writer`).
 
 ## Overview
 
@@ -39,6 +50,20 @@ for a reader who will copy the code and check the numbers.
 6. **Review checklist before publishing:** numbers match sources, code runs, no confidential data,
    claims about other tools are fair and sourced, links work.
 
+## Checklist
+
+```text
+- [ ] Audience and single takeaway defined
+- [ ] Specific title (names the thing and result)
+- [ ] Opening states the problem with a number
+- [ ] What didn't work included
+- [ ] Code runnable, minimal, versions noted; no secrets or internal hosts
+- [ ] Results: before/after with how measured
+- [ ] Trade-offs and limits
+- [ ] No marketing adjectives; numbers match sources
+- [ ] Confidential details (customers, hostnames, unreleased plans) removed
+```
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not use marketing language ("revolutionary", "blazing fast", "seamless") in place of evidence.
@@ -49,6 +74,8 @@ for a reader who will copy the code and check the numbers.
 * Do not open with company history; open with the problem.
 
 ## Examples
+
+### Example 1: a slow dashboard
 
 **User:** "Write a blog post about how we fixed our slow dashboard. Postgres 16, orders table 310M rows,
 2% open. p95 was 9.1s on page 1 and page 20 timed out at 30s. A composite index (19 GB) only got
@@ -113,3 +140,45 @@ LIMIT 50;
 - OFFSET gets slower with every page; keyset pagination stays flat.
 - Measure p95 per page depth, not just page 1.
 ````
+
+### Example 2: turning a postmortem into a public post
+
+**User:** "Turn our internal Redis outage postmortem into a public engineering blog post."
+
+**Expected output:**
+
+````markdown
+# What a full Redis memory taught us about our job queue
+
+On November 4, background jobs — emails, exports, webhooks — stopped for 47 minutes. Nothing was
+lost, but customers waited for receipts and exports. The cause was a single queue growing until
+Redis ran out of memory, and the fix was mostly about limits we hadn't set.
+
+## What happened
+A retry bug re-enqueued failed webhook jobs without a cap. Over three days that queue grew to
+11 million jobs and filled Redis' 25 GB. With `maxmemory-policy noeviction`, Redis started
+rejecting all writes, so no new jobs could be queued.
+
+## What we changed
+- Capped retries (10, with exponential backoff) and moved exhausted jobs to a dead-letter queue.
+- Alerts on queue length and Redis memory at 70%.
+- Separate Redis instances for queues and caching, so a runaway queue can't take caching down.
+
+## What you can take from it
+- `noeviction` is the right policy for queues — but only with alerts before memory fills.
+- Every retry loop needs a ceiling.
+````
+
+Removed from the internal version: hostnames, the customer who reported it first, individual
+names, and internal ticket links.
+
+## Quick Reference
+
+| Part | Rule |
+|---|---|
+| Title | Specific thing + result |
+| Opening | Problem + a number, in 2–4 sentences |
+| Middle | Context → what failed → solution with runnable code |
+| Results | Before/after, how measured |
+| Ending | Trade-offs + 2–4 takeaways |
+| Never | Invented benchmarks, marketing adjectives, internal names |
