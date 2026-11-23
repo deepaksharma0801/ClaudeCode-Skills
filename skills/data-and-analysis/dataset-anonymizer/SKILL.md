@@ -9,6 +9,18 @@ compatibility: Bundled script requires Python 3.8+ (standard library only).
 Decide what each column is for the recipient before transforming it, and treat any column you did
 not explicitly handle as a leak. Removing names is not anonymization; combinations like ZIP +
 birth date + gender re-identify people.
+Once a file is shared it can't be recalled, so mistakes here are permanent. The script makes the
+transformations repeatable and lists every untouched column, so nothing leaks by omission.
+
+## When to Use
+
+- Sharing data with a contractor, vendor, researcher, or another team
+- Pasting data into an AI tool or a public issue
+- Creating realistic test or demo data from production
+- Publishing a dataset or a case study
+
+**Don't use when:** the recipient needs to contact or identify people (then it's a data-sharing
+agreement question, not anonymization), or the data is already aggregated to large groups.
 
 ## Overview
 
@@ -44,6 +56,33 @@ re-identification risk with a k-anonymity count.
    Note when a legal standard applies (HIPAA Safe Harbor, GDPR) — pseudonymized data is still
    personal data under GDPR — and recommend review rather than declaring compliance.
 
+## Checklist
+
+```text
+- [ ] Recipient's purpose written down
+- [ ] Every column classified (direct, quasi, free text, attribute)
+- [ ] rules.json covers every column; report shows no surprise "copied unchanged"
+- [ ] ANONYMIZE_KEY set from a secret, not shared
+- [ ] k-anonymity on quasi-identifiers ≥ 5 (higher for sensitive data)
+- [ ] 20 random output rows spot-checked, especially free text
+- [ ] Residual risks and legal context stated
+```
+
+## Red Flags
+
+- "We dropped the name and email columns, so it's anonymous."
+- "SHA-256 the emails, nobody can reverse that."
+- "The notes column is probably fine."
+- "Send the key along so they can join the files."
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "No names means anonymous." | ZIP + birth date + gender alone identifies most people in a population. Check quasi-identifiers. |
+| "Hashes are irreversible." | Unkeyed hashes of emails or phone numbers can be reversed by hashing guesses. Use a keyed HMAC and keep the key. |
+| "Redaction catches everything." | Pattern redaction catches emails and numbers, not names or stories in free text. Drop or review free text. |
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not treat dropping the name and email columns as anonymization.
@@ -54,6 +93,8 @@ re-identification risk with a k-anonymity count.
 * Do not generalize so aggressively that the data no longer answers the recipient's question.
 
 ## Examples
+
+### Example 1: a file for a contractor
 
 **User:** "I need to send our customers.csv to an analytics contractor so they can study churn by region and age. Make it safe."
 
@@ -88,3 +129,35 @@ Send: customers_anon.csv only. Keep ANONYMIZE_KEY in the team password manager; 
 Residual risk: mrr values are exact; a contractor who knows a specific customer's price could
 spot them. Round mrr to the nearest $10 if that matters.
 ```
+
+### Example 2: free text that redaction can't fix
+
+**User:** "Just run redact on the support tickets body and send them to the vendor."
+
+**Expected output:**
+
+```text
+Ran redact on a 200-ticket sample and read 20 outputs. It removed emails, phone numbers, and card
+digits, but left:
+- personal names ("Hi, this is Ana from accounting")
+- health and family details ("after my surgery last week", "my husband's account")
+- company names and order references in prose
+
+Pattern-based redaction isn't enough for this column. Options, safest first:
+1. Don't send body; send category, product, created_month, and resolution time instead.
+2. Send bodies only after a named-entity redaction pass plus a manual review of a sample.
+3. Have the vendor work in your environment so the text never leaves.
+```
+
+## Quick Reference
+
+| Column type | Default action |
+|---|---|
+| Name, phone, address, government ID | `drop` |
+| Email / user ID needed for joins | `hash` (keyed HMAC) |
+| Birth date | `year` |
+| Timestamp | `month` |
+| ZIP / postcode | `zip3` |
+| Age | `bucket:10` |
+| IP | `ip24` or `drop` |
+| Free text | `drop`, or `redact` + review |
