@@ -1,0 +1,39 @@
+{
+  "skill_name": "sql-query-reviewer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Why is this total double what finance reports?\nSELECT SUM(i.amount) FROM invoices i JOIN invoice_lines l ON l.invoice_id = i.id WHERE l.taxable;",
+      "expected_output": "Identifies join fan-out (invoice amount repeated per line), gives a check query showing invoices with multiple lines, and rewrites using EXISTS or by aggregating lines first, depending on the intended meaning.",
+      "files": [],
+      "expectations": [
+        "Identifies the one-to-many join fan-out as the cause",
+        "Provides a check query that proves the duplication",
+        "Rewrites without fan-out (EXISTS or pre-aggregation)",
+        "Does not fix it by adding DISTINCT"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "This returns zero rows and I don't get why: SELECT * FROM users WHERE id NOT IN (SELECT user_id FROM bans);",
+      "expected_output": "Explains that bans.user_id likely contains a NULL, which makes NOT IN unknown for every row; shows a check query for NULLs and rewrites with NOT EXISTS.",
+      "files": [],
+      "expectations": [
+        "Explains NOT IN with a NULL in the subquery",
+        "Provides a check for NULL user_id in bans",
+        "Rewrites using NOT EXISTS"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Speed this up: SELECT * FROM events WHERE DATE(created_at) = '2026-11-20' AND lower(type) = 'signup';",
+      "expected_output": "Replaces DATE(created_at) with a half-open timestamp range so an index can be used, addresses the lower() call (expression index or normalized data), avoids SELECT *, and suggests an index with explicit column order, noting it should be measured.",
+      "files": [],
+      "expectations": [
+        "Rewrites the date filter as a sargable half-open range",
+        "Addresses the function on type (expression index or data normalization)",
+        "Suggests an index with specific columns and order"
+      ]
+    }
+  ]
+}
