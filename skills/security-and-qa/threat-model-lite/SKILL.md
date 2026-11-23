@@ -7,6 +7,18 @@ description: Produces a one-page STRIDE threat model with ranked risks and concr
 
 Model the specific feature in front of you, not security in general. Every threat must name the
 component it hits and a mitigation a developer can implement this sprint.
+Full threat-modeling workshops rarely happen for everyday features, so the obvious risks ship.
+A one-page model done while the design is still cheap to change catches most of them.
+
+## When to Use
+
+- Designing or reviewing a feature that touches auth, user data, payments, uploads, sharing,
+  webhooks, admin tools, or third-party integrations
+- Security review before launch
+- "What could go wrong with this design?"
+
+**Don't use when:** reviewing existing auth code line by line (use `auth-code-review`), or
+triaging scanner findings (use `security-finding-triage`).
 
 ## Overview
 
@@ -31,6 +43,34 @@ boundary, and rank what matters by likelihood and impact.
    instead of assuming.
 8. List **open questions** you could not answer from the material provided.
 
+## Checklist
+
+```text
+- [ ] Scope in one sentence: feature, users, data
+- [ ] Data flow with trust boundaries marked
+- [ ] Assets listed
+- [ ] STRIDE walked at each boundary; only real threats kept
+- [ ] Each threat: scenario, likelihood, impact, concrete mitigation, exists in code?
+- [ ] Claimed mitigations verified in code where available
+- [ ] Top 3 "do before launch"
+- [ ] Open questions listed
+```
+
+## Red Flags
+
+- A threat list that would fit any feature ("SQL injection, XSS, CSRF…") with no data flow.
+- Everything rated High.
+- "Users must be logged in, so it's fine."
+- Mitigations like "validate input" or "use encryption".
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "We use a framework, so it's secure." | Frameworks cover common bugs, not your authorization rules or business logic. |
+| "Only logged-in users can reach it." | Authentication isn't authorization; any logged-in user may be the attacker. |
+| "It's internal." | Internal tools get phished accounts and over-broad access; model them too. |
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not produce a generic OWASP checklist unrelated to the feature's actual flows.
@@ -40,6 +80,8 @@ boundary, and rank what matters by likelihood and impact.
 * Do not write exploit code; describe the attack scenario in one line.
 
 ## Examples
+
+### Example 1: share invoice by link
 
 **User:** "We're adding 'share invoice by link' — anyone with the link can view a PDF of the invoice."
 
@@ -73,3 +115,38 @@ Trust boundaries: browser→API (both flows), API→object storage
 ## Open questions
 - Should links require the viewer's email (stronger), or stay bearer links?
 ```
+
+### Example 2: a webhook receiver
+
+**User:** "We're adding an endpoint that receives payment webhooks from our provider and marks orders paid."
+
+**Expected output:**
+
+```text
+## Data flow
+Provider → (internet) → POST /webhooks/payments → verify → update orders → enqueue receipt email
+Trust boundary: internet → our API (anyone can call this URL)
+
+## Threats
+| ID | Threat (STRIDE) | Scenario | L | I | Mitigation |
+|----|-----------------|----------|---|---|------------|
+| T1 | Spoofing | Attacker posts a fake "paid" event and gets goods free | H | H | Verify the provider's signature header with the webhook secret; reject if invalid |
+| T2 | Tampering / replay | Valid old event replayed to re-trigger fulfillment | M | M | Reject timestamps older than 5 min; store processed event IDs (idempotency) |
+| T3 | Info disclosure | Error responses echo payloads with customer data | L | M | Return 400/200 with no body detail; log event ID only |
+| T4 | DoS | Flood of junk requests | M | L | Verify signature before any DB work; rate-limit by IP |
+| T5 | Elevation | Event for order A marks order B paid (ID from payload trusted blindly) | M | H | Look up the payment by provider ID and match amount + currency + order before updating |
+
+## Do before launch
+1. T1 signature verification  2. T5 amount/order matching  3. T2 idempotency on event ID
+```
+
+## Quick Reference
+
+| Boundary | Ask |
+|---|---|
+| Browser → API | Who is the caller, and may they touch *this* object? |
+| Internet → webhook | Is the sender verified (signature), and is it a replay? |
+| API → third party | What do we send, and what if the response is malicious? |
+| User upload → storage | Type/size limits, malware, public access, served from where? |
+| Service → DB | Least privilege; tenant scoping in every query |
+| Ranking | Likelihood × impact; top 3 before launch |

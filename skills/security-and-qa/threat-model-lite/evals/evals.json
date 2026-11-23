@@ -1,0 +1,38 @@
+{
+  "skill_name": "threat-model-lite",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Threat model our new 'invite teammates by email' feature.",
+      "expected_output": "Draws the flow (inviter → API → email → invite link → signup), marks trust boundaries, and lists specific threats such as guessable or reusable invite tokens, inviting into another tenant, email enumeration, and role escalation via invite parameters, each with a concrete mitigation.",
+      "files": [],
+      "expectations": [
+        "Includes a data flow with trust boundaries",
+        "Covers invite token strength, expiry, and single use",
+        "Checks role or tenant escalation via invite parameters",
+        "Gives concrete mitigations and a top-3 list"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Give me a generic list of security threats for web apps.",
+      "expected_output": "Explains that a useful model needs the specific feature's data flow, asks for or proposes a feature to model, and avoids an unfocused OWASP dump.",
+      "files": [],
+      "expectations": [
+        "Asks for the specific feature or design",
+        "Does not produce a generic unprioritized list as the answer"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Our internal admin panel lets support staff view any customer's account. Anything to worry about?",
+      "expected_output": "Models insider and compromised-account threats: least privilege by role, audit logging of views, just-in-time access, MFA, and data masking — and rates them realistically.",
+      "files": [],
+      "expectations": [
+        "Considers compromised support accounts and insider misuse",
+        "Recommends audit logging of access",
+        "Recommends role-based or just-in-time access and MFA"
+      ]
+    }
+  ]
+}
