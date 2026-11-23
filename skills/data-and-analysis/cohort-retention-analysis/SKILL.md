@@ -9,6 +9,19 @@ compatibility: Bundled script requires Python 3.8+ (standard library only).
 Pick the retention definition before computing anything, and never compare a cohort's unfinished
 period with older cohorts' finished ones. Most "retention is collapsing" charts are incomplete
 recent periods.
+The definition (what counts as active, which period, cohort by signup or first activity) changes
+the numbers more than any product change will, so it is fixed and written down before the table
+is built.
+
+## When to Use
+
+- "Are users coming back?", "what's our retention / churn / stickiness?"
+- Judging whether a product or onboarding change improved retention
+- Repeat-purchase behavior from orders data
+- Investigating a retention chart that "suddenly dropped"
+
+**Don't use when:** the question is a single conversion step (use `funnel-analysis`) or an
+experiment between two arms (use `ab-test-readout`, then this skill per arm if needed).
 
 ## Overview
 
@@ -42,6 +55,32 @@ monthly periods, cohort by signup or by first activity, classic (active in perio
 6. **Report:** the definition, the table (or the first 8 periods), 3–5 findings tied to numbers,
    and caveats. For a chart, plot one line per cohort (or the average) with periods on the x-axis.
 
+## Checklist
+
+```text
+- [ ] Cohort, active event, period, and classic vs rolling decided and written down
+- [ ] Internal/test users excluded
+- [ ] Ran scripts/retention.py; incomplete periods left blank
+- [ ] Read rows (curve shape), columns (newer vs older cohorts), and the weighted average
+- [ ] Small cohorts and seasonal cohorts flagged
+- [ ] Findings tied to numbers, with caveats
+```
+
+## Red Flags
+
+- "The latest cohort's month 1 is way down — retention is collapsing."
+- "Active = logged in."
+- "Average the cohort percentages."
+- "W1 went from 44% to 47% — the redesign worked." (with 70-user cohorts)
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "Partial periods are close enough." | A period that's half over shows roughly half the activity. Blank it. |
+| "Logins are a fine proxy." | Logins include auto-logins and bounces; they overstate retained value. |
+| "Simple average is fine." | It weights a 13-user cohort the same as a 900-user one. Weight by size. |
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not compute retention for periods that have not ended; the latest cohorts will look like they churned.
@@ -51,6 +90,8 @@ monthly periods, cohort by signup or by first activity, classic (active in perio
 * Do not call a 2–3 point change between small cohorts a trend.
 
 ## Examples
+
+### Example 1: did the redesign help?
 
 **User:** "Here's our events export. Is retention getting better since the October onboarding redesign?" *(events.csv: user_id, occurred_at, event)*
 
@@ -80,3 +121,35 @@ Findings
 Caveats: the newest cohorts have only 2–3 complete weeks (blank cells are not drop-off).
 Next step: compare W1 for users who completed the new onboarding vs those who skipped it.
 ```
+
+### Example 2: "why are cells blank?"
+
+**User:** "Monthly retention by first purchase month please. Why are some cells empty?" *(data through 2026-11-20)*
+
+**Expected output:**
+
+```text
+$ python3 scripts/retention.py orders.csv --user-col customer_id --time-col ordered_at --period month --max-periods 2 --format csv
+cohort,users,M0,M1,M2
+2026-09-01,254,100.0%,83.1%,
+2026-10-01,333,100.0%,,
+2026-11-01,13,,,
+weighted avg,600,100.0%,83.1%,
+
+Blank cells are periods that haven't finished yet, not churn:
+- October's M1 is November, which runs to Nov 30; data ends Nov 20.
+- November's M0 is still in progress, so even it is blank.
+Only September has a complete M1 (83.1% of 254 customers ordered again in October).
+Re-run after Dec 1 for October's M1. Until then, don't compare cohorts on M1.
+```
+
+## Quick Reference
+
+| Choice | Default |
+|---|---|
+| Period | Week for weekly-use products; month for purchases/billing |
+| Active | A key action, not login |
+| Type | Classic (active in period N) unless stated |
+| Incomplete periods | Blank, never zero |
+| Averages | Weighted by cohort size |
+| Small cohorts | < ~100 users → call it noisy |
