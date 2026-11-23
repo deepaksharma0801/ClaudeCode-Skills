@@ -7,6 +7,20 @@ description: Audits a web page or UI component against WCAG 2.2 AA and returns l
 
 Test what users actually hit: keyboard, screen reader semantics, contrast, and zoom. Every issue
 names the element, the WCAG criterion, who it affects, and the code that fixes it.
+Automated scanners find only part of accessibility problems; the rest — focus order, keyboard
+traps, meaningless labels, unannounced errors — need a manual pass. Reporting a clean automated
+scan as "accessible" is the most common mistake.
+
+## When to Use
+
+- "Is this page/component accessible?", WCAG or ADA/EAA compliance checks
+- Reviewing forms, modals, menus, custom widgets, and charts
+- Before launching a public page or design-system component
+- A user complaint about keyboard or screen-reader use
+
+**Don't use when:** the question is visual design taste with no accessibility angle (use
+`chart-critique` for charts), or legal advice on compliance obligations (give the technical
+findings and recommend legal review).
 
 ## Overview
 
@@ -37,6 +51,28 @@ order, keyboard traps, meaningful labels, and announcements for dynamic content.
 5. Prefer fixing with native HTML before adding ARIA.
 6. List what was checked and passed, and what could not be tested (e.g. no screen reader available).
 
+## Checklist
+
+```text
+- [ ] Scope and framework noted
+- [ ] Automated pass (axe-core / Lighthouse) run and de-duplicated
+- [ ] Keyboard: reach, operate, visible focus, logical order, no traps, Escape closes, focus returns
+- [ ] Semantics: native elements, headings, landmarks, lists/tables
+- [ ] Names: labels, icon buttons, alt text, link text
+- [ ] Contrast computed: text 4.5:1 (3:1 large), UI/focus 3:1
+- [ ] Dynamic content announced; errors linked to fields
+- [ ] 200% zoom / 320px width; reduced motion; target size
+- [ ] Each issue: severity, location, WCAG criterion, who's affected, code fix
+- [ ] Passed checks and untested areas listed
+```
+
+## Red Flags
+
+- "Lighthouse says 100, we're accessible."
+- `<div onClick>` for buttons; `outline: none` globally.
+- `aria-label` sprinkled everywhere instead of visible labels.
+- Suggesting an accessibility overlay widget.
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not report a clean result from an automated scan alone as "accessible".
@@ -46,6 +82,8 @@ order, keyboard traps, meaningful labels, and announcements for dynamic content.
 * Do not suggest an accessibility overlay widget as a fix.
 
 ## Examples
+
+### Example 1: a signup form
 
 **User:** "Can you check the signup form for accessibility?"
 
@@ -81,3 +119,40 @@ Tab order follows visual order; submit works with Enter; page has one h1; usable
 ## Not tested
 Screen reader output was not checked live (no VoiceOver/NVDA session available).
 ```
+
+### Example 2: a custom modal
+
+**User:** "Our confirm-delete modal is a div we show with CSS. Is it OK?"
+
+**Expected output:**
+
+```text
+1. BLOCKER — 2.1.2 No keyboard trap / 2.4.3 Focus order — Modal.tsx
+   Focus stays on the page behind; Tab moves through hidden content; Escape does nothing.
+   Fix: use <dialog> with showModal() (built-in focus containment and Escape), or trap focus in
+   the modal, move focus to its first control on open, and return it to the trigger on close.
+2. SERIOUS — 4.1.2 Name, role, value — the div has no role or name.
+   Fix: <dialog aria-labelledby="del-title"> … <h2 id="del-title">Delete project?</h2>
+3. SERIOUS — background content still readable by screen readers while open.
+   Fix: showModal() makes the rest inert; otherwise add the inert attribute to the page root.
+
+Recommended rewrite:
+<dialog ref={ref} aria-labelledby="del-title" onClose={onCancel}>
+  <h2 id="del-title">Delete project?</h2>
+  <p>This can't be undone.</p>
+  <button onClick={onConfirm}>Delete</button>
+  <button autoFocus onClick={() => ref.current.close()}>Cancel</button>
+</dialog>
+```
+
+## Quick Reference
+
+| Check | Pass condition |
+|---|---|
+| Keyboard | Everything reachable and operable; visible focus; no traps |
+| Buttons/links | Native `<button>` / `<a href>` |
+| Form fields | Visible `<label>`; errors via `aria-describedby` + announced |
+| Images | Meaningful `alt`, or `alt=""` if decorative |
+| Contrast | 4.5:1 text, 3:1 large text and UI |
+| Modals | `<dialog>` + `showModal()`, focus returns on close |
+| Zoom | Usable at 200% and 320px wide |
