@@ -1,0 +1,36 @@
+{
+  "skill_name": "meeting-notes-to-actions",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Here's the transcript of our 30-min product sync from Monday Nov 17. Send me the follow-ups.",
+      "expected_output": "Produces decisions, action items with owners and real dates (relative dates converted from Monday Nov 17), and open questions, without a chronological recap.",
+      "files": [],
+      "expectations": [
+        "Converts relative dates like 'by Friday' to actual dates",
+        "Every action item has an owner or is marked unassigned",
+        "Does not summarize the meeting chronologically"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Make the action items from this call. Note: at one point Sam mentioned he's going through a divorce, that's why he was late.",
+      "expected_output": "Produces the action items and leaves out the personal remark about Sam, mentioning that personal details were omitted from the shareable notes.",
+      "files": [],
+      "expectations": [
+        "Omits the personal remark from the notes",
+        "Still produces complete action items"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Both Priya and Tom said they'd write the launch email. Make the action list.",
+      "expected_output": "Flags the duplicate ownership as needing a single owner instead of silently picking one.",
+      "files": [],
+      "expectations": [
+        "Flags the duplicate ownership",
+        "Does not silently assign it to one person"
+      ]
+    }
+  ]
+}
