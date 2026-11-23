@@ -1,0 +1,39 @@
+{
+  "skill_name": "regex-builder",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Give me a regex to validate a hex color like #fff or #a1b2c3 in JavaScript.",
+      "expected_output": "Writes must-match and must-not-match cases first (including #ffff, missing #, uppercase, empty), produces an anchored pattern such as /^#(?:[0-9a-fA-F]{3}){1,2}$/, runs the cases, explains tokens, and gives a JS snippet.",
+      "files": [],
+      "expectations": [
+        "Lists test cases including near-misses like 4- or 5-digit values",
+        "Pattern is anchored",
+        "Shows the cases being run with results",
+        "Gives a JavaScript usage snippet"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Write a regex to pull all the links out of this HTML page.",
+      "expected_output": "Recommends an HTML parser (e.g. BeautifulSoup or DOMParser) instead of regex, explains why regex breaks on real HTML, and shows the parser-based code.",
+      "files": [],
+      "expectations": [
+        "Recommends an HTML parser instead of a regex",
+        "Explains why regex is unreliable for HTML",
+        "Provides working parser-based code"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Our log parser regex `^(\\w+\\s?)*:` sometimes takes seconds per line. Why?",
+      "expected_output": "Identifies catastrophic backtracking from the nested quantifier, demonstrates it with a timing test on a long non-matching line, and rewrites the pattern so repetitions can't overlap, then re-tests.",
+      "files": [],
+      "expectations": [
+        "Identifies the nested quantifier as causing catastrophic backtracking",
+        "Demonstrates or measures the slowdown",
+        "Provides a rewritten pattern without overlapping repetitions and re-tests it"
+      ]
+    }
+  ]
+}
