@@ -1,0 +1,27 @@
+{
+  "skill_name": "observability-instrumentation",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Add a Prometheus metric that counts requests per user so we can see who uses the API most.",
+      "expected_output": "Warns that a user_id label creates unbounded cardinality, keeps the metric labeled by route/method/status, and suggests logs or an analytics store for per-user usage.",
+      "files": [],
+      "expectations": [
+        "Explains the cardinality problem with per-user metric labels",
+        "Does not add user_id as a Prometheus label",
+        "Suggests structured logs or analytics for per-user counts"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Requests go from our Node API to a Python worker via SQS and we can't connect errors across them. Help.",
+      "expected_output": "Adds OpenTelemetry instrumentation on both sides, propagates trace context through SQS message attributes, and includes trace_id in structured logs so one request can be followed end to end.",
+      "files": [],
+      "expectations": [
+        "Uses OpenTelemetry (auto-instrumentation where available)",
+        "Propagates trace context through SQS message attributes",
+        "Adds trace_id to logs on both services"
+      ]
+    }
+  ]
+}
