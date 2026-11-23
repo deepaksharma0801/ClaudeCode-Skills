@@ -1,0 +1,27 @@
+{
+  "skill_name": "survey-analysis",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Our employee engagement score went from 3.8 to 3.9 out of 5 this year (n=120 both years). Leadership wants to announce engagement improved. Can they?",
+      "expected_output": "Explains that a 0.1 change in a Likert mean with n=120 is very likely within noise, asks for or computes the distribution / top-2-box with a margin of error, and recommends wording that does not claim improvement.",
+      "files": [],
+      "expectations": [
+        "Does not endorse claiming an improvement",
+        "Recommends reporting distributions or top-2-box with margins of error rather than the mean alone",
+        "Mentions sample size and response rate as context"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Summarize these 600 open-ended responses to 'Why did you cancel?' for the product team.",
+      "expected_output": "Builds a codebook of themes with definitions, codes all responses (allowing multiple codes), reports theme shares, and includes short anonymized representative quotes.",
+      "files": [],
+      "expectations": [
+        "Defines 5-10 themes before counting",
+        "Reports the share of responses per theme",
+        "Quotes are short and contain no identifying details"
+      ]
+    }
+  ]
+}
