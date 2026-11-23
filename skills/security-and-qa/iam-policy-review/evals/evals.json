@@ -1,0 +1,27 @@
+{
+  "skill_name": "iam-policy-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Our Lambda keeps getting AccessDenied on DynamoDB, so I'm going to give it dynamodb:* on *. Fine?",
+      "expected_output": "Advises against the wildcard, asks which table and operations the function uses (or derives them from the code/CloudTrail), and writes a policy scoped to specific actions and the table ARN (plus its indexes if needed).",
+      "files": [],
+      "expectations": [
+        "Recommends against dynamodb:* on Resource *",
+        "Scopes Resource to the table ARN (and /index/* only if needed)",
+        "Lists specific actions such as GetItem, PutItem, Query"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Check this S3 bucket policy: {\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":\"s3:GetObject\",\"Resource\":\"arn:aws:s3:::invoices-prod/*\"}]}",
+      "expected_output": "Runs scripts/iam_lint.py, flags the public principal on an invoices bucket as HIGH, and proposes serving through CloudFront with origin access control or a condition such as aws:SourceArn, plus checking Block Public Access.",
+      "files": [],
+      "expectations": [
+        "Flags Principal * without a Condition as making invoices public",
+        "Proposes a restricted alternative (CloudFront OAC, aws:SourceArn, or presigned URLs)",
+        "Mentions S3 Block Public Access"
+      ]
+    }
+  ]
+}
