@@ -22,6 +22,17 @@
         "Reports the share of responses per theme",
         "Quotes are short and contain no identifying details"
       ]
+    },
+    {
+      "id": 3,
+      "prompt": "Here are survey results by country: Germany 18 responses (61% satisfied), France 22 (77%), Spain 9 (44%). Which country should we worry about?",
+      "expected_output": "Points out the very small samples and wide margins of error (roughly ±15–35 points), says the differences are not distinguishable, and recommends pooling or collecting more responses before acting.",
+      "files": [],
+      "expectations": [
+        "Computes or notes the large margins of error per country",
+        "Does not single out a country as a finding",
+        "Recommends more data or pooling"
+      ]
     }
   ]
 }

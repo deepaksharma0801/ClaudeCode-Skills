@@ -8,6 +8,19 @@ description: Builds conversion funnels with ordered steps, conversion windows, a
 A funnel number is meaningless without its definition: which events, in what order, within what
 time window, counted per user or per session. Define those first, then find the step that loses
 the most users and the segment where it is worst.
+Counting events independently of order produces "funnels" where later steps exceed earlier
+ones, and unbounded windows count users who converted months later. Both look plausible and both
+are wrong.
+
+## When to Use
+
+- "Where are we losing users in signup / checkout / onboarding?"
+- Comparing conversion across devices, channels, or countries
+- Validating that a funnel dashboard is computed correctly
+- Before designing an experiment on a step
+
+**Don't use when:** the question is whether users return over time (use
+`cohort-retention-analysis`), or whether a change caused an improvement (use `ab-test-readout`).
 
 ## Overview
 
@@ -41,6 +54,25 @@ window), computes step and overall conversion, and breaks drop-off down by segme
 7. **Report:** definition, funnel table, biggest leak, segment finding, tracking caveats, and one
    or two hypotheses to test — not conclusions about why users leave.
 
+## Checklist
+
+```text
+- [ ] Steps (exact event names), unit, window, entry period, and ordering defined
+- [ ] Query enforces order and window; counts distinct units
+- [ ] Per-step and overall conversion, plus time between steps
+- [ ] Biggest absolute leak identified
+- [ ] Leak segmented by 2–4 dimensions with n ≥ 100
+- [ ] Tracking checked around the leak (duplicates, renames, platform gaps)
+- [ ] Hypotheses to test, not causes asserted
+```
+
+## Red Flags
+
+- A later step has more users than an earlier one.
+- "Conversion is 3% — must be the form." (No segment or tracking check.)
+- Window "all time".
+- Mixing sessions and users in one table.
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not count step events independently of order (a "funnel" where step 3 exceeds step 2).
@@ -50,6 +82,8 @@ window), computes step and overall conversion, and breaks drop-off down by segme
 * Do not compare funnels across a tracking change without saying so.
 
 ## Examples
+
+### Example 1: a checkout funnel
 
 **User:** "Where are we losing people in checkout?" *(Postgres table `events(user_id, event, occurred_at, device)`)*
 
@@ -101,3 +135,34 @@ Tracking check: started_checkout counts on mobile are stable across the period (
 
 Hypotheses to test: the mobile cart's checkout button placement; forced account creation on mobile.
 ```
+
+### Example 2: a funnel that goes up
+
+**User:** "Our dashboard funnel shows 10,000 cart views → 6,100 checkout starts → 6,400 payment pages. How can step 3 be bigger?"
+
+**Expected output:**
+
+```text
+A strict funnel can't grow, so this one counts events independently. Checked:
+- payment_page_viewed fires on page load and again on every card-validation error (event counts
+  per user: median 1, p90 3) → counted twice for many users.
+- Some users reach the payment page from a saved "Buy again" link without starting checkout, so
+  they never had step 2.
+
+Recomputed as a strict, per-user, 24-hour funnel from cart view:
+cart 10,000 → checkout 6,100 (61.0%) → payment 5,380 (88.2%) → purchased 4,410 (82.0%)
+
+Also fix tracking: fire payment_page_viewed once per page view (dedupe on page_view_id), and
+document the "Buy again" path as a separate funnel.
+```
+
+## Quick Reference
+
+| Rule | Default |
+|---|---|
+| Unit | Distinct users |
+| Order | Strict: each step after the previous |
+| Window | Bounded from step 1 (e.g. 1 or 7 days) |
+| Biggest leak | Largest absolute loss, not lowest % |
+| Segments | Only with n ≥ 100 at the step |
+| Step count grows | Tracking or ordering bug |

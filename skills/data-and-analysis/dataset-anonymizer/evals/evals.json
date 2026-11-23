@@ -23,6 +23,18 @@
         "Recommends a keyed HMAC with a secret key",
         "Says the key must not be shared with the recipient"
       ]
+    },
+    {
+      "id": 3,
+      "prompt": "Make this patient appointments CSV safe to share with a scheduling-software vendor: name, dob, zip, diagnosis_code, appointment_time, notes.",
+      "expected_output": "Treats it as sensitive health data: drops name and notes, generalizes dob and zip, coarsens appointment_time, considers whether the vendor needs diagnosis_code at all, checks k-anonymity with a higher threshold, and recommends legal/privacy review rather than declaring compliance.",
+      "files": [],
+      "expectations": [
+        "Drops or justifies keeping diagnosis_code based on the vendor's purpose",
+        "Generalizes dob, zip, and appointment_time",
+        "Uses a higher k threshold or extra caution for health data",
+        "Recommends legal or privacy review"
+      ]
     }
   ]
 }

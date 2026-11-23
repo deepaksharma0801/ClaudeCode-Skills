@@ -7,6 +7,20 @@ description: Analyzes survey results with response rates, margins of error, Like
 
 Report what the respondents said, with its uncertainty, and be explicit about who did not respond.
 A survey describes the people who answered it, not automatically everyone you sent it to.
+Surveys invite overconfident readouts: small samples, self-selected respondents, and many
+possible comparisons. Margins of error and the response-rate caveat are part of the result, not
+footnotes.
+
+## When to Use
+
+- Customer satisfaction, NPS, CSAT, employee engagement, user research surveys
+- Comparing survey results between periods or segments
+- Summarizing open-ended answers
+- Reviewing a survey readout before it goes to leadership
+
+**Don't use when:** the data is behavioral (events, purchases — use `funnel-analysis` or
+`cohort-retention-analysis`), or the question is survey *design* before launch (then focus on
+wording and sampling, not analysis).
 
 ## Overview
 
@@ -37,6 +51,33 @@ distributions with margins of error, careful segment comparisons, and a coded su
 6. **Report:** headline findings tied to numbers with margins of error, the top themes from free
    text, segment differences that are real, and caveats (response rate, bias, wording).
 
+## Checklist
+
+```text
+- [ ] Invited vs responded; response rate computed
+- [ ] Respondents compared with invitees on known attributes
+- [ ] Speeders, straight-liners, duplicates removed (counted)
+- [ ] Distributions + top-2-box with margins of error
+- [ ] Comparisons only with n ≥ 30 per group; tested; corrected for many
+- [ ] Open-ended answers coded with a codebook; theme shares; anonymized quotes
+- [ ] Caveats: response rate, bias, wording
+```
+
+## Red Flags
+
+- "Satisfaction went from 71% to 74%, we improved!" (n ≈ 400 each)
+- "The average score is 3.9."
+- "Enterprise customers in EMEA are unhappy" (n = 11).
+- Skipping the free-text answers.
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "The change is in the right direction." | Within the margin of error, the direction is noise. Report the interval. |
+| "Means are easier to explain." | A mean of 3.9 hides whether people are split or lukewarm. Show the distribution. |
+| "Respondents represent our customers." | Only if they resemble invitees. Check, and weight if not. |
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not report percentages without n, or changes smaller than the margin of error as real.
@@ -47,6 +88,8 @@ distributions with margins of error, careful segment comparisons, and a coded su
 * Do not ignore the open-ended answers; they explain the numbers.
 
 ## Examples
+
+### Example 1: did satisfaction improve?
 
 **User:** "Here are 412 responses to our customer satisfaction survey (sent to 3,800 customers). Last quarter, 71% said satisfied (n=389). Did we improve?" *(survey.csv)*
 
@@ -82,3 +125,30 @@ No detectable change — the difference is within sampling noise.
 ## Caveats
 10.8% response rate and an annual-plan skew. Weight by plan type before quoting a company-wide number.
 ```
+
+### Example 2: NPS from a small sample
+
+**User:** "We got 60 responses: 30 promoters, 18 passives, 12 detractors. NPS 30! Can I put that in the board deck?"
+
+**Expected output:**
+
+```text
+NPS = 50% promoters − 20% detractors = 30.
+With n = 60, the 95% margin of error is about ±20 points (19.8), so the plausible range is
+roughly 10 to 50.
+
+For the deck: "NPS 30 (n = 60, ±20)". Don't compare it with last quarter unless the change is
+bigger than both margins. To get to ±10, you'd need roughly 4x the responses (~240).
+Also check who responded — 60 of how many invited, and do they look like your customer base?
+```
+
+## Quick Reference
+
+| Metric | Report |
+|---|---|
+| Proportion | p ± 1.96·√(p(1−p)/n) |
+| Likert item | Full distribution + top-2-box; mean only as secondary |
+| NPS | %9–10 − %0–6, with its interval when n < 200 |
+| Comparison | n ≥ 30 per group; test; correct for many |
+| Free text | Codebook → coded shares → anonymized quotes |
+| Always | n, response rate, who didn't respond |

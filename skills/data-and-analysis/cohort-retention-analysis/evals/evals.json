@@ -22,6 +22,17 @@
         "States the cohort and activity definitions",
         "Gives findings tied to specific numbers from the table"
       ]
+    },
+    {
+      "id": 3,
+      "prompt": "Compute our weekly retention and tell me if it's good. Active means 'logged in'.",
+      "expected_output": "Questions login as the activity definition and proposes a key action, builds the table with scripts/retention.py, and judges 'good' by curve shape (flattening) and trend across cohorts rather than a universal benchmark.",
+      "files": [],
+      "expectations": [
+        "Questions or caveats login-based activity",
+        "Uses scripts/retention.py or equivalent with incomplete periods blank",
+        "Assesses whether curves flatten and whether newer cohorts improve"
+      ]
     }
   ]
 }

@@ -1,0 +1,38 @@
+{
+  "skill_name": "ab-test-readout",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Our pricing page test: A had 12,000 visitors and 360 signups, B had 12,100 and 401. We stopped after 4 days because B was winning. Ship B?",
+      "expected_output": "Runs scripts/ab_test.py, reports the lift with CI and p, and flags that 4 days is less than a full week and that stopping when it looked good inflates false positives; recommends keeping it running or rerunning rather than shipping.",
+      "files": [],
+      "expectations": [
+        "Uses scripts/ab_test.py or reports the CI and p-value",
+        "Flags the short duration and early stopping",
+        "Does not give an unqualified SHIP"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Test came back p=0.28. So the new onboarding has no effect, right? Control 8,000/1,120 activated, variant 8,050/1,175.",
+      "expected_output": "Explains the result is inconclusive rather than 'no effect', reports the interval (which includes meaningful positive values), and gives the sample size needed to detect the observed effect.",
+      "files": [],
+      "expectations": [
+        "Says inconclusive, not 'no effect'",
+        "Reports the confidence interval",
+        "States the sample size needed for the observed effect"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "We ran 5 headline variants against control. Variant D had p=0.03. Winner?",
+      "expected_output": "Applies a multiple-comparison correction (e.g. Bonferroni to 0.01 per comparison), concludes D is not significant after correction, and suggests a confirmatory test of D vs control.",
+      "files": [],
+      "expectations": [
+        "Applies a multiple comparison correction",
+        "Concludes D is not significant after correction",
+        "Recommends a follow-up confirmatory test"
+      ]
+    }
+  ]
+}

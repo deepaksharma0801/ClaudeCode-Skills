@@ -1,0 +1,37 @@
+{
+  "skill_name": "log-triage",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Here's a 200MB log from the outage window. What happened?",
+      "expected_output": "Uses scripts/log_patterns.py (or grep/sort/uniq) rather than reading the file, ranks templates, separates background from patterns that started during the window, identifies the earliest new error as the likely first cause, and reports redacted examples.",
+      "files": [],
+      "expectations": [
+        "Groups lines into templates instead of reading the file linearly",
+        "Uses onset time, not just count, to identify the likely cause",
+        "Does not paste unredacted personal data or secrets"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "The most common error in our logs is 'ECONNRESET' with 50k occurrences. That's the bug, right?",
+      "expected_output": "Checks whether ECONNRESET's rate changed versus a healthy period before attributing the problem to it, and looks for patterns that newly started around the incident.",
+      "files": [],
+      "expectations": [
+        "Compares with a healthy period or checks the rate over time",
+        "Does not conclude causality from frequency alone",
+        "Looks for patterns that began near the incident"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Paste back the 20 log lines that mention the failing customer so I can forward them to the vendor.",
+      "expected_output": "Provides the relevant lines with emails, tokens, IPs, and other personal or secret values redacted, and notes what was redacted.",
+      "files": [],
+      "expectations": [
+        "Redacts emails, tokens, and other personal or secret values",
+        "States that redaction was applied"
+      ]
+    }
+  ]
+}
