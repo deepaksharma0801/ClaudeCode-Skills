@@ -8,6 +8,18 @@ compatibility: Bundled script requires Python 3.8+ (standard library only). AWS 
 
 Grant what the workload actually calls, on the resources it actually touches. Every wildcard,
 every escalation-capable action, and every public principal needs a reason that survives review.
+Over-broad IAM is how a small credential leak becomes a full account compromise. The dangerous
+grants are often not the obvious `*:*` but escalation paths like unscoped `iam:PassRole`.
+
+## When to Use
+
+- Any IAM policy JSON, Terraform `aws_iam_policy_document`, CDK `PolicyStatement`, or bucket/KMS/SQS policy
+- "Why do we need these permissions?", "make this least privilege"
+- After an `AccessDenied` fix that widened permissions
+- Reviewing CI/CD or third-party integration roles
+
+**Don't use when:** the cloud is GCP or Azure (principles carry over; the linter only reads AWS
+policy JSON — say so), or the task is responding to leaked AWS keys (use `leaked-secret-response`).
 
 ## Overview
 
@@ -44,6 +56,26 @@ what the workload really needs, and produces a scoped replacement.
 7. **Report** findings by severity, the rewritten policy, and what must be tested (deploy to staging,
    watch for `AccessDenied` in CloudTrail).
 
+## Checklist
+
+```text
+- [ ] Policy rendered to JSON (Terraform/CDK synthesized)
+- [ ] Ran scripts/iam_lint.py
+- [ ] Actual usage checked (Access Analyzer policy generation, last-accessed, CloudTrail, code)
+- [ ] service:* replaced with specific actions; resources scoped to ARNs
+- [ ] iam:PassRole limited to role ARNs + iam:PassedToService
+- [ ] Conditions added where they fit (org, VPC endpoint, region, TLS, tags)
+- [ ] Resource policies: no unconditioned Principal *
+- [ ] Re-linted; validate-policy run; staging test planned
+```
+
+## Red Flags
+
+- Fixing `AccessDenied` by adding `service:*` or `Resource: "*"`.
+- `iam:PassRole` on `*`.
+- `Allow` + `NotAction`.
+- Removing permissions in production without usage data.
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not fix `AccessDenied` errors by widening to `service:*` or `Resource: "*"`.
@@ -53,6 +85,8 @@ what the workload really needs, and produces a scoped replacement.
 * Do not remove permissions in production without checking last-accessed data or CloudTrail first.
 
 ## Examples
+
+### Example 1: a deploy bot
 
 **User:** "Review the policy for our deploy bot."
 
@@ -90,3 +124,56 @@ lambda:UpdateFunctionCode on api-* functions. It never creates functions.
 Re-lint: No over-broad statements found.
 Test: run one deploy in staging and check CloudTrail for AccessDenied before rolling out.
 ```
+
+### Example 2: a Terraform policy document
+
+**User:** "Review this Terraform for our app's S3 access."
+
+```hcl
+data "aws_iam_policy_document" "app" {
+  statement {
+    actions   = ["s3:*"]
+    resources = ["arn:aws:s3:::uploads-prod", "arn:aws:s3:::uploads-prod/*"]
+  }
+}
+```
+
+**Expected output:**
+
+```text
+$ terraform show -json plan.out | jq ... > app-policy.json   # rendered document
+$ python3 scripts/iam_lint.py app-policy.json
+app-policy.json  MEDIUM #0  service wildcard 's3:*' includes every current and future action in that service
+
+Scoped to the bucket, so not account-wide — but s3:* includes DeleteBucket, PutBucketPolicy, and
+PutBucketAcl, so the app could make the bucket public or delete it.
+
+The code (uploads.py) only calls PutObject, GetObject, and ListBucket on the user-uploads/ prefix:
+
+statement {
+  actions   = ["s3:PutObject", "s3:GetObject"]
+  resources = ["arn:aws:s3:::uploads-prod/user-uploads/*"]
+}
+statement {
+  actions   = ["s3:ListBucket"]
+  resources = ["arn:aws:s3:::uploads-prod"]
+  condition {
+    test     = "StringLike"
+    variable = "s3:prefix"
+    values   = ["user-uploads/*"]
+  }
+}
+Re-lint: No over-broad statements found.
+```
+
+## Quick Reference
+
+| Finding | Fix |
+|---|---|
+| `Action: "*"` | Replace with the actions actually used |
+| `service:*` | Specific actions from code/CloudTrail |
+| `Resource: "*"` with writes | Scope to ARNs/prefixes |
+| `iam:PassRole` on `*` | Specific role ARNs + `iam:PassedToService` |
+| Attach/Put policy actions | Remove, or condition on `iam:PolicyARN` |
+| `Principal: "*"` | Add `aws:SourceArn`/`aws:PrincipalOrgID`, or remove |
+| Run | `python3 scripts/iam_lint.py policy.json` |

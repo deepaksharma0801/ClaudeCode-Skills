@@ -1,0 +1,38 @@
+{
+  "skill_name": "auth-code-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Review this Express route: app.get('/api/documents/:id', requireLogin, async (req,res)=>res.json(await Document.findByPk(req.params.id)))",
+      "expected_output": "Flags an IDOR: any logged-in user can read any document by ID; fixes by scoping the query to the user's ownership or tenant and adds a test with a second user.",
+      "files": [],
+      "expectations": [
+        "Identifies the missing object-level authorization (IDOR)",
+        "Scopes the query by owner or tenant",
+        "Suggests a test with a second user or tenant"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Is storing passwords with sha256(password + salt) okay?",
+      "expected_output": "Explains fast hashes are unsuitable for passwords and recommends bcrypt, scrypt, or Argon2id with a migration path that rehashes on next login.",
+      "files": [],
+      "expectations": [
+        "Says fast hashes like SHA-256 are not suitable for password storage",
+        "Recommends bcrypt, scrypt, or Argon2",
+        "Describes a migration path for existing hashes"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Our password reset sends a link with ?token=<user_id>-<timestamp>. Review it.",
+      "expected_output": "Flags the predictable token as allowing account takeover, and replaces it with a random 128-bit+ token that is single-use, short-lived, and stored hashed.",
+      "files": [],
+      "expectations": [
+        "Identifies the token as predictable",
+        "Recommends a cryptographically random token",
+        "Requires single use, expiry, and hashed storage"
+      ]
+    }
+  ]
+}

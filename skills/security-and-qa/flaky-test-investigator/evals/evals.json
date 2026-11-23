@@ -1,0 +1,38 @@
+{
+  "skill_name": "flaky-test-investigator",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "This Cypress test fails sometimes because the button isn't clickable yet. I'll add cy.wait(3000).",
+      "expected_output": "Explains fixed waits are both slow and still flaky, and replaces them with waiting on a condition (e.g. the request alias or the element becoming enabled), then verifies with repeated runs.",
+      "files": [],
+      "expectations": [
+        "Rejects the fixed wait as the fix",
+        "Waits on a specific condition or network alias",
+        "Verifies with repeated runs"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "test_checkout fails randomly. Can we just add pytest-rerunfailures with 3 reruns?",
+      "expected_output": "Declines retries as the fix, reproduces with repetition or random ordering, classifies the cause, and fixes it, noting retries can hide a real race.",
+      "files": [],
+      "expectations": [
+        "Does not adopt reruns as the solution",
+        "Reproduces with repetition or random order",
+        "Identifies and fixes a cause category"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "A Go test with t.Parallel() sometimes fails with 'address already in use'.",
+      "expected_output": "Identifies parallel tests binding the same fixed port and fixes it by using port 0 (OS-assigned) or httptest servers, then re-runs with -count and -race.",
+      "files": [],
+      "expectations": [
+        "Identifies the shared fixed port across parallel tests",
+        "Uses OS-assigned ports or httptest",
+        "Verifies with -count and -race"
+      ]
+    }
+  ]
+}

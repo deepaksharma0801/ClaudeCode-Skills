@@ -1,0 +1,39 @@
+{
+  "skill_name": "secrets-precommit-check",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm making this repo public tonight. Check it's safe to push.",
+      "expected_output": "Scans the commits about to be pushed (and recommends a full-history gitleaks scan since the repo is becoming public), reports redacted findings with fixes, and gives a clear verdict.",
+      "files": [],
+      "expectations": [
+        "Runs scripts/scan_secrets.py with a range or a full-history scan",
+        "Recommends scanning all history because the repo is going public",
+        "Never prints full secret values",
+        "Ends with SAFE or BLOCKED"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Scanner flagged my AWS key in config.py but I already pushed it yesterday. I'll just delete the line and force-push.",
+      "expected_output": "Explains that a pushed key must be rotated at AWS first and that force-pushing doesn't remove it from clones or caches, and switches to the leaked-secret response.",
+      "files": [],
+      "expectations": [
+        "Says to rotate/deactivate the key at AWS before any history cleanup",
+        "Explains force-push doesn't make a pushed secret safe",
+        "Suggests checking for abuse during the exposure window"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "The scanner keeps flagging API_KEY=your-api-key-here in .env.example. Can I turn it off?",
+      "expected_output": "Confirms .env.example placeholders shouldn't be flagged, checks the value is truly a placeholder, and keeps the scanner on (allowlisting the line only if needed) rather than disabling it.",
+      "files": [],
+      "expectations": [
+        "Confirms the value is a placeholder",
+        "Does not disable the scanner entirely",
+        "Uses the allowlist pragma or placeholder handling for the specific line"
+      ]
+    }
+  ]
+}

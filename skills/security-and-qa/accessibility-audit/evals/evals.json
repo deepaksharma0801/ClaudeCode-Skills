@@ -1,0 +1,38 @@
+{
+  "skill_name": "accessibility-audit",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Our Lighthouse accessibility score is 100. Can we say the site is WCAG AA compliant?",
+      "expected_output": "Explains automated tools catch only part of WCAG issues, lists the manual checks still needed (keyboard, focus, screen reader, zoom, dynamic content), and avoids declaring compliance.",
+      "files": [],
+      "expectations": [
+        "States that automated scores don't establish WCAG compliance",
+        "Lists manual checks such as keyboard and screen reader testing",
+        "Does not declare legal compliance"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Check this icon-only button: <div class='btn' onclick='save()'><svg>...</svg></div>",
+      "expected_output": "Flags the div as not keyboard accessible and unnamed, and replaces it with a native button with an accessible name.",
+      "files": [],
+      "expectations": [
+        "Identifies missing keyboard access and accessible name",
+        "Replaces it with a native button element",
+        "Adds an aria-label or visually hidden text"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Our brand gray #999999 on white for body text — fine?",
+      "expected_output": "Computes the contrast ratio (about 2.8:1), says it fails WCAG AA for body text (4.5:1), and suggests a darker gray that passes with its ratio.",
+      "files": [],
+      "expectations": [
+        "Computes the contrast ratio",
+        "States it fails the 4.5:1 requirement",
+        "Suggests a passing alternative color with its ratio"
+      ]
+    }
+  ]
+}

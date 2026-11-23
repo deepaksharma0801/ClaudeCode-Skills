@@ -7,6 +7,17 @@ description: Writes a risk-based test plan for a change, listing the cases worth
 
 Test what can break, at the cheapest level that catches it. A short list of high-value cases
 beats exhaustive coverage of the happy path.
+Asked to "add tests", models tend to write many near-identical happy-path unit tests that pass
+today and catch nothing tomorrow. A risk-based plan spends the effort where bugs actually live.
+
+## When to Use
+
+- "What should I test for this?", "write tests for this PR", "is this well tested?"
+- Planning QA for a feature before release
+- Reviewing the test coverage of a pull request
+
+**Don't use when:** a test is intermittently failing (use `flaky-test-investigator`), or the task
+is refactoring under test (use `safe-refactor`, which writes characterization tests).
 
 ## Overview
 
@@ -33,6 +44,34 @@ then optionally writes the top cases in the project's existing test style.
 8. Call out anything that cannot be tested reliably as written (hidden clock, network calls,
    global state) and suggest the seam that would make it testable.
 
+## Checklist
+
+```text
+- [ ] Read the change and existing tests; noted framework and conventions
+- [ ] Behavior summarized in 1–2 sentences
+- [ ] Risks listed (boundaries, invalid input, errors, concurrency, time, permissions, compat, integrations)
+- [ ] Each case: level, inputs, expected result, priority
+- [ ] Lowest effective level chosen per case
+- [ ] Existing coverage marked with test names
+- [ ] P1 tests written in house style and run (if asked)
+- [ ] Testability problems named with the seam to add
+```
+
+## Red Flags
+
+- Ten happy-path tests that differ only in input values.
+- Tests asserting that a mock was called with what the test just passed it.
+- "We'll cover it end to end." (for pure logic)
+- Tests that depend on `now()`, randomness, or the network.
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "More tests = better coverage." | Coverage of risky branches matters; duplicate happy paths add maintenance, not safety. |
+| "E2E tests are the most realistic." | They're slow and flaky; use them only for critical journeys and test logic at the unit level. |
+| "Mocks make it easy." | Over-mocked tests pass while the real integration breaks. Use real DB/HTTP fakes at the integration level. |
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not write tests that only assert a mock was called with the arguments you just passed it.
@@ -43,6 +82,8 @@ then optionally writes the top cases in the project's existing test style.
 * Do not claim coverage for a case unless a named test actually exercises it.
 
 ## Examples
+
+### Example 1: a coupon feature
 
 **User:** "What should I test for this new coupon code feature?" *(diff adds `apply_coupon(cart, code)`)*
 
@@ -69,3 +110,37 @@ discount to the cart subtotal, never below zero.
 - apply_coupon calls datetime.now() directly; inject a clock to make C3 deterministic.
 - C5 needs a real database transaction; the usage check is currently read-then-write (race).
 ```
+
+### Example 2: reviewing a PR's tests
+
+**User:** "Is this PR tested enough? It adds CSV export for invoices."
+
+**Expected output:**
+
+```text
+Existing tests in the PR: 3, all happy path (10 invoices → 11 lines).
+
+Missing, by risk:
+| ID | Case                                              | Level       | Pri |
+|----|---------------------------------------------------|-------------|-----|
+| E1 | Field containing comma, quote, or newline is quoted correctly | unit | P1 |
+| E2 | Cell starting with = + - @ is escaped (CSV injection in Excel) | unit | P1 |
+| E3 | User from org A can't export org B's invoices      | integration | P1 |
+| E4 | 0 invoices → header row only, not an error         | unit        | P2 |
+| E5 | 100k invoices streams without loading all into memory | integration | P2 |
+| E6 | Non-ASCII names survive (UTF-8 with BOM for Excel) | unit        | P3 |
+
+Verdict: not enough — E1–E3 are must-haves before merge (E2 and E3 are security issues).
+```
+
+## Quick Reference
+
+| Risk | Typical case |
+|---|---|
+| Boundaries | empty, zero, one, max, max+1 |
+| Invalid input | wrong type, missing field, malicious string |
+| Errors | dependency down, timeout, partial failure, retry |
+| Time | frozen clock, time zones, DST, month end |
+| Concurrency | two requests for the last unit |
+| Permissions | other user's / other tenant's object |
+| Level | unit for logic, integration for DB/API contracts, e2e for critical journeys |

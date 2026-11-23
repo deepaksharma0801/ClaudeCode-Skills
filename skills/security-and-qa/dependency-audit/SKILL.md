@@ -7,6 +7,19 @@ description: Audits a project's dependencies for known vulnerabilities, stale or
 
 Run the ecosystem's own audit tool, then triage. Report what is exploitable and fixable first;
 do not dump raw scanner output on the user.
+Raw scanner output is long, mostly dev-only, and often fixed by a minor bump; if it isn't triaged,
+teams either panic or ignore all of it — including the one exploitable runtime issue.
+
+## When to Use
+
+- "Audit our dependencies", "are we vulnerable?", pre-launch or compliance checks
+- A Dependabot/Snyk/`npm audit` report that needs prioritizing
+- A newly disclosed CVE in a popular package ("are we affected by …?")
+- Inheriting a codebase with an old lockfile
+
+**Don't use when:** the task is upgrading one framework across major versions (use
+`dependency-upgrade-planner`), or reviewing first-party code findings from SAST tools (use
+`security-finding-triage`).
 
 ## Overview
 
@@ -39,6 +52,34 @@ into a prioritized table with a concrete upgrade path for each issue.
    AGPL/GPL/SSPL and "UNKNOWN".
 7. Summarize with counts by severity and a short ordered action list.
 
+## Checklist
+
+```text
+- [ ] Ecosystems detected from lockfiles; right audit tool run (or missing tool named)
+- [ ] Each finding: package, installed → fixed version, severity, advisory ID
+- [ ] Direct vs transitive; runtime vs dev-only
+- [ ] Reachability considered for high/critical (is the vulnerable function used?)
+- [ ] Exact upgrade command per fix; major bumps flagged
+- [ ] Hygiene: lockfile present, no wildcard ranges, very stale packages
+- [ ] Licenses checked when relevant
+- [ ] Summary counts and an ordered action list
+```
+
+## Red Flags
+
+- "Run `npm audit fix --force`."
+- "237 vulnerabilities — we're compromised."
+- "It's only transitive, so it doesn't matter."
+- Reporting a CVE without the installed and fixed versions.
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "Auto-fix everything." | `--force` applies breaking majors silently. Review majors; take patches and minors freely. |
+| "Dev dependencies can't hurt us." | Mostly true for runtime, but build tools run in CI with secrets. Low priority, not zero. |
+| "Transitive issues aren't ours." | They ship in your bundle. Use overrides/resolutions when the parent won't update. |
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not run `npm audit fix --force` or any auto-upgrade without the user's go-ahead; it can apply
@@ -50,6 +91,8 @@ into a prioritized table with a concrete upgrade path for each issue.
   "unknown".
 
 ## Examples
+
+### Example 1: a pre-launch Node audit
 
 **User:** "Can you audit the deps on this Node app before we launch?"
 
@@ -79,3 +122,35 @@ Found 7 advisories: 1 critical, 2 high, 3 moderate, 1 low
 2. Upgrade jsonwebtoken to 9 and rerun auth tests.
 3. Pin express. Rerun `npm audit` to confirm 0 runtime highs.
 ```
+
+### Example 2: "are we affected by this CVE?"
+
+**User:** "There's a new security advisory for `requests` — are we affected?" *(Python service)*
+
+**Expected output:**
+
+```text
+$ pip-audit -f json   (uvx pip-audit)
+requests 2.31.0 → fixed in 2.32.0 (GHSA-9wx4-h78v-vm56, CVSS 5.6 — "Session verify=False persists")
+
+Installed via: direct dependency (requirements.txt pins requests==2.31.0).
+Reachability: the advisory affects code that makes a request with verify=False and later requests
+to the same host on the same Session. grep shows one Session with verify=False in
+scripts/legacy_sync.py (internal tool, not the service). The service never disables verification.
+
+Verdict: affected package, low practical exposure. Upgrade anyway (patch-level, low risk):
+  change the pin in requirements.txt to requests==2.32.3, then pip install -r requirements.txt
+and remove verify=False from scripts/legacy_sync.py.
+```
+
+## Quick Reference
+
+| Ecosystem | Command |
+|---|---|
+| npm / pnpm / yarn | `npm audit --json` / `pnpm audit --json` / `yarn npm audit --json` |
+| Python | `pip-audit -f json` (or `uvx pip-audit`) |
+| Rust | `cargo audit --json` |
+| Go | `govulncheck ./...` (reports reachable vulns) |
+| Ruby | `bundle audit check --update` |
+| Priority | runtime + high/critical + fix available → first |
+| Transitive stuck | npm `overrides`, yarn `resolutions`, pip constraints |

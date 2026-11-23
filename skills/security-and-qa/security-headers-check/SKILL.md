@@ -9,6 +9,18 @@ compatibility: Bundled script requires Python 3.8+ (standard library only). Live
 Measure the headers the site actually sends, then fix them where they are set (server, CDN, or
 framework). A Content-Security-Policy that breaks the site gets removed the next day, so roll out
 strict policies in report-only mode first.
+Headers are cheap defense in depth, but a strict policy rolled out blindly breaks pages and gets
+removed — so measurement and staged rollout matter as much as the header values.
+
+## When to Use
+
+- Launching or hardening a web app; pen-test or security questionnaire prep
+- Findings like "missing CSP/HSTS" from a scanner or audit
+- Cookie flag questions (Secure, HttpOnly, SameSite)
+- CORS configuration reviews
+
+**Don't use when:** the issue is application logic (XSS in a template, IDOR — use
+`auth-code-review` or `security-finding-triage`), or you don't own or have permission to test the site.
 
 ## Overview
 
@@ -42,6 +54,27 @@ headers), ranks the findings, and produces copy-paste config for the user's stac
    `Strict`); `HttpOnly` is optional only for cookies that JavaScript must read.
 8. **Re-run the script** after the change and show the before/after summary.
 
+## Checklist
+
+```text
+- [ ] Authorized to test the site
+- [ ] Ran scripts/check_headers.py on the HTML page, an authenticated page, and an API response
+- [ ] Findings ranked HIGH → LOW
+- [ ] Found the single layer where headers are set (CDN, proxy, platform, app)
+- [ ] CSP rolled out report-only first, nonces/hashes over unsafe-inline
+- [ ] HSTS max-age raised in steps; preload only if every subdomain is HTTPS
+- [ ] Session cookies Secure + HttpOnly + SameSite
+- [ ] CORS allow-list instead of * with credentials
+- [ ] Re-ran the check; before/after summary
+```
+
+## Red Flags
+
+- Enforcing a brand-new strict CSP straight to production.
+- Adding `'unsafe-inline' 'unsafe-eval'` to make CSP errors go away.
+- `preload` on HSTS without checking subdomains.
+- The same header set in both the CDN and the app.
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not enforce a strict CSP without a report-only phase; it will break real pages.
@@ -52,6 +85,8 @@ headers), ranks the findings, and produces copy-paste config for the user's stac
 * Do not run the check against sites the user is not authorized to test.
 
 ## Examples
+
+### Example 1: launch-week check
 
 **User:** "We launch Monday. Can you check our headers? Site is Express behind nginx."
 
@@ -92,3 +127,34 @@ CORS: replace `origin: "*"` with an allow-list (["https://shop.example"]) — cr
 Ship HSTS, nosniff, framing, cookie flags, and CORS now. Run CSP in report-only through launch
 week, then enforce. Re-run the check after deploy.
 ```
+
+### Example 2: CSP breaks a third-party script
+
+**User:** "We enforced CSP and now the Stripe checkout and our analytics don't load."
+
+**Expected output:**
+
+```text
+Browser console: "Refused to load the script 'https://js.stripe.com/v3' because it violates
+script-src 'self' 'nonce-…'" and "Refused to connect to 'https://api.stripe.com'".
+
+1. Switch back to Content-Security-Policy-Report-Only immediately to restore checkout.
+2. Add only the origins each vendor documents:
+   script-src 'self' 'nonce-{n}' https://js.stripe.com https://plausible.io;
+   frame-src https://js.stripe.com https://hooks.stripe.com;
+   connect-src 'self' https://api.stripe.com https://plausible.io/api/event;
+3. Watch the report endpoint for a week; when violations are only extensions/noise, enforce again.
+Don't add 'unsafe-inline' or a blanket https: to script-src — that removes most of CSP's value.
+```
+
+## Quick Reference
+
+| Header | Good default |
+|---|---|
+| Strict-Transport-Security | `max-age=31536000; includeSubDomains` |
+| Content-Security-Policy | `default-src 'self'; script-src 'self' 'nonce-…'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'` |
+| X-Content-Type-Options | `nosniff` |
+| Referrer-Policy | `strict-origin-when-cross-origin` |
+| Permissions-Policy | disable unused features, e.g. `camera=(), geolocation=()` |
+| Session cookie | `Secure; HttpOnly; SameSite=Lax` |
+| Run | `python3 scripts/check_headers.py https://…` |

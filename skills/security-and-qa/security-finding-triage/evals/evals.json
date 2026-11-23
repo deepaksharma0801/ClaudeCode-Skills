@@ -22,6 +22,17 @@
         "Checks the helper for normalization (realpath/resolve) and a base-directory containment check",
         "Does not mark them false positive without reading safe_join"
       ]
+    },
+    {
+      "id": 3,
+      "prompt": "Semgrep says our 300 findings are blocking the release. Can we just disable Semgrep in CI for now?",
+      "expected_output": "Proposes triaging by rule and severity, fixing or suppressing with reasons, and if needed setting a baseline so only new findings block, rather than disabling scanning.",
+      "files": [],
+      "expectations": [
+        "Does not recommend disabling the scanner",
+        "Suggests grouping by rule and prioritizing high-severity findings",
+        "Suggests baselining existing findings so new ones still block"
+      ]
     }
   ]
 }

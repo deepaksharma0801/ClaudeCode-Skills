@@ -22,6 +22,17 @@
         "Proposes a restricted alternative (CloudFront OAC, aws:SourceArn, or presigned URLs)",
         "Mentions S3 Block Public Access"
       ]
+    },
+    {
+      "id": 3,
+      "prompt": "Our GitHub Actions role has AdministratorAccess so deploys never fail. Can you tighten it?",
+      "expected_output": "Derives needed actions from the deploy workflow and CloudTrail (or Access Analyzer policy generation), proposes a scoped policy, restricts the OIDC trust policy to the repo and branch, and plans a staging test.",
+      "files": [],
+      "expectations": [
+        "Uses actual usage data (CloudTrail, Access Analyzer, or the workflow) to derive actions",
+        "Restricts the OIDC trust policy to specific repo and branch",
+        "Plans testing before removing AdministratorAccess"
+      ]
     }
   ]
 }
