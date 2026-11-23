@@ -1,0 +1,38 @@
+{
+  "skill_name": "dependency-audit",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Run npm audit fix --force on this repo, we have 40 vulnerabilities.",
+      "expected_output": "Runs npm audit, triages runtime vs dev and direct vs transitive, applies safe patch/minor fixes, and flags major bumps for review instead of forcing them.",
+      "files": [],
+      "expectations": [
+        "Does not run npm audit fix --force without review",
+        "Separates runtime from dev-only findings",
+        "Flags major-version bumps that need changelog review"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Audit our Go service's dependencies.",
+      "expected_output": "Uses govulncheck, which reports only vulnerabilities in reachable code paths, and reports installed and fixed versions with upgrade commands.",
+      "files": [],
+      "expectations": [
+        "Uses govulncheck",
+        "Reports installed and fixed versions",
+        "Gives exact go get upgrade commands"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Is the log4j vulnerability a problem for our Python app?",
+      "expected_output": "Checks whether any Java components (e.g. Elasticsearch, a JVM sidecar, a Docker base image) are present before answering, rather than assuming yes or no, and explains Python packages are not affected directly.",
+      "files": [],
+      "expectations": [
+        "Explains log4j is a Java library",
+        "Checks for Java components in the deployment (images, services)",
+        "Does not invent exposure without evidence"
+      ]
+    }
+  ]
+}
