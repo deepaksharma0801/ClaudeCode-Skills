@@ -11,6 +11,7 @@ Skills for status updates, meeting follow-ups, and consistent writing.
 - **[explain-for-stakeholders](explain-for-stakeholders)** — Rewrite technical updates for non-engineers, with the bottom line first and a clear ask.
 - **[code-review-comments](code-review-comments)** — Write labeled, kind, actionable review comments so authors know what blocks the merge.
 - **[customer-support-reply](customer-support-reply)** — Draft support replies that answer first, give clear steps, and never overpromise.
+- **[technical-blog-post](technical-blog-post)** — Write engineering posts built on a real problem, real numbers, runnable code, and trade-offs.
 
 brand-guidelines and internal-comms from [anthropics/skills](https://github.com/anthropics/skills) are
 listed in the [main README](../../README.md#community-picks).
