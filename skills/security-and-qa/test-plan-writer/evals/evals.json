@@ -1,0 +1,37 @@
+{
+  "skill_name": "test-plan-writer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write tests for this function that calculates shipping cost by weight and country.",
+      "expected_output": "Lists risk-based cases (weight boundaries between brackets, zero and negative weight, unknown country, currency rounding) with levels and priorities, then writes the P1 unit tests in the project's style and runs them.",
+      "files": [],
+      "expectations": [
+        "Includes bracket boundary values",
+        "Includes invalid inputs such as zero or negative weight and unknown country",
+        "Writes and runs tests in the existing framework"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Add tests to get our coverage from 60% to 90%.",
+      "expected_output": "Focuses on untested risky branches rather than coverage percentage, warns against tests that only execute lines, and proposes a prioritized plan.",
+      "files": [],
+      "expectations": [
+        "Prioritizes risky untested behavior over the coverage number",
+        "Warns against low-value tests written to raise coverage"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "This test uses datetime.now() and sometimes fails on the last day of the month. Plan tests for the billing period logic.",
+      "expected_output": "Proposes injecting or freezing the clock and covers month-end, leap day, time zone, and DST boundaries explicitly.",
+      "files": [],
+      "expectations": [
+        "Recommends freezing or injecting the clock",
+        "Covers month-end and leap-year cases",
+        "Covers time zone or DST boundaries"
+      ]
+    }
+  ]
+}
