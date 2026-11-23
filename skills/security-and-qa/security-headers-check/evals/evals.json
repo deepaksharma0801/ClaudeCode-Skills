@@ -23,6 +23,17 @@
         "Suggests allow-listing the specific third-party origins and using nonces or hashes",
         "Mentions Content-Security-Policy-Report-Only for testing changes"
       ]
+    },
+    {
+      "id": 3,
+      "prompt": "Add HSTS with preload to our main domain today.",
+      "expected_output": "Checks whether every subdomain serves HTTPS before preload, recommends starting with a short max-age and includeSubDomains, raising to a year, and only then submitting for preload, explaining preload is hard to undo.",
+      "files": [],
+      "expectations": [
+        "Checks subdomains support HTTPS before preload",
+        "Recommends a staged max-age increase",
+        "Explains preload is difficult to reverse"
+      ]
     }
   ]
 }
