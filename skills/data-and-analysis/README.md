@@ -11,3 +11,4 @@ Skills for profiling data, checking queries, and reading experiment results.
 - **[chart-critique](chart-critique)** — Catch misleading scales and wrong chart types, then propose a clearer redesign.
 - **[cohort-retention-analysis](cohort-retention-analysis)** — Build cohort retention tables without fake drop-off from incomplete periods.
 - **[funnel-analysis](funnel-analysis)** — Ordered funnels with conversion windows, the biggest leak, and the segment where it's worst.
+- **[dataset-anonymizer](dataset-anonymizer)** — Hash, generalize, and redact a dataset before sharing, then check k-anonymity.
