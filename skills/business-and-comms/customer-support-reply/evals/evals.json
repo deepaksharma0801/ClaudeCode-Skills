@@ -22,6 +22,17 @@
         "Gives numbered, specific next steps",
         "Includes an agent note to check email delivery or bounce logs"
       ]
+    },
+    {
+      "id": 3,
+      "prompt": "Draft a reply to: 'Your app deleted all my notes after the update!!! I want them back NOW.'",
+      "expected_output": "Acknowledges specifically, gives concrete recovery steps if any exist or marks [CHECK] items (backups, trash, sync), sets an honest expectation, and adds agent notes to escalate a possible data-loss bug, without promising recovery that isn't confirmed.",
+      "files": [],
+      "expectations": [
+        "Does not promise the notes can be recovered without confirmation",
+        "Gives concrete next steps or [CHECK] markers",
+        "Flags a possible data-loss bug for escalation in agent notes"
+      ]
     }
   ]
 }
