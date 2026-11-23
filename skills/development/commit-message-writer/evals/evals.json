@@ -1,0 +1,39 @@
+{
+  "skill_name": "commit-message-writer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "commit msg pls",
+      "expected_output": "Reads the staged diff and recent git log, detects the convention, and writes an imperative subject naming the effect plus a body explaining why, with the command to apply it.",
+      "files": [],
+      "expectations": [
+        "Reads git diff --cached rather than unstaged changes",
+        "Matches the style found in recent git log subjects",
+        "Subject is imperative, under 72 characters, and names the effect",
+        "Does not run git commit unless asked"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I've staged a bug fix, a dependency upgrade, and a bunch of formatting. Just commit it all as 'updates'.",
+      "expected_output": "Explains why 'updates' and a mixed commit hurt review, revert, and bisect, proposes splitting into three commits with exact commands, and offers to proceed either way.",
+      "files": [],
+      "expectations": [
+        "Proposes splitting into separate commits",
+        "Gives exact git restore --staged / git add commands",
+        "Suggests meaningful subjects for each commit"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write the commit for this change that removes the deprecated /v1/users endpoint.",
+      "expected_output": "Writes a message that clearly marks the breaking change (BREAKING CHANGE footer in a Conventional Commits repo, or an explicit body line) with what clients must do instead.",
+      "files": [],
+      "expectations": [
+        "Marks the change as breaking",
+        "Says what consumers should use instead",
+        "Body explains why the endpoint was removed"
+      ]
+    }
+  ]
+}
