@@ -1,0 +1,27 @@
+{
+  "skill_name": "technical-blog-post",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write a launch blog post for our new Rust-based CLI. It's blazing fast and revolutionary. Here are our benchmark notes: cold start 40ms vs 900ms for the old Python CLI on a 2023 MacBook Air.",
+      "expected_output": "A post that opens with the concrete problem and the 40ms vs 900ms measurement (with the hardware), avoids 'blazing fast' and 'revolutionary', includes install and usage commands, and states limits or trade-offs.",
+      "files": [],
+      "expectations": [
+        "Does not use 'blazing fast' or 'revolutionary'",
+        "States the benchmark numbers with the measurement context",
+        "Includes a trade-offs or limitations section"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Turn our internal incident postmortem about a Redis outage into a public engineering blog post.",
+      "expected_output": "A public-safe post that keeps the technical lessons, removes internal hostnames, customer names, and people's names, and leads with the problem and impact before the fix.",
+      "files": [],
+      "expectations": [
+        "Removes internal hostnames, customer names, and individual blame",
+        "Leads with the problem and its impact",
+        "Includes what the team changed and what others can learn"
+      ]
+    }
+  ]
+}
