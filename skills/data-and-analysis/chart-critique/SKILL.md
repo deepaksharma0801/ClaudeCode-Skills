@@ -7,6 +7,19 @@ description: Critiques a chart or dashboard for misleading scales, wrong chart t
 
 A chart should answer one question at a glance, honestly. Judge it by whether a reader gets the
 right takeaway in five seconds, and fix what stops that.
+Misleading comes before ugly: a truncated axis or a partial period can drive a wrong decision,
+while a cluttered legend only slows the reader down. So the review always checks honesty first,
+then fit, then clarity.
+
+## When to Use
+
+- A chart, plot code (matplotlib, seaborn, plotly, ggplot, Vega-Lite, Recharts), or dashboard shared for feedback
+- Preparing charts for a board deck, report, or blog post
+- "Why does nobody understand this dashboard?"
+
+**Don't use when:** the numbers themselves are in question (check the query with
+`sql-query-reviewer` or the definition with `metric-definition-writer` first), or the user wants a
+new chart built from data (build it, then apply this checklist to your own output).
 
 ## Overview
 
@@ -36,6 +49,27 @@ a specific redesign (and code, when the chart came from code).
    encodings, title, annotations.
 7. If the chart was produced by code (matplotlib, plotly, Vega, ggplot), provide the revised code.
 
+## Output shape
+
+```text
+Question it should answer: <one sentence>
+## Findings (most serious first)   Misleading → Fit → Clarity → Accessibility, each with the fix
+## Redesign                        chart type, encodings, title with the takeaway, annotations
+## Revised code                    if the chart came from code
+```
+
+## Checklist
+
+```text
+- [ ] The chart's question stated in one sentence
+- [ ] Bars/areas start at zero; line axis range labeled
+- [ ] No misleading dual axes; partial periods marked; time intervals even
+- [ ] Chart type fits the question
+- [ ] Title states the takeaway; direct labels; ≤ ~5 colors with one highlight
+- [ ] Color isn't the only encoding; contrast OK; colorblind-safe palette
+- [ ] Revised code provided when the chart came from code
+```
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not critique style before checking whether the chart misleads.
@@ -45,6 +79,8 @@ a specific redesign (and code, when the chart came from code).
 * Do not judge colors alone; check the message.
 
 ## Examples
+
+### Example 1: a board-deck bar chart
 
 **User:** "Thoughts on this chart for the board deck?" *(bar chart "Monthly Revenue", Jan–Nov, y-axis 980k–1.06M, 11 colors, legend at right, November is month-to-date)*
 
@@ -79,3 +115,39 @@ ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"${v/1e6:.2f}M"))
 ax.spines[["top", "right"]].set_visible(False)
 ax.set_title("Revenue up 6% since January; November on track for a record month", loc="left")
 ```
+
+### Example 2: a dashboard with a dual axis
+
+**User:** "Our growth dashboard plots signups (left axis) and ad spend (right axis) on one chart — leadership reads it as 'spend drives signups'. Fine?"
+
+**Expected output:**
+
+```text
+Question it should answer: is ad spend producing signups efficiently?
+
+## Findings
+1. Misleading — dual y-axes: each axis is scaled independently, so the two lines can be made to
+   overlap or diverge at will. The visual "they move together" comes from the axis choice, not the data.
+2. Fit — the real question is efficiency; neither raw series shows cost per signup.
+
+## Redesign
+- Replace with two aligned small multiples sharing the x-axis (signups; ad spend), each with its
+  own clearly labeled axis starting at zero, or
+- Better for the question: one line of cost per signup (spend ÷ signups) by week, with the target
+  CPA as a reference line.
+- Title: "Cost per signup rose from $38 to $54 since September while spend doubled."
+- If leadership wants causality, note the chart can't show it; a geo or holdout test can.
+```
+
+## Quick Reference
+
+| Question | Chart |
+|---|---|
+| Change over time | Line (bars for few discrete periods) |
+| Compare categories | Sorted horizontal bar |
+| Part of whole (2–4 parts) | Stacked bar; pie at most |
+| Distribution | Histogram or box plot |
+| Relationship | Scatter (+ trend line if meaningful) |
+| Two measures over time | Small multiples or a ratio, not dual axes |
+| Always | Takeaway title, labeled axes, partial periods marked |
+

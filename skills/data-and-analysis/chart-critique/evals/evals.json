@@ -1,0 +1,38 @@
+{
+  "skill_name": "chart-critique",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Here's my matplotlib code for a bar chart of weekly active users; the y-axis starts at 9,500 so the changes are visible. Can you make it look nicer?",
+      "expected_output": "Flags the truncated y-axis on a bar chart as misleading before any styling, proposes a zero baseline or a line chart with a labeled range, adds a takeaway title, and returns revised matplotlib code.",
+      "files": [],
+      "expectations": [
+        "Identifies the non-zero baseline on bars as misleading",
+        "Addresses honesty before styling",
+        "Returns revised code with a takeaway title"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Pie chart of revenue by 11 product lines for the quarterly review. Thoughts?",
+      "expected_output": "Recommends a sorted horizontal bar chart (or grouping small categories into 'Other'), with a title stating the main takeaway and direct labels.",
+      "files": [],
+      "expectations": [
+        "Recommends against an 11-slice pie",
+        "Proposes a sorted bar chart or grouping small categories",
+        "Suggests a takeaway title"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "This line chart shows this month's revenue dropping sharply at the end. It's the 18th. Should I raise the alarm?",
+      "expected_output": "Identifies the current month as a partial period that looks like a drop, recommends marking it as month-to-date or projecting it, and compares like-for-like days before concluding anything.",
+      "files": [],
+      "expectations": [
+        "Identifies the partial month as the likely cause of the apparent drop",
+        "Recommends marking or projecting the partial period",
+        "Suggests a like-for-like comparison before raising an alarm"
+      ]
+    }
+  ]
+}
