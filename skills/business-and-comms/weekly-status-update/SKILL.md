@@ -7,6 +7,18 @@ description: Turns git history, notes, or a task list into a short weekly status
 
 Lead with outcomes, not activity. Every line should answer "so what?" for a reader who has
 30 seconds.
+Status updates are read in seconds and skimmed for three things: what's done, what's stuck, and
+what the reader must do. Anything else is cost to the reader.
+
+## When to Use
+
+- "Write my weekly update / status report / standup summary"
+- "What did I (or the team) do this week?" from git, tickets, or notes
+- Monthly or sprint summaries for a manager or stakeholders
+
+**Don't use when:** the audience is non-technical leadership and the topic is one incident or
+decision (use `explain-for-stakeholders`), or it's release notes for users (use
+`release-notes-writer`).
 
 ## Overview
 
@@ -27,6 +39,28 @@ surfaces blockers and decisions the reader needs to act on.
 7. Keep the whole update under ~150 words. Match the tone the user asks for (Slack, email, doc).
 8. If the sources are thin, say what is missing and ask, rather than padding.
 
+## Output shape
+
+```text
+**Week of <date>**
+**Shipped**            outcome + evidence (PR, metric, demo)
+**In progress**        what + how far + next milestone
+**Blockers / Risks**   what's needed, from whom, by when — or "None"
+**Next week**          2–4 commitments
+**Decisions needed**   only if something waits on the reader
+```
+
+## Checklist
+
+```text
+- [ ] Sources gathered (git log, merged PRs, tickets, notes)
+- [ ] Work grouped into 2–5 themes, not by day or commit
+- [ ] Each line states an outcome with evidence
+- [ ] Blockers name what's needed and from whom
+- [ ] Under ~150 words; tone matches the channel
+- [ ] No invented metrics; no private data
+```
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not paste commit messages verbatim or list every commit.
@@ -37,6 +71,8 @@ surfaces blockers and decisions the reader needs to act on.
   wider audience.
 
 ## Examples
+
+### Example 1: from a repo
 
 **User:** "Write my weekly update for my manager from this repo."
 
@@ -60,3 +96,41 @@ surfaces blockers and decisions the reader needs to act on.
 - Finish invoice rendering and open the billing PR.
 - Run dependency audit before the Dec 1 launch.
 ```
+
+### Example 2: a week with little to show
+
+**User:** "Bad week — mostly debugging a flaky deploy and interviews. Write my update anyway."
+
+**Expected output:**
+
+```markdown
+**Week of Nov 17**
+
+**Shipped**
+- Found the cause of the intermittent deploy failures: a race between the migration job and app
+  start (#431). Fix in review; deploys have failed 6 times this month because of it.
+
+**In progress**
+- Fix for #431 — needs one more review, then a week of watching deploys.
+
+**Other**
+- 4 candidate interviews for the backend role (feedback submitted).
+
+**Blockers / Risks**
+- Usage-based billing slips ~1 week because of the deploy work. New target: Dec 5.
+
+**Next week**
+- Merge #431, then back to invoice rendering for billing.
+```
+
+Honest about the slip, with the reason and new date — that's what a manager needs.
+
+## Quick Reference
+
+| Do | Instead of |
+|---|---|
+| "Webhook retries live — missed events 9 → 0" | "Worked on webhooks" |
+| Group by theme | List commits by day |
+| Blocker + who + by when | "Some blockers" |
+| New date when something slips | Silence about the slip |
+| ≤ 150 words | A full changelog |

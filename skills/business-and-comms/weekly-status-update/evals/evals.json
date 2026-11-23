@@ -1,0 +1,39 @@
+{
+  "skill_name": "weekly-status-update",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Turn these 23 commit messages into my weekly update for my manager.",
+      "expected_output": "Groups the commits into 2-5 outcome themes with evidence, adds blockers (or None) and next week's commitments, stays under about 150 words, and doesn't paste commit messages.",
+      "files": [],
+      "expectations": [
+        "Groups work into themes rather than listing commits",
+        "States outcomes, not activity words",
+        "Includes a Blockers section and Next week",
+        "Stays roughly under 150 words"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Write my update. I'm 2 weeks behind on the migration but don't want to make it sound bad.",
+      "expected_output": "Reports the slip honestly with the cause, the new date, and what would help, framed constructively rather than hidden.",
+      "files": [],
+      "expectations": [
+        "Does not hide or downplay the delay",
+        "Gives the cause and a new target date",
+        "Says what help or decision would get it back on track"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Summarize what our team did this sprint for the VP of Engineering.",
+      "expected_output": "Produces a team-level summary grouped by outcomes and impact, with risks and decisions needed up top for an executive reader, without per-person activity lists.",
+      "files": [],
+      "expectations": [
+        "Leads with outcomes and impact",
+        "Highlights risks or decisions needed",
+        "Avoids per-person activity listing"
+      ]
+    }
+  ]
+}

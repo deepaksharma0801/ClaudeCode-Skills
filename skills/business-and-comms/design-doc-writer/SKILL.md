@@ -7,6 +7,18 @@ description: Writes a technical design doc with context, goals, non-goals, desig
 
 A design doc exists to get the right decision made before code is written. Make the problem and
 the trade-offs clear enough that a reviewer can disagree specifically.
+A design doc is cheapest when it changes the plan: reviewers can only push back on what's written
+down. Hiding the alternatives or the risky parts turns the review into a rubber stamp.
+
+## When to Use
+
+- "Write a design doc / RFC / tech spec / proposal" for a change
+- A change that touches several teams, production data, public APIs, or costs real money
+- Writing down a decision already made, so others understand why
+
+**Don't use when:** the question is a single choice between options for a decision-maker (use
+`decision-memo`), or the change is small enough that a PR description covers it
+(use `pr-description-writer`).
 
 ## Overview
 
@@ -33,6 +45,20 @@ ships safely.
 4. Mark assumptions explicitly; do not present them as facts.
 5. Keep it as short as the change allows. A two-week change needs two pages, not ten.
 
+## Checklist
+
+```text
+- [ ] Problem and evidence stated before the solution
+- [ ] Goals measurable; non-goals explicit
+- [ ] Design covers components, data, APIs, failure modes (diagram if > 2 parts)
+- [ ] ≥ 2 real alternatives incl. "do nothing", each with why not
+- [ ] Risks and open questions listed
+- [ ] Rollout with flags, migration, monitoring, rollback
+- [ ] Cost/effort estimate; assumptions marked
+- [ ] Summary with recommendation and decisions needed at the top
+- [ ] Length proportional to the change
+```
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not start with the solution before explaining the problem.
@@ -42,6 +68,8 @@ ships safely.
 * Do not pad with generic sections that have nothing specific to say.
 
 ## Examples
+
+### Example 1: async PDF generation
 
 **User:** "Write a design doc for moving our PDF invoice generation from the web request to a background job. Requests time out on large invoices."
 
@@ -85,3 +113,43 @@ Failures: 3 retries with backoff, then pdf_status = failed and an alert.
 Feature flag per account → internal accounts → 10% → 100% over 2 weeks. Dashboards: queue depth,
 render duration, failure count. Rollback: disable the flag; synchronous path stays until Q2.
 ```
+
+### Example 2: a one-page doc for a small change
+
+**User:** "Do we need a full design doc for adding rate limiting to our public API?"
+
+**Expected output:**
+
+```markdown
+# Design: Rate limiting for the public API (1 page)
+
+**Summary:** Add per-API-key rate limits (600 req/min default) at the gateway, returning 429 with
+Retry-After. Decision needed: default limit and whether enterprise keys get higher limits.
+
+**Problem:** Two customers' scripts caused 30-minute slowdowns for everyone in October (incidents #88, #93).
+
+**Design:** Token bucket per API key in Redis (gateway plugin, already supported).
+Headers: RateLimit-Limit, RateLimit-Remaining, Retry-After. Per-key overrides in the admin panel.
+
+**Alternatives:** per-IP limits (rejected: customers share NAT IPs); no limit + autoscaling
+(rejected: cost, and the DB is the bottleneck).
+
+**Rollout:** log-only mode for 1 week to see who'd be limited → email those customers → enforce.
+Rollback: disable the plugin.
+
+**Risk:** a customer's legitimate batch job gets throttled → overrides + the log-only week.
+```
+
+A page is enough here: one component, a reversible rollout, and the main decision is a number.
+
+## Quick Reference
+
+| Section | Must contain |
+|---|---|
+| Summary | Recommendation + decisions needed |
+| Context | Problem with evidence |
+| Goals / non-goals | Measurable; explicit exclusions |
+| Design | Components, data, APIs, failure modes |
+| Alternatives | ≥ 2 real ones + do nothing |
+| Rollout | Flags, migration, monitoring, rollback |
+| Length | Proportional to risk and scope |

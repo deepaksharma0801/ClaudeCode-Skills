@@ -7,6 +7,17 @@ description: Turns a meeting transcript or notes into decisions, action items wi
 
 Extract what was decided and who does what. A recap of the conversation is not the deliverable;
 the action list is.
+People skim meeting notes for one question: what do I have to do, and by when? Notes that bury the
+action items in a chronological recap get no follow-through.
+
+## When to Use
+
+- A meeting transcript (Zoom, Meet, Teams, Otter) or rough notes
+- "What were the action items?", "send a recap", "who's doing what?"
+- Turning a long Slack thread into decisions and owners
+
+**Don't use when:** the meeting was an incident review (use `incident-postmortem`), or the user
+wants a verbatim transcript cleaned up.
 
 ## Overview
 
@@ -30,6 +41,28 @@ questions, quoting the source when something is ambiguous.
 7. Output in the format the user asks for (Slack message, email, doc); default to Markdown with
    the action items as a checklist.
 
+## Output shape
+
+```markdown
+**<Meeting> — <date>**
+**Summary**         ≤ 3 sentences: purpose and outcome
+**Decisions**       one line each, with who decided
+**Action items**    - [ ] **Owner** — verb-first task — due date (or "not set")
+**Open questions**  topic — who answers
+```
+
+## Checklist
+
+```text
+- [ ] Read the whole transcript first
+- [ ] Decisions captured with who made them
+- [ ] Every action has owner, verb-first task, due date (or marked unassigned / not set)
+- [ ] Relative dates converted to real dates
+- [ ] Contradictions flagged (two owners, reversed decisions)
+- [ ] Open questions with who should answer
+- [ ] Sensitive remarks left out of shareable notes
+```
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not summarize the meeting chronologically ("First, Ana talked about…").
@@ -40,6 +73,8 @@ questions, quoting the source when something is ambiguous.
 * Do not drop disagreements; list them as open questions.
 
 ## Examples
+
+### Example 1: a launch-planning call
 
 **User:** *(pastes a 40-minute transcript of a launch-planning call held Tue Nov 18)*
 "Give me the follow-ups."
@@ -67,3 +102,41 @@ the Stripe production setup are the remaining blockers.
 - Do beta accounts get a discount after the beta ends? (Priya to confirm with Sales)
 - Marco and Ana both said they'd draft the launch email — needs one owner.
 ```
+
+### Example 2: a meeting with no clear decisions
+
+**User:** *(pastes notes from a 1-hour architecture discussion)* "Action items?"
+
+**Expected output:**
+
+```markdown
+**Architecture sync — Nov 20**
+
+**Summary**
+Discussed moving search from Postgres full-text to OpenSearch. No decision was made; two concerns
+(operating cost and team experience) need data first.
+
+**Decisions**
+- None. (Ravi suggested deciding "next week", but nothing was agreed.)
+
+**Action items**
+- [ ] **Ravi** — Estimate monthly OpenSearch cost for current index size — due: not set
+- [ ] **Unassigned** — Benchmark Postgres full-text on the 10 slowest production queries — due: not set
+
+**Open questions**
+- Who operates OpenSearch on-call? (Engineering manager to answer)
+- Is search latency actually a customer complaint, or an engineering preference? (Product)
+
+Suggest: assign the benchmark and set dates before the next sync, or this repeats.
+```
+
+## Quick Reference
+
+| Phrase in transcript | Becomes |
+|---|---|
+| "Let's go with X" / "agreed" | Decision |
+| "I'll do X by Friday" | Action, owner, real date |
+| "Someone should…" | Action, Owner: unassigned |
+| "We need to figure out…" | Open question |
+| Two people claim it | Flag the contradiction |
+| Personal / HR remarks | Leave out |

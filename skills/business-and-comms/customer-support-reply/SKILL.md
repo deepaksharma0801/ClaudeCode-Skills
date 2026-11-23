@@ -8,6 +8,19 @@ description: Drafts customer support replies that answer the actual question, gi
 Answer the question the customer asked, in the first lines, with steps they can follow. Be warm
 without padding, honest about what you don't know, and never promise what policy or the product
 can't deliver.
+An upset customer judges the reply by whether it answers their question and whether the promises
+in it come true. A warm reply that answers the wrong question, or promises an unconfirmed refund,
+makes things worse.
+
+## When to Use
+
+- Drafting replies to support tickets, emails, chats, or app-store reviews
+- Angry or escalated customers, refund and billing disputes
+- Saying no to a feature request or out-of-policy ask
+- Rewriting a draft reply that's too long, too vague, or too defensive
+
+**Don't use when:** it's a public incident announcement (use `explain-for-stakeholders`), or the
+ticket involves legal threats or a security breach (draft only a holding reply and escalate).
 
 ## Overview
 
@@ -38,6 +51,32 @@ that resolves it or sets an honest expectation.
 7. **Flag for the agent** anything risky: legal threats, security or data concerns, chargebacks,
    requests outside policy that need approval.
 
+## Output shape
+
+```text
+Hi <name>,
+<1 line: specific acknowledgment of their situation>
+<the answer or resolution, up front>
+<numbered steps, with exact button/menu names, if they need to act>
+<what happens next and when — only real commitments>
+<short close with one specific offer>
+
+Agent notes: <facts to check ([CHECK: …]), risks, escalation needs>
+```
+
+## Checklist
+
+```text
+- [ ] Whole thread read; real question and emotion identified
+- [ ] Facts and policy checked, or marked [CHECK: …]
+- [ ] Answer in the first lines
+- [ ] Steps numbered with exact UI names
+- [ ] Only commitments that are real (SLA, confirmed actions)
+- [ ] "No" stated clearly with the best alternative
+- [ ] 60–150 words; tone matches the customer
+- [ ] Agent notes for risks (chargebacks, legal, security, approvals)
+```
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not promise refunds, credits, fix dates, or features that are not confirmed.
@@ -48,6 +87,8 @@ that resolves it or sets an honest expectation.
 * Do not ask for information they already gave in the thread.
 
 ## Examples
+
+### Example 1: a double charge
 
 **User:** "Draft a reply." *(ticket: "This is the THIRD time I'm writing. I was charged twice for my annual plan on Nov 3 ($240 each). Nobody has answered. I want my money back or I'm disputing it with my bank.")*
 
@@ -77,3 +118,39 @@ Agent notes: customer mentioned a bank dispute → if a chargeback is already op
 double-credit; check in Stripe before sending. Earlier two tickets (#48121, #48233) were unassigned
 — worth a look for the queue.
 ```
+
+### Example 2: saying no
+
+**User:** "Customer wants a refund for 8 months of an annual plan they didn't use. Policy: refunds within 30 days only. Draft a reply."
+
+**Expected output:**
+
+```text
+Hi Jordan,
+
+Thanks for explaining — I can see the account hasn't been used since March.
+
+I'm not able to refund the unused months: annual plans can be refunded within 30 days of purchase,
+and this one renewed on January 12. What I can do today is turn off auto-renewal, so you won't be
+charged again in January, and downgrade you to the free plan now so your projects stay available
+to export.
+
+If you'd like either of those, just reply "yes" and I'll make the change.
+
+Best,
+Sam
+
+Agent notes: if the customer pushes back, a pro-rated credit needs team-lead approval
+[CHECK: current exception policy]. Don't offer it unprompted.
+```
+
+## Quick Reference
+
+| Situation | Do |
+|---|---|
+| Angry customer | Specific acknowledgment, then the fix — no paragraph of apologies |
+| Unknown fact | `[CHECK: …]` for the agent |
+| Must say no | Clear no + reason + best alternative |
+| Timeline | Only SLAs or confirmed dates |
+| Legal / security / chargeback | Agent note + escalate |
+| Length | 60–150 words |

@@ -22,6 +22,17 @@
         "Leads with the problem and its impact",
         "Includes what the team changed and what others can learn"
       ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write a blog post announcing our new search feature. Make it exciting!",
+      "expected_output": "Leads with the user problem the search solves and concrete improvements (with real numbers if provided, or placeholders to fill), avoids hype words, and includes limits.",
+      "files": [],
+      "expectations": [
+        "Leads with a concrete problem",
+        "Avoids hype words like revolutionary or blazing fast",
+        "Uses real numbers or marks placeholders instead of inventing them"
+      ]
     }
   ]
 }

@@ -7,6 +7,18 @@ description: Writes a blameless incident postmortem with impact, timeline, root 
 
 Describe what happened to the system, not who made a mistake. Every claim comes from the material
 provided; every action item has an owner and makes this class of incident less likely or less bad.
+The point of a postmortem is fewer and shorter incidents. That only happens when it's accurate,
+blameless (so people share what really happened), and ends in owned, specific action items.
+
+## When to Use
+
+- After an outage, degraded service, data loss, security incident, or customer-facing bug
+- Turning an incident Slack channel, alerts, and deploy logs into a write-up
+- Reviewing a draft postmortem for blame, gaps, or vague actions
+
+**Don't use when:** the incident is still ongoing (stabilize first; use `log-triage` or
+`root-cause-debugging`), or the audience is customers (use `explain-for-stakeholders` for the
+external version).
 
 ## Overview
 
@@ -31,6 +43,33 @@ document in a standard shape.
    tagged prevent / detect / mitigate. Mark owner "TBD" if not assigned in the source.
 8. Flag gaps in the source material as open questions instead of filling them in.
 
+## Output shape
+
+```markdown
+# Postmortem: <what broke> (<date>)
+Status · Severity · Time zone
+## Summary          2–3 sentences
+## Impact           duration, who/what affected (numbers), data loss yes/no
+## Timeline         start → detected → mitigated → resolved, with key decisions
+## Root cause       trigger + underlying cause + contributing factors
+## What went well / what was hard
+## Action items     action | prevent/detect/mitigate | owner | priority | due
+## Open questions
+```
+
+## Checklist
+
+```text
+- [ ] Sources gathered (channel, alerts, logs, deploys, status page)
+- [ ] Impact quantified; data loss stated
+- [ ] Timeline in one time zone with detection and mitigation marked
+- [ ] Trigger separated from root cause; contributing factors listed ("5 whys")
+- [ ] Blameless wording throughout
+- [ ] Every action specific, owned (or TBD), prioritized, dated, typed
+- [ ] Time-to-detect and time-to-mitigate gaps have actions
+- [ ] Gaps in the source listed as open questions
+```
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not name individuals as the cause ("Sam pushed a bad config"). Describe the system: "a config change was deployed without validation".
@@ -40,6 +79,8 @@ document in a standard shape.
 * Do not include customer personal data from logs or tickets.
 
 ## Examples
+
+### Example 1: a checkout outage
 
 **User:** *(pastes the incident Slack thread and deploy log)* "Write the postmortem for yesterday's checkout outage."
 
@@ -88,3 +129,39 @@ Contributing factors
 ## Open questions
 - Were any orders left in "pending payment" that need manual follow-up?
 ```
+
+### Example 2: rewriting a blaming draft
+
+**User:** "Can you fix this draft? 'Root cause: Alex ran the migration on prod without testing it. Action: Alex to be more careful.'"
+
+**Expected output:**
+
+```text
+Rewritten root cause (system, not person):
+A schema migration that added a NOT NULL column without a default ran against production during
+business hours. Nothing in the process required it to run on staging with production-sized data
+first, and the deploy tool allowed migrations to run without review.
+
+Contributing factors
+- Staging data is 1% of production, so the 40-minute table rewrite took 20 seconds there.
+- No migration linting in CI.
+
+Action items
+| Action | Type | Owner | Priority | Due |
+|---|---|---|---|---|
+| Run a migration linter (lock/rewrite checks) in CI | prevent | Platform | P1 | Dec 1 |
+| Require a second approver for production migrations | prevent | Eng manager | P1 | Nov 28 |
+| Refresh staging with production-sized anonymized data monthly | detect | Data team | P2 | Dec 15 |
+
+"Be more careful" isn't an action: it can't be checked and won't prevent the next one.
+```
+
+## Quick Reference
+
+| Instead of | Write |
+|---|---|
+| "Alex broke prod" | "A config change was deployed without validation" |
+| "Root cause: bad deploy" | Trigger + why the system allowed it + what slowed recovery |
+| "Improve monitoring" | "Alert when payment error rate > 5% for 2 min — on-call lead — Nov 25" |
+| Mixed time zones | One time zone, stated |
+| Guessed numbers | Numbers from logs, or an open question |

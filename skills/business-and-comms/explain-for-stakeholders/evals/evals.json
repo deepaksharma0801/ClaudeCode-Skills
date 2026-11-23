@@ -23,6 +23,17 @@
         "Explains the risk (no security fixes) in business terms",
         "Stays under about 8 lines"
       ]
+    },
+    {
+      "id": 3,
+      "prompt": "Explain to our sales team why the reporting feature will be 3 weeks late, so they can tell customers.",
+      "expected_output": "Leads with the new date and what sales should tell customers, explains the reason in one or two plain sentences, gives customer-safe wording, and avoids internal jargon.",
+      "files": [],
+      "expectations": [
+        "States the new date first",
+        "Provides wording sales can use with customers",
+        "Avoids technical jargon"
+      ]
     }
   ]
 }

@@ -7,6 +7,17 @@ description: Turns commits, merged PRs, or a changelog into user-facing release 
 
 Write for the people using the product, not the people who built it. Each line says what a user
 can now do, or what stopped being broken, in their words.
+Users read release notes to answer "what changes for me, and do I need to do anything?"
+Breaking changes buried under internal refactors become support tickets and broken integrations.
+
+## When to Use
+
+- Preparing a release, changelog entry, version announcement, or "what's new" post
+- Turning merged PRs or commits between two tags into notes
+- Writing upgrade/migration notes for an SDK or API
+
+**Don't use when:** the audience is the internal team (use `weekly-status-update` or
+`pr-description-writer`), or it's a single commit message (use `commit-message-writer`).
 
 ## Overview
 
@@ -30,6 +41,32 @@ where nobody can miss them.
    no internals).
 8. Offer a 1–2 sentence highlight summary for announcements.
 
+## Output shape
+
+```markdown
+## vX.Y.Z — YYYY-MM-DD
+One- or two-sentence highlight.
+### Breaking          change + migration step (code if needed)
+### Security          fixed advisories, with IDs
+### New
+### Improved
+### Fixed
+### Deprecated        what, replacement, removal version
+_Also in this release: N internal changes._
+```
+
+## Checklist
+
+```text
+- [ ] Range found (previous tag → new tag); version and date set
+- [ ] Every change classified; internal ones dropped but counted
+- [ ] Each line in user terms, linked to PR/issue
+- [ ] Breaking changes first, each with a migration step
+- [ ] Security fixes listed with advisory IDs
+- [ ] Deprecations name the replacement and removal version
+- [ ] Wording matches the audience (developers vs end users)
+```
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not paste commit messages or internal ticket codes as release notes.
@@ -39,6 +76,8 @@ where nobody can miss them.
 * Do not credit or name contributors unless the project's existing notes do so.
 
 ## Examples
+
+### Example 1: an SDK release
 
 **User:** "Write release notes for v2.4.0 from the commits since v2.3.0. Audience: developers using our SDK."
 
@@ -72,3 +111,32 @@ Retries are now built in, and uploads can resume after a dropped connection.
 
 _Also in this release: 14 internal changes (tests, CI, dependency updates)._
 ````
+
+### Example 2: end-user notes for an app
+
+**User:** "Release notes for our mobile app update, for the App Store 'What's New' field. Changes: added dark mode, fixed crash on Android 14 when uploading photos, refactored networking layer, bumped Kotlin."
+
+**Expected output:**
+
+```text
+What's New in 3.8
+
+• Dark mode — follows your phone's setting, or choose it in Settings › Appearance.
+• Fixed a crash when uploading photos on some Android devices.
+
+Thanks for using the app! Questions or feedback: help@example.com
+```
+
+Left out: the networking refactor and Kotlin bump (no visible change for users). App store notes
+stay short; there's no need to mention the Android version or internal details.
+
+## Quick Reference
+
+| Change type | Include? | How |
+|---|---|---|
+| Breaking | Always, first | What breaks + migration snippet |
+| Security | Always | Advisory ID, affected versions |
+| Feature / improvement | Yes | User benefit, one line |
+| Bug fix | Yes, if users could hit it | What stopped being broken |
+| Refactor, CI, tests, dep bumps | No | Count as "internal changes" |
+| Deprecation | Yes | Replacement + removal version |

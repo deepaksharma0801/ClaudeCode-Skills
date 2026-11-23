@@ -22,6 +22,17 @@
         "Does not block on quote style; batches or defers it to a formatter",
         "Starts with a summary stating the verdict"
       ]
+    },
+    {
+      "id": 3,
+      "prompt": "My reviewer comment is 'This is a terrible approach.' Rewrite it.",
+      "expected_output": "Asks what the concrete concern is (or infers it from context) and rewrites the comment with a label, the specific issue, why it matters, and a proposed alternative, without judgmental language.",
+      "files": [],
+      "expectations": [
+        "Removes judgmental wording",
+        "Adds a Conventional Comments label",
+        "States a concrete issue and a proposed alternative"
+      ]
     }
   ]
 }

@@ -1,0 +1,37 @@
+{
+  "skill_name": "incident-postmortem",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write the postmortem from this Slack export. The on-call engineer pushed a bad config.",
+      "expected_output": "Produces the standard structure with a blameless root cause (process and system factors, not the engineer), quantified impact, a single-time-zone timeline, and specific owned action items typed prevent/detect/mitigate.",
+      "files": [],
+      "expectations": [
+        "Does not name the engineer as the cause",
+        "Separates trigger from root cause and contributing factors",
+        "Action items are specific with owners and dates"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our postmortem's action items are 'improve monitoring' and 'add more tests'. Good enough?",
+      "expected_output": "Explains these are unverifiable and rewrites them as specific, measurable actions tied to the incident (named alert with threshold, specific test), with owners and dates.",
+      "files": [],
+      "expectations": [
+        "Identifies the action items as too vague",
+        "Rewrites them with specific thresholds or scope",
+        "Adds owners and due dates"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "We had a 2-hour outage but the Slack thread doesn't say how many customers were affected. Write the postmortem.",
+      "expected_output": "Writes the postmortem but leaves the customer impact as an open question (or a range from available data) rather than inventing a number.",
+      "files": [],
+      "expectations": [
+        "Does not invent the number of affected customers",
+        "Lists the missing impact data as an open question"
+      ]
+    }
+  ]
+}

@@ -7,6 +7,19 @@ description: Rewrites technical updates, incidents, or trade-offs for executives
 
 Answer the reader's real question first — what happened, what it means for them, and what you
 need from them — in words they already use. Accuracy stays; jargon goes.
+Most technical updates fail non-technical readers not because they're inaccurate but because the
+answer to "what does this mean for me?" arrives in paragraph four, in vocabulary the reader doesn't use.
+
+## When to Use
+
+- Incident or outage updates for executives, customers, or sales/support
+- Explaining a technical trade-off, delay, or cost to non-engineers
+- Asking leadership for a decision, budget, or approval on technical work
+- Status page or customer email copy
+
+**Don't use when:** the audience is engineers who need the mechanism (write the technical version
+or a postmortem with `incident-postmortem`), or it's a routine weekly update (use
+`weekly-status-update`).
 
 ## Overview
 
@@ -37,6 +50,28 @@ done, what is needed, and only as much mechanism as builds trust.
 9. **Check honesty:** no minimizing ("brief blip" for a 3-hour outage), no unearned certainty, and
    no blame on individuals or vendors without the facts.
 
+## Output shape
+
+```text
+Subject / first line   the bottom line
+Impact                 in the reader's units (customers, money, dates, risk)
+What we're doing       + when the next update comes
+Ask                    decision/approval with a deadline — or "No action needed"
+Why (short)            ≤ 2 plain sentences of mechanism
+```
+
+## Checklist
+
+```text
+- [ ] Audience and what they decide or worry about identified
+- [ ] Bottom line stands alone in the first 1–2 sentences
+- [ ] Impact quantified in their units, or "not known yet"
+- [ ] Next update time stated
+- [ ] Ask explicit with a deadline, or "No action needed"
+- [ ] Jargon translated or removed; mechanism ≤ 2 sentences
+- [ ] Length fits the channel; no minimizing or blame
+```
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not start with the investigation story or the technical cause.
@@ -47,6 +82,8 @@ done, what is needed, and only as much mechanism as builds trust.
 * Do not condescend; plain language is not simplified facts.
 
 ## Examples
+
+### Example 1: a slowdown for the CEO
 
 **User:** "Turn this into an update for the CEO." *(engineering note: "p95 on /checkout regressed from 400ms to 3.2s after Tuesday's deploy due to an N+1 in the pricing service; rollback blocked by schema migration; hotfix ETA Thursday; ~6% of sessions hit timeouts; conversion down 11% WoW on mobile.")*
 
@@ -73,3 +110,29 @@ instead of all at once, which is much slower for large carts.
 Ask: none right now. If Thursday's fix slips, I'll ask whether to temporarily turn off the new
 pricing feature to restore speed.
 ```
+
+### Example 2: asking for a decision
+
+**User:** "I need the VP to approve 2 extra weeks to migrate off Python 3.8 before security support ends. Slack message."
+
+**Expected output:**
+
+```text
+Ask: can we add 2 weeks to the Q1 plan (Jan 6–17) to upgrade our backend's Python version?
+I need a yes/no by Friday to keep the schedule.
+
+Why: the version we run (Python 3.8) no longer gets security fixes. Any new vulnerability in it
+would stay open on our production servers, and our SOC 2 auditor flags unsupported software.
+
+Cost: the 2 weeks push the reporting dashboard from Jan 17 to Jan 31. Nothing else moves.
+```
+
+## Quick Reference
+
+| Instead of | Write |
+|---|---|
+| "p95 latency regressed 8x" | "The slowest 1 in 20 checkouts take 8 times longer" |
+| "Rollback blocked by a migration" | "We can't simply undo the release" |
+| "RCA pending" | "We'll share what caused it by Thursday" |
+| "Brief blip" (3 hours) | "A 3-hour outage" |
+| Ask in the last paragraph | Ask in the first lines, with a deadline |
