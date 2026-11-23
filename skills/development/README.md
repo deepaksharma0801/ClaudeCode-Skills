@@ -13,6 +13,7 @@ Skills for writing, debugging, and shipping code.
 - **[performance-investigation](performance-investigation)** — Measure, profile the hot path, and prove each speedup with before/after numbers.
 - **[db-migration-safety](db-migration-safety)** — Lint Postgres migrations for locks and breaking changes, then rewrite them as safe steps.
 - **[ci-failure-debugger](ci-failure-debugger)** — Find the first real error in a failing CI run, classify it, and fix the cause.
+- **[dependency-upgrade-planner](dependency-upgrade-planner)** — Plan major-version upgrades from changelogs and codemods, one verified step at a time.
 
 More from the community (web-artifacts-builder, systematic-debugging, test-fixing, ios-simulator-skill)
 is listed in the [main README](../../README.md#community-picks).
