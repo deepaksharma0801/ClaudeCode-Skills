@@ -8,6 +8,19 @@ description: Triages static analysis findings (Semgrep, CodeQL, Bandit, Snyk Cod
 Every finding gets a verdict backed by a traced data flow: where the value comes from, what
 happens to it on the way, and where it ends up. Severity comes from exploitability in this
 codebase, not from the scanner's default label.
+Scanners over-report; teams that can't separate the real bugs from noise end up ignoring the whole
+report. A traced verdict per finding — and a documented suppression for false positives — keeps
+the next scan meaningful.
+
+## When to Use
+
+- A Semgrep, CodeQL, Bandit, SonarQube, Snyk Code, or Checkmarx report to review
+- GitHub code scanning alerts piling up
+- Deciding whether to suppress or fix a specific finding
+- A security gate failing a PR
+
+**Don't use when:** the findings are dependency CVEs (use `dependency-audit`), or headers/config
+(use `security-headers-check`).
 
 ## Overview
 
@@ -43,6 +56,32 @@ that reflects reachability and impact, and proposes a fix or a documented suppre
    with a comment.
 7. **Report** a table: finding, location, verdict, severity, one-line reason, action. True positives first.
 
+## Checklist
+
+```text
+- [ ] Findings grouped by rule and shared root cause (triage helpers once)
+- [ ] For each: source, path (sanitization on every path?), sink, reachability
+- [ ] Verdict: true positive / false positive (with reason) / needs info
+- [ ] Severity re-rated by attacker access and impact
+- [ ] True positives fixed at the root, with a test
+- [ ] False positives suppressed in code with rule ID and reason
+- [ ] Report table, true positives first
+```
+
+## Red Flags
+
+- "It's validated somewhere upstream." (Where? On every path?)
+- Suppressing a whole rule to silence noise.
+- Marking 40 alerts false positive without opening the shared helper.
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "Scanners are always noisy." | Noise is a reason to triage carefully, not to skip — real bugs hide in noisy reports. |
+| "The input comes from our own frontend." | Attackers don't use your frontend; any HTTP input is attacker-controlled. |
+| "It's internal code." | Internal endpoints get reached via SSRF, compromised accounts, and misconfigured networks. |
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not mark a finding false positive without tracing the source, or because "the input is validated somewhere".
@@ -52,6 +91,8 @@ that reflects reachability and impact, and proposes a fix or a documented suppre
 * Do not write a working exploit; describe the attack in one sentence.
 
 ## Examples
+
+### Example 1: four Bandit findings
 
 **User:** "Bandit found 4 issues in our Flask app. Which ones are real?" *(bandit.json)*
 
@@ -74,3 +115,42 @@ that reflects reachability and impact, and proposes a fix or a documented suppre
 3. tests/conftest.py:9 — `password = "test-only"  # nosec B105 - local test DB fixture`
 4. Question: is ref_code ever used to authorize anything (e.g. guest access links)? If yes, use secrets.token_urlsafe().
 ```
+
+### Example 2: a shared helper behind many alerts
+
+**User:** "CodeQL reported 41 'path injection' alerts, all through our safe_join(base, user_path) helper."
+
+**Expected output:**
+
+```text
+Triaged the helper once (utils/files.py:14):
+
+def safe_join(base, user_path):
+    return os.path.join(base, user_path)
+
+Verdict: TRUE POSITIVE for all 41 — os.path.join doesn't prevent "../../etc/passwd", and an
+absolute user_path replaces base entirely.
+
+Fix (one place):
+def safe_join(base, user_path):
+    base = os.path.realpath(base)
+    target = os.path.realpath(os.path.join(base, user_path))
+    if os.path.commonpath([base, target]) != base:
+        raise ValueError("path escapes base directory")
+    return target
+
+Tests: "../x", "/etc/passwd", "a/../../x", and a symlink pointing outside base → ValueError;
+"reports/q3.pdf" → allowed. After the fix, CodeQL recognizes the containment check on re-scan
+(if not, add a model or dismiss the alerts as "fixed in helper" with a link to the test).
+```
+
+## Quick Reference
+
+| Question | Decides |
+|---|---|
+| Is the source attacker-controlled? | No → likely false positive |
+| Sanitized on *every* path to the sink? | No → true positive |
+| Reachable in production? | No → lower severity, still note it |
+| Unauthenticated access? | Raises severity |
+| Many alerts, one helper | Triage and fix the helper once |
+| False positive | Suppress inline with rule ID + reason |
