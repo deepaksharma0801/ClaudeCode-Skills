@@ -34,6 +34,17 @@
         "Validates in a separate step with VALIDATE CONSTRAINT",
         "Suggests checking for orphaned payments rows before validating"
       ]
+    },
+    {
+      "id": 4,
+      "prompt": "Backfill: UPDATE subscriptions SET plan_code = 'legacy' WHERE plan_code IS NULL; — about 25M rows. I'll just run it in the migration.",
+      "expected_output": "Explains that a single 25M-row UPDATE holds locks for a long time, causes replication lag and bloat, and rewrites it as a batched backfill by primary key in separate transactions, run outside the schema migration.",
+      "files": [],
+      "expectations": [
+        "Rejects the single unbatched UPDATE for 25M rows",
+        "Provides a batched approach keyed by primary key with separate transactions",
+        "Suggests running the backfill as a separate job rather than inside the schema migration"
+      ]
     }
   ]
 }
