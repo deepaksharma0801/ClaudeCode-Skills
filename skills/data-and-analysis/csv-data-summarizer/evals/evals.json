@@ -1,0 +1,38 @@
+{
+  "skill_name": "csv-data-summarizer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "What's in this customers.csv? I'm about to build a churn model from it.",
+      "expected_output": "Runs scripts/profile_csv.py on the whole file and reports structure, a column table, quality issues with counts, distributions, filtered correlations, and up to five numbers-backed observations, without starting to build a model.",
+      "files": [],
+      "expectations": [
+        "Runs scripts/profile_csv.py (or equivalent full profile)",
+        "Lists data quality issues with counts",
+        "Each 'what stands out' bullet cites a computed number",
+        "Does not build or recommend a specific model unprompted"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Quick look at this export please — just tell me what the first few rows look like.",
+      "expected_output": "Shows a short peek if asked, but profiles the whole file, because quality issues (missing values, text-typed numbers, duplicates) usually appear beyond the first rows.",
+      "files": [],
+      "expectations": [
+        "Profiles the full file rather than only the first rows",
+        "Reports missing values and type issues found anywhere in the file"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Profile this file. revenue and units are super correlated, is that interesting?",
+      "expected_output": "Notes that revenue is likely computed from units and price, so a high correlation is mechanical and expected, and suggests a more informative comparison.",
+      "files": [],
+      "expectations": [
+        "Identifies the correlation as mechanical or expected",
+        "Does not present it as a meaningful finding",
+        "Suggests a more useful analysis"
+      ]
+    }
+  ]
+}
