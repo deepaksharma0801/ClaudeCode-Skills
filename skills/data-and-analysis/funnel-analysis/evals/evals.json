@@ -22,6 +22,17 @@
         "Bounds the window at 1 day from the first step",
         "Counts distinct users, not events"
       ]
+    },
+    {
+      "id": 3,
+      "prompt": "Our signup funnel is 2% end to end. Which step should design fix first?",
+      "expected_output": "Computes per-step conversion with an ordered, windowed funnel, identifies the step with the largest absolute loss, segments it, checks tracking, and offers hypotheses rather than asserting a design cause.",
+      "files": [],
+      "expectations": [
+        "Identifies the largest absolute drop-off step",
+        "Segments the leak or checks tracking before concluding",
+        "Frames causes as hypotheses to test"
+      ]
     }
   ]
 }
