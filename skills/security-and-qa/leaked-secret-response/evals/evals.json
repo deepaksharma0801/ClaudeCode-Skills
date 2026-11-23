@@ -22,6 +22,18 @@
         "Includes checking Stripe logs/events for abuse",
         "Includes preventing secrets from being printed in CI logs"
       ]
+    },
+    {
+      "id": 3,
+      "prompt": "Our .env with the production database password was in a public repo for 3 days before we noticed. We made the repo private. Are we OK now?",
+      "expected_output": "Explains making the repo private doesn't help, and says to rotate the database password now, kill existing sessions, review database logs for the 3-day window, and rotate other secrets in the same file.",
+      "files": [],
+      "expectations": [
+        "States that making the repo private doesn't remove the exposure",
+        "Rotates the database password and terminates existing sessions",
+        "Reviews logs for the exposure window",
+        "Rotates the other secrets in the .env"
+      ]
     }
   ]
 }

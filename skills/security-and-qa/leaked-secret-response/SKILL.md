@@ -8,6 +8,18 @@ description: Runs the response when an API key, token, password, or private key 
 Rotate first, clean up second. Once a secret has been pushed, shared, or logged, assume it is
 compromised — deleting the commit or the message does not take it back, because bots scrape public
 repos within minutes and forks, caches, and clones keep copies.
+Every minute a leaked credential stays valid is a minute it can be used; cleanup feels productive
+but protects nothing until the credential is dead.
+
+## When to Use
+
+- A secret was pushed to git (public or private), pasted in chat, a ticket, or a doc
+- A secret appeared in CI logs, error tracking, or application logs
+- A provider (GitHub, AWS) emailed about an exposed credential
+- A laptop or account with stored credentials was lost or compromised
+
+**Don't use when:** the secret hasn't left the machine yet (use `secrets-precommit-check` to
+remove it before committing).
 
 ## Overview
 
@@ -43,6 +55,34 @@ and push protection), with a short record of what happened.
 6. **Record** a short timeline: exposed at, detected at, rotated at, abuse found (yes/no), cleanup
    done, prevention added. Notify security or affected parties per policy.
 
+## Checklist
+
+```text
+- [ ] Secret identified: provider, permissions, where exposed, since when
+- [ ] Rotated/revoked at the provider (consumers updated, or revoked immediately if public)
+- [ ] Related secrets in the same file rotated too
+- [ ] Provider logs checked for the exposure window; result recorded
+- [ ] Removed from code; loaded from env/secret manager
+- [ ] History, logs, chats cleaned where possible (after rotation)
+- [ ] Prevention added: push protection, pre-commit scanner, short-lived creds
+- [ ] Timeline recorded; security/affected parties notified per policy
+```
+
+## Red Flags
+
+- "Let me rewrite history first."
+- "It's a private repo / the message is deleted, so it's fine."
+- "It only had read access, skip the log check."
+- Pasting the secret into a ticket while investigating.
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "Nobody saw it, it was only up for a minute." | Bots scan public pushes within minutes. Assume it was seen. |
+| "Rotating will cause an outage." | A brief planned outage beats an attacker with valid credentials. Coordinate fast, but rotate. |
+| "We deleted the commit." | Forks, clones, caches, and CI logs keep it. Only rotation helps. |
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not rewrite history or delete the message first and rotate later (or never).
@@ -52,6 +92,8 @@ and push protection), with a short record of what happened.
 * Do not revoke without a plan for consumers when a coordinated rotation is possible and the exposure is private.
 
 ## Examples
+
+### Example 1: AWS keys pushed to a public repo
 
 **User:** "I just pushed our .env with the AWS keys to our public GitHub repo about 20 minutes ago. What do I do?"
 
@@ -87,3 +129,35 @@ Treat the key as compromised — public repos are scraped within minutes. Rotate
 Exposed 14:02 · detected 14:20 · key deactivated 14:24 · CloudTrail: no foreign calls found ·
 history cleaned 15:10 · push protection on.
 ```
+
+### Example 2: a token pasted in a shared chat
+
+**User:** "I accidentally pasted our GitHub personal access token into a Slack channel with 200 people. I deleted the message."
+
+**Expected output:**
+
+```text
+Treat it as exposed — 200 people (and any integrations or exports on that channel) could have
+copied it before deletion.
+
+1. Now: GitHub → Settings → Developer settings → Personal access tokens → revoke that token.
+2. Create a replacement with the minimum scopes and an expiry (fine-grained token, only the repos
+   it needs), and update wherever the old one was used.
+3. Check: the organization audit log for actions by your account since the paste (repo clones,
+   new deploy keys, new tokens, settings changes). Record "no unexpected activity" if clean.
+4. Slack: deleting the message was right; ask a workspace admin whether message exports or
+   integrations retained it.
+5. Prevent: store tokens in a password manager and paste from there; prefer GitHub Apps or
+   short-lived tokens over long-lived personal tokens.
+```
+
+## Quick Reference
+
+| Order | Action |
+|---|---|
+| 1 | Rotate or revoke at the provider |
+| 2 | Update consumers (secret manager, CI, env vars) |
+| 3 | Check provider logs for the exposure window |
+| 4 | Remove from code; clean history/logs/chats |
+| 5 | Prevent: push protection, scanners, short-lived creds |
+| Never | Rewrite history *instead of* rotating; paste the secret while investigating |
