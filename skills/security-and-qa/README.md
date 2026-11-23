@@ -13,3 +13,4 @@ Skills for keeping secrets out of repos, finding risky dependencies, and testing
 - **[security-headers-check](security-headers-check)** — Grade security headers and cookies, then write the server config that fixes them.
 - **[security-finding-triage](security-finding-triage)** — Trace scanner findings from source to sink to separate real bugs from false positives.
 - **[iam-policy-review](iam-policy-review)** — Lint AWS IAM policies for wildcards and escalation paths, then rewrite them least-privilege.
+- **[leaked-secret-response](leaked-secret-response)** — Respond to an exposed key: rotate first, check for abuse, then clean up and prevent.
