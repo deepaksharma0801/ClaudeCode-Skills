@@ -16,6 +16,7 @@ Skills for writing, debugging, and shipping code.
 - **[dependency-upgrade-planner](dependency-upgrade-planner)** — Plan major-version upgrades from changelogs and codemods, one verified step at a time.
 - **[observability-instrumentation](observability-instrumentation)** — Add structured logs, RED metrics, and OpenTelemetry traces that answer incident questions.
 - **[git-recovery](git-recovery)** — Recover lost commits, branches, and stashes with reflog and non-destructive restores.
+- **[implementation-plan-writer](implementation-plan-writer)** — Turn a spec into small, ordered, verifiable tasks built from the real codebase.
 
 More from the community (web-artifacts-builder, systematic-debugging, test-fixing, ios-simulator-skill)
 is listed in the [main README](../../README.md#community-picks).
