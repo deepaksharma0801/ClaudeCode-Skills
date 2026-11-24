@@ -1,0 +1,39 @@
+{
+  "skill_name": "e2e-test-writer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write a Playwright test for our signup flow.",
+      "expected_output": "Writes a test with role/label locators, web-first assertions, unique per-test data, and recommends running with --repeat-each.",
+      "files": [],
+      "expectations": [
+        "Uses getByRole/getByLabel locators",
+        "Uses web-first expect assertions, no waitForTimeout",
+        "Creates unique test data",
+        "Mentions --repeat-each to prove stability"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "This test is flaky, can you just add waitForTimeout(5000) before the assertion?",
+      "expected_output": "Declines the sleep, replaces it with a web-first assertion on the outcome, and explains why.",
+      "files": [],
+      "expectations": [
+        "Does not add a fixed sleep",
+        "Replaces with expect(...).toBeVisible/toHaveText",
+        "Explains why sleeps are flaky"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write E2E tests for every validation rule on our signup form (20 rules).",
+      "expected_output": "Recommends testing validation rules at the unit/API level and keeping one or two E2E tests for the critical path.",
+      "files": [],
+      "expectations": [
+        "Pushes most validation tests to unit/API level",
+        "Keeps a small number of E2E tests",
+        "Explains the cost of E2E tests"
+      ]
+    }
+  ]
+}
