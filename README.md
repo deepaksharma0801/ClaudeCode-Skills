@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="#skills"><img src="https://img.shields.io/badge/skills-46-D97757?style=flat-square&labelColor=16141F" alt="46 skills"></a>
+  <a href="#skills"><img src="https://img.shields.io/badge/skills-54-D97757?style=flat-square&labelColor=16141F" alt="54 skills"></a>
   <a href=".github/workflows/validate-skills.yml"><img src="https://img.shields.io/github/actions/workflow/status/deepaksharma0801/ClaudeCode-Skills/validate-skills.yml?branch=main&style=flat-square&label=validate&labelColor=16141F" alt="Validate skills"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-CC0_1.0-8B8798?style=flat-square&labelColor=16141F" alt="CC0 1.0"></a>
   <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-8B8798?style=flat-square&labelColor=16141F" alt="PRs welcome"></a>
@@ -74,6 +74,8 @@ No build step and no registry. Claude picks the skill up on the next session.
 | [`ci-failure-debugger`](skills/development/ci-failure-debugger/SKILL.md) | Finds the first real error in a failing CI run, classifies it, and fixes the cause |
 | [`dependency-upgrade-planner`](skills/development/dependency-upgrade-planner/SKILL.md) | Plans major-version upgrades from changelogs and codemods, one verified step at a time |
 | [`observability-instrumentation`](skills/development/observability-instrumentation/SKILL.md) | Adds structured logs, RED metrics, and OpenTelemetry traces that answer incident questions |
+| [`git-recovery`](skills/development/git-recovery/SKILL.md) | Recovers lost commits, branches, and stashes from the reflog without overwriting more work |
+| [`implementation-plan-writer`](skills/development/implementation-plan-writer/SKILL.md) | Turns a spec into small, ordered, verifiable tasks built from the real codebase |
 
 ### Data & Analysis
 
@@ -90,6 +92,8 @@ No build step and no registry. Claude picks the skill up on the next session.
 | [`funnel-analysis`](skills/data-and-analysis/funnel-analysis/SKILL.md) | Ordered funnels with conversion windows, the biggest leak, and the segment where it is worst |
 | [`dataset-anonymizer`](skills/data-and-analysis/dataset-anonymizer/SKILL.md) | Hashes, generalizes, and redacts a dataset before sharing, then checks k-anonymity. Ships `scripts/anonymize.py` |
 | [`survey-analysis`](skills/data-and-analysis/survey-analysis/SKILL.md) | Reports survey results with margins of error, honest comparisons, and coded free text |
+| [`metric-drop-investigation`](skills/data-and-analysis/metric-drop-investigation/SKILL.md) | Explains a metric move: checks the data, sizes the change, decomposes by segment, and matches it to events |
+| [`experiment-design`](skills/data-and-analysis/experiment-design/SKILL.md) | Designs an A/B test before launch: one metric, guardrails, sample size, duration, and a decision rule |
 
 ### Security & QA
 
@@ -107,6 +111,8 @@ No build step and no registry. Claude picks the skill up on the next session.
 | [`security-finding-triage`](skills/security-and-qa/security-finding-triage/SKILL.md) | Traces scanner findings from source to sink to separate real bugs from false positives |
 | [`iam-policy-review`](skills/security-and-qa/iam-policy-review/SKILL.md) | Finds wildcards and escalation paths in AWS IAM policies and rewrites them least-privilege. Ships `scripts/iam_lint.py` |
 | [`leaked-secret-response`](skills/security-and-qa/leaked-secret-response/SKILL.md) | Responds to an exposed key in the right order: rotate, check for abuse, clean up, prevent |
+| [`injection-review`](skills/security-and-qa/injection-review/SKILL.md) | Traces untrusted input to SQL, shell, template, HTML, URL, and file sinks and fixes them structurally |
+| [`e2e-test-writer`](skills/security-and-qa/e2e-test-writer/SKILL.md) | Writes stable Playwright tests for critical flows with role locators and per-test data |
 
 ### Business & Communication
 
@@ -122,6 +128,8 @@ No build step and no registry. Claude picks the skill up on the next session.
 | [`code-review-comments`](skills/business-and-comms/code-review-comments/SKILL.md) | Writes labeled, kind, actionable review comments so authors know what blocks the merge |
 | [`customer-support-reply`](skills/business-and-comms/customer-support-reply/SKILL.md) | Drafts support replies that answer first, give clear steps, and never overpromise |
 | [`technical-blog-post`](skills/business-and-comms/technical-blog-post/SKILL.md) | Writes engineering posts built on a real problem, real numbers, runnable code, and trade-offs |
+| [`runbook-writer`](skills/business-and-comms/runbook-writer/SKILL.md) | Writes on-call runbooks with branching triage, exact commands, rollback, and escalation |
+| [`job-description-writer`](skills/business-and-comms/job-description-writer/SKILL.md) | Writes job postings with the real work, few must-haves, the pay range, and the hiring process |
 
 <br>
 
@@ -266,10 +274,10 @@ and keep keys in environment variables, never in a committed config. More in
 ```text
 ClaudeCode-Skills/
 ├── skills/
-│   ├── development/            13 skills
-│   ├── data-and-analysis/      11 skills
-│   ├── security-and-qa/        12 skills
-│   └── business-and-comms/     10 skills
+│   ├── development/            15 skills
+│   ├── data-and-analysis/      13 skills
+│   ├── security-and-qa/        14 skills
+│   └── business-and-comms/     12 skills
 ├── templates/SKILL_TEMPLATE.md
 ├── scripts/validate_skills.py  runs in CI on every PR
 ├── mcp-servers/                MCP config examples
