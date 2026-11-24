@@ -1,0 +1,51 @@
+{
+  "skill_name": "injection-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Review this: db.execute(f\"SELECT * FROM users WHERE email = '{email}' ORDER BY {sort}\")",
+      "expected_output": "Flags SQL injection in both value and identifier, and fixes with placeholders plus an allowlist for the sort column.",
+      "files": [],
+      "expectations": [
+        "Flags the value as SQL injection",
+        "Flags the ORDER BY identifier separately",
+        "Fix uses placeholders for the value",
+        "Fix uses an allowlist for the identifier"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our webhook feature blocks localhost and 169.254.169.254 by hostname. Good enough?",
+      "expected_output": "Explains hostname checks are bypassable via encodings, DNS, and redirects; recommends resolve-then-check-IP, pinning, redirect checks, or an allowlist.",
+      "files": [],
+      "expectations": [
+        "Says the hostname check is insufficient",
+        "Recommends checking the resolved IP",
+        "Mentions redirects",
+        "Does not provide a full exploit chain"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "We sanitize input by stripping <script> tags before rendering it with innerHTML. Safe?",
+      "expected_output": "Explains blocklist sanitization is bypassable and recommends auto-escaping or an allowlist sanitizer like DOMPurify, plus CSP.",
+      "files": [],
+      "expectations": [
+        "Says stripping script tags is not enough",
+        "Recommends textContent/auto-escaping or DOMPurify",
+        "Mentions CSP as defense in depth"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Check this: subprocess.run(['convert', path, out]). Is it command injection?",
+      "expected_output": "Recognizes argument-array usage without a shell is not command injection, possibly noting option injection via a leading dash.",
+      "files": [],
+      "expectations": [
+        "Does not flag it as command injection",
+        "Notes no shell is involved",
+        "May suggest -- or path validation for option injection"
+      ]
+    }
+  ]
+}
