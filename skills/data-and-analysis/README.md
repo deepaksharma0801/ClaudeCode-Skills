@@ -14,3 +14,4 @@ Skills for profiling data, checking queries, and reading experiment results.
 - **[dataset-anonymizer](dataset-anonymizer)** — Hash, generalize, and redact a dataset before sharing, then check k-anonymity.
 - **[survey-analysis](survey-analysis)** — Report survey results with margins of error, honest comparisons, and coded free text.
 - **[metric-drop-investigation](metric-drop-investigation)** — Explain a metric move: verify the data, size it, decompose by segment, match to events.
+- **[experiment-design](experiment-design)** — Design an A/B test up front: one metric, guardrails, sample size, and a decision rule.
