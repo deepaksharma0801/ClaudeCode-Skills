@@ -1,0 +1,40 @@
+{
+  "skill_name": "implementation-plan-writer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Plan adding a CSV export to the invoices page in this repo.",
+      "expected_output": "Reads the codebase, writes acceptance criteria and non-goals, and produces small ordered tasks with real file paths and verification, riskiest unknown first.",
+      "files": [],
+      "expectations": [
+        "Cites real paths found in the repo, not invented ones",
+        "Has acceptance criteria and non-goals",
+        "Puts the riskiest unknown (e.g. large-data performance) early",
+        "Each task has a verification step",
+        "Tests are inside tasks, not one final 'write tests' task"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Just give me a quick plan: backend, frontend, tests.",
+      "expected_output": "Pushes back on horizontal layers and proposes a thin vertical slice early, with tests in each task.",
+      "files": [],
+      "expectations": [
+        "Does not produce a backend/frontend/tests layered plan",
+        "Includes an early end-to-end slice",
+        "Keeps tasks small and verifiable"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Plan migrating our whole auth system from sessions to JWT.",
+      "expected_output": "Recognizes open design decisions and recommends a design doc first, offering a safe first task like pinning current auth behavior with tests.",
+      "files": [],
+      "expectations": [
+        "Identifies the open design decisions (token storage, revocation)",
+        "Recommends a design doc or asks for the decisions before a full task list",
+        "Offers a safe first task"
+      ]
+    }
+  ]
+}
