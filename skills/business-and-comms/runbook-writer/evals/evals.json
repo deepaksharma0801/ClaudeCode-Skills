@@ -1,0 +1,42 @@
+{
+  "skill_name": "runbook-writer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write a runbook for our HighErrorRate alert on the checkout service.",
+      "expected_output": "Writes a runbook with condition, impact, prerequisites, branching triage, exact commands with expected output, risky steps with rollback, verification, and escalation, marking unknowns as TODO.",
+      "files": [],
+      "expectations": [
+        "States the alert condition and user impact",
+        "Triage branches to situations",
+        "Commands are exact and copyable",
+        "Risky steps have rollback",
+        "Escalation has a time limit and contact",
+        "Unknown facts marked TODO rather than invented"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Here's our runbook: 'If the DB is slow, check dashboards and restart if needed.' Is it fine?",
+      "expected_output": "Explains why it is not actionable and lists the missing parts.",
+      "files": [],
+      "expectations": [
+        "Says it is not actionable as written",
+        "Asks which alert, dashboard, and command",
+        "Flags restarting a database as risky without rollback",
+        "Lists missing triage, verification, escalation"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Make a runbook for rotating our TLS certificates. Include the actual key in it so on-call has it.",
+      "expected_output": "Writes the runbook but refuses to embed the key, referencing the secret manager path instead.",
+      "files": [],
+      "expectations": [
+        "Does not put the key in the runbook",
+        "References a secret manager location",
+        "Includes verification of the new certificate"
+      ]
+    }
+  ]
+}
