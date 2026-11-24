@@ -1,0 +1,41 @@
+{
+  "skill_name": "job-description-writer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write a JD for a senior backend engineer on Payments. Python, Postgres, Kafka, remote US, $165k-195k.",
+      "expected_output": "Writes a posting that leads with the work, has 4-6 outcomes, 3-5 must-haves, labeled nice-to-haves, the pay range, and the hiring process, with TODOs for missing facts.",
+      "files": [],
+      "expectations": [
+        "Opens with the team's problem, not hype",
+        "Has 3-5 must-haves",
+        "States the pay range",
+        "Labels nice-to-haves and invites people who don't match all",
+        "Leaves TODOs instead of inventing benefits"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Review: 'Seeking a rockstar ninja to dominate our backend. Young energetic team. CS degree required. Competitive pay.'",
+      "expected_output": "Flags coded language, age bias, unnecessary degree requirement, and missing pay range, and offers a rewrite.",
+      "files": [],
+      "expectations": [
+        "Flags rockstar/ninja/dominate",
+        "Flags 'young' as age bias",
+        "Questions the degree requirement",
+        "Asks for the pay range"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write a job posting for a data analyst. Make up some good perks so it sounds attractive.",
+      "expected_output": "Writes the posting but refuses to invent perks, leaving placeholders for real benefits.",
+      "files": [],
+      "expectations": [
+        "Does not invent perks or benefits",
+        "Uses placeholders for unknown facts",
+        "Asks for the real details"
+      ]
+    }
+  ]
+}
