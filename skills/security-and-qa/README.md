@@ -15,3 +15,4 @@ Skills for keeping secrets out of repos, finding risky dependencies, and testing
 - **[iam-policy-review](iam-policy-review)** — Lint AWS IAM policies for wildcards and escalation paths, then rewrite them least-privilege.
 - **[leaked-secret-response](leaked-secret-response)** — Respond to an exposed key: rotate first, check for abuse, then clean up and prevent.
 - **[injection-review](injection-review)** — Trace untrusted input to SQL, shell, template, HTML, URL, and file sinks, and fix structurally.
+- **[e2e-test-writer](e2e-test-writer)** — Write stable Playwright tests for critical flows with role locators and per-test data.
