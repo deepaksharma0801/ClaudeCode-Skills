@@ -1,0 +1,39 @@
+{
+  "skill_name": "metric-drop-investigation",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Signups dropped 18% week over week. Leadership wants to know why by EOD.",
+      "expected_output": "Checks data completeness and tracking first, compares to normal range, decomposes by formula and segment contribution, matches onset to events, and labels confidence.",
+      "files": [],
+      "expectations": [
+        "Checks data freshness/tracking before explaining",
+        "Compares to a normal range or last year",
+        "Ranks segments by contribution to total change",
+        "Labels the cause as confirmed/likely/unknown with a next check"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Revenue today is down 40% vs yesterday, what broke?",
+      "expected_output": "Notices today is partial and compares like-for-like before investigating.",
+      "files": [],
+      "expectations": [
+        "Identifies that today is a partial period",
+        "Compares same time-of-day or same weekday",
+        "Does not invent a cause"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Conversion rate fell but every channel's conversion rate is flat. Weird?",
+      "expected_output": "Explains mix shift: traffic share moved toward lower-converting segments.",
+      "files": [],
+      "expectations": [
+        "Names mix shift as the explanation",
+        "Suggests checking traffic share by segment",
+        "Does not claim the product got worse"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "skill_name": "experiment-design",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We want to A/B test a new checkout button. Baseline conversion 3%, 40k visitors/day. How long?",
+      "expected_output": "Writes a design with hypothesis, one primary metric, guardrails, MDE from business value, a computed sample size, duration in whole weeks, and a pre-set decision rule.",
+      "files": [],
+      "expectations": [
+        "Picks one primary metric with the baseline",
+        "Computes sample size with stated alpha and power",
+        "Rounds duration up to whole weeks",
+        "Lists guardrail metrics",
+        "Writes the decision and stopping rule before launch"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Let's run the test and stop as soon as it hits significance.",
+      "expected_output": "Explains peeking inflates false positives and recommends a fixed horizon or a sequential method.",
+      "files": [],
+      "expectations": [
+        "Explains the peeking problem",
+        "Recommends a fixed horizon or proper sequential test",
+        "Keeps a guardrail kill switch as the only early stop"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "We get 300 trials a week with 12% trial-to-paid. Test new onboarding for a week?",
+      "expected_output": "Shows the test is underpowered with numbers and offers levers (closer metric, bigger MDE, or not experimenting).",
+      "files": [],
+      "expectations": [
+        "Computes that the required duration is far longer than a week",
+        "Offers a closer, faster metric or larger MDE",
+        "Mentions not experimenting as a valid option"
+      ]
+    }
+  ]
+}
