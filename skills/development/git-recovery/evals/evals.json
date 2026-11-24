@@ -1,0 +1,50 @@
+{
+  "skill_name": "git-recovery",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I did git reset --hard and lost my last two commits. Should I just re-clone?",
+      "expected_output": "Tells the user not to re-clone, finds the pre-reset sha in the reflog, and restores it onto a new branch before moving the real branch.",
+      "files": [],
+      "expectations": [
+        "Says not to re-clone or run gc",
+        "Creates a rescue branch or backup first",
+        "Uses git reflog to find the lost sha",
+        "Restores onto a new branch and verifies before resetting the working branch"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I pushed a commit with a bug to main. How do I undo it?",
+      "expected_output": "Recommends git revert on the shared branch instead of reset and force-push, with the merge variant if relevant.",
+      "files": [],
+      "expectations": [
+        "Recommends git revert",
+        "Advises against reset + force-push on a shared branch",
+        "Mentions --force-with-lease only as a coordinated last resort"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I dropped a stash by accident with git stash drop. Is it gone?",
+      "expected_output": "Explains dropped stashes are unreachable commits, finds them with git fsck, and applies the right one.",
+      "files": [],
+      "expectations": [
+        "Uses git fsck --unreachable (or equivalent) to find stash commits",
+        "Shows how to apply the recovered stash",
+        "Warns against running gc before recovery"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "I edited a file for an hour but never saved it to git, then ran git checkout on it. Can you recover it?",
+      "expected_output": "Explains git never recorded unstaged edits and points to editor local history instead, without promising recovery from git.",
+      "files": [],
+      "expectations": [
+        "States git cannot recover never-staged changes",
+        "Suggests editor local history (VS Code Timeline, JetBrains Local History)",
+        "Does not invent a git command that claims to restore it"
+      ]
+    }
+  ]
+}
