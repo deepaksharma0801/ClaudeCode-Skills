@@ -1,0 +1,41 @@
+{
+  "skill_name": "tdd-workflow",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Use TDD to add a discount rule: 10% off orders over $200 for members.",
+      "expected_output": "Writes a behavior test list, then one test at a time, runs each to see it fail for the right reason, writes minimal code, refactors on green, and commits.",
+      "files": [],
+      "expectations": [
+        "Writes a test list of behaviors",
+        "Runs the test and shows it failing before implementing",
+        "Distinguishes failing for the right reason vs import errors",
+        "Minimal implementation per cycle",
+        "Refactors only on green"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I already wrote the function, can you add tests and call it TDD?",
+      "expected_output": "Explains tests-after aren't TDD, and at minimum verifies each new test can fail (e.g. by temporarily breaking the code) before trusting it.",
+      "files": [],
+      "expectations": [
+        "Says writing tests after isn't TDD",
+        "Recommends proving each test can fail",
+        "Does not claim the work was test-driven"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Fix this bug: users can redeem the same coupon twice.",
+      "expected_output": "Starts with a failing regression test reproducing the bug, then fixes and shows it passing.",
+      "files": [],
+      "expectations": [
+        "Writes a reproducing test first",
+        "Shows it failing with the buggy behavior",
+        "Fixes and shows the test passing",
+        "Keeps the test as a regression guard"
+      ]
+    }
+  ]
+}
