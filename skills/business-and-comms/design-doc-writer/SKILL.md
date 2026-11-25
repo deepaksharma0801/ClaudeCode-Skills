@@ -45,6 +45,21 @@ ships safely.
 4. Mark assumptions explicitly; do not present them as facts.
 5. Keep it as short as the change allows. A two-week change needs two pages, not ten.
 
+## Output shape
+
+```markdown
+# <Title> — design doc
+Status · Author · Reviewers · Decision needed by
+## Summary              recommendation + decisions needed from reviewers
+## Context              current state, the problem, evidence
+## Goals / Non-goals
+## Proposed design      components, data, APIs, diagram, failure modes
+## Alternatives         ≥ 2 incl. "do nothing", why not chosen
+## Risks & open questions
+## Rollout              steps, flags, backfill, monitoring, rollback
+## Cost & effort
+```
+
 ## Checklist
 
 ```text
