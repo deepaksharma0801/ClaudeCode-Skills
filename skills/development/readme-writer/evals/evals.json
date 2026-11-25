@@ -1,0 +1,40 @@
+{
+  "skill_name": "readme-writer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write a README for this repo.",
+      "expected_output": "Reads the manifest, scripts, CI, and .env.example, then writes a README with pitch, quickstart, usage, configuration, development, and license, verifying commands.",
+      "files": [],
+      "expectations": [
+        "Commands come from the repo's scripts/Makefile/CI",
+        "Opens with a one-line pitch, not history",
+        "Quickstart reaches a visible result",
+        "Configuration table matches the code",
+        "States which commands were verified"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our README says npm start but it fails. Fix the README.",
+      "expected_output": "Finds the real script in package.json and corrects the quickstart, checking other stale commands.",
+      "files": [],
+      "expectations": [
+        "Checks package.json scripts",
+        "Replaces the wrong command with the real one",
+        "Looks for other mismatches like env var names"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Make the README impressive — add lots of badges and a long history section at the top.",
+      "expected_output": "Keeps the top focused on what the project does and a working quickstart; limits badges to accurate ones on one line and moves history lower.",
+      "files": [],
+      "expectations": [
+        "Keeps pitch and quickstart at the top",
+        "Limits badges to accurate ones",
+        "Moves history below or out"
+      ]
+    }
+  ]
+}
