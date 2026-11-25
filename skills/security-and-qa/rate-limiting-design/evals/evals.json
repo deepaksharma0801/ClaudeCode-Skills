@@ -1,0 +1,41 @@
+{
+  "skill_name": "rate-limiting-design",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Design rate limits for our public API and login endpoint.",
+      "expected_output": "Classifies endpoints, picks keys (API key; account + IP for login), algorithm, limits from traffic data, shared store, fail-open/closed, and 429 + Retry-After.",
+      "files": [],
+      "expectations": [
+        "Limits login per account as well as per IP",
+        "Uses a shared store, not in-memory",
+        "Bases limits on real traffic",
+        "Returns 429 with Retry-After",
+        "Decides fail-open vs fail-closed"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "We limit by X-Forwarded-For IP. Fine?",
+      "expected_output": "Explains X-Forwarded-For is client-controlled unless taken from a trusted proxy, and IP-only limiting is weak.",
+      "files": [],
+      "expectations": [
+        "Flags spoofable X-Forwarded-For",
+        "Recommends trusted proxy configuration",
+        "Suggests user/API-key keys"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Our SMS verification endpoint costs are exploding even with per-IP limits.",
+      "expected_output": "Identifies SMS pumping and adds per-number, per-country, and session controls plus spend alerts.",
+      "files": [],
+      "expectations": [
+        "Mentions SMS pumping / toll fraud",
+        "Adds per-phone-number limits",
+        "Adds country caps or blocking",
+        "Adds spend alerting"
+      ]
+    }
+  ]
+}
