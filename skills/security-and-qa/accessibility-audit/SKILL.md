@@ -73,6 +73,15 @@ order, keyboard traps, meaningful labels, and announcements for dynamic content.
 - `aria-label` sprinkled everywhere instead of visible labels.
 - Suggesting an accessibility overlay widget.
 
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "Lighthouse scores 100." | Automated tools catch only part of WCAG issues; test with a keyboard and a screen reader too. |
+| "We'll add ARIA to fix it." | Native elements beat ARIA; bad ARIA makes things worse. |
+| "Few users need this." | Keyboard, low vision, and temporary impairments are common, and it's often a legal requirement. |
+| "An overlay widget handles it." | Overlays don't fix the underlying markup and are criticized by disabled users. |
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not report a clean result from an automated scan alone as "accessible".
