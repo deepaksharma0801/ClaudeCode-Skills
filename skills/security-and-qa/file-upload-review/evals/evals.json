@@ -1,0 +1,40 @@
+{
+  "skill_name": "file-upload-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Review our upload: saves request.files['f'] to static/uploads/<filename> if it ends in .png or .svg.",
+      "expected_output": "Flags path traversal via filename, SVG stored XSS on the main origin, name-only type checks, missing size limit, and web-root storage, with fixes.",
+      "files": [],
+      "expectations": [
+        "Flags using the client filename as the path",
+        "Flags SVG served inline as XSS",
+        "Recommends magic-byte checks with an allowlist",
+        "Recommends a size limit",
+        "Recommends private storage or a separate domain"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "We use presigned S3 PUT URLs valid for a week, key = client filename.",
+      "expected_output": "Recommends server-generated keys, short expiry, and a presigned POST with size and type conditions.",
+      "files": [],
+      "expectations": [
+        "Server-generated object key",
+        "Short expiry",
+        "Presigned POST with content-length-range"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "We only allow .zip imports, so it's safe to unzip into the data folder.",
+      "expected_output": "Explains zip slip and zip bombs; requires entry path validation and size/count limits.",
+      "files": [],
+      "expectations": [
+        "Mentions zip slip / path traversal in archive entries",
+        "Mentions decompression size limits",
+        "Rejects symlinks or absolute paths"
+      ]
+    }
+  ]
+}
