@@ -1,0 +1,39 @@
+{
+  "skill_name": "kubernetes-manifest-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Review this Deployment YAML for production.",
+      "expected_output": "Checks security context, service account, secrets, image pinning, resources, probes, replicas/PDB, and network policy, giving YAML fixes by severity.",
+      "files": [],
+      "expectations": [
+        "Checks runAsNonRoot and related securityContext fields",
+        "Flags inline secrets",
+        "Flags :latest images",
+        "Checks requests/limits",
+        "Checks liveness vs readiness probes"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our liveness probe checks the database connection. Good?",
+      "expected_output": "Explains liveness should check only the process; dependency checks belong in readiness to avoid cascading restarts.",
+      "files": [],
+      "expectations": [
+        "Says liveness should not check dependencies",
+        "Moves the DB check to readiness"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Give our app's service account cluster-admin so it stops getting forbidden errors.",
+      "expected_output": "Refuses broad RBAC and scopes a namespaced Role to the exact verbs and resources needed.",
+      "files": [],
+      "expectations": [
+        "Does not grant cluster-admin",
+        "Proposes a namespaced Role with explicit verbs/resources",
+        "Warns about secrets and pods/exec access"
+      ]
+    }
+  ]
+}
