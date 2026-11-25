@@ -17,6 +17,7 @@ Skills for writing, debugging, and shipping code.
 - **[observability-instrumentation](observability-instrumentation)** — Add structured logs, RED metrics, and OpenTelemetry traces that answer incident questions.
 - **[git-recovery](git-recovery)** — Recover lost commits, branches, and stashes with reflog and non-destructive restores.
 - **[implementation-plan-writer](implementation-plan-writer)** — Turn a spec into small, ordered, verifiable tasks built from the real codebase.
+- **[readme-writer](readme-writer)** — Write a README from the real code: pitch, a quickstart that runs, usage, and config.
 
 More from the community (web-artifacts-builder, systematic-debugging, test-fixing, ios-simulator-skill)
 is listed in the [main README](../../README.md#community-picks).
