@@ -91,6 +91,23 @@ token, and states its limits.
 - [ ] Limits stated
 ```
 
+## Red Flags
+
+- Delivering a pattern with no run test cases.
+- No anchors (`^…$` or `\A…\z`) on a validation regex.
+- Nested quantifiers like `(a+)+` or `(.*)*` on user input.
+- Testing only strings that should match.
+- Using regex to parse HTML, JSON, or full email RFC grammar.
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "It matched my example." | Validation bugs live in near-misses; test what must *not* match. |
+| "Regex is the same everywhere." | Lookbehind, `\d` Unicode behavior, and flags differ across engines. |
+| "Performance doesn't matter for a regex." | Catastrophic backtracking turns one input into a CPU-bound outage. |
+| "A full RFC email regex is safest." | It's unreadable and still wrong; validate loosely and send a confirmation. |
+
 ## Anti-Patterns (What NOT to do)
 
 * **Delivering a pattern without running it** — "it should work" is how validators accept garbage.
