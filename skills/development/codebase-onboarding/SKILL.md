@@ -94,6 +94,23 @@ shape so it's easy to scan.
 - [ ] Unknowns and README drift listed
 ```
 
+## Red Flags
+
+- Describing a folder's purpose from its name without opening a file in it.
+- A summary with no file paths.
+- Skipping the run instructions because the build "probably works".
+- Listing every directory instead of tracing one real request.
+- Presenting a guess about architecture as fact.
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "The README explains it." | READMEs drift. Check them against the code and CI. |
+| "The folder names are self-explanatory." | `utils/` and `core/` hide most of the surprises. |
+| "Tracing one flow is slow." | It's the fastest way to learn how the layers really connect. |
+| "I'll skip running it." | Then the run instructions are unverified; say so. |
+
 ## Anti-Patterns (What NOT to do)
 
 * **Listing every directory or file** — the reader needs the shape, not an index.
