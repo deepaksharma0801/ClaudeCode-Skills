@@ -70,6 +70,23 @@ Question it should answer: <one sentence>
 - [ ] Revised code provided when the chart came from code
 ```
 
+## Red Flags
+
+- Discussing colors before checking the y-axis baseline.
+- A last period that's incomplete but plotted like the others.
+- A dual-axis chart with no warning about the scales.
+- A title that describes the chart ("Revenue by month") instead of the takeaway.
+- Red/green as the only way to tell series apart.
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "The truncated axis shows the change better." | It exaggerates it; use a zero baseline for bars, or label a line chart clearly. |
+| "Everyone knows the last month is partial." | Readers don't; grey it out or drop it. |
+| "Pie charts are fine for shares." | Beyond 2–3 slices people can't compare angles; use bars. |
+| "It's just a quick internal chart." | Internal charts drive decisions too. |
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not critique style before checking whether the chart misleads.
