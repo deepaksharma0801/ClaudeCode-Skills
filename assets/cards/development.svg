@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="164" viewBox="0 0 600 164" role="img" aria-label="Development: 19 skills">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1E1B29"/><stop offset="1" stop-color="#15131C"/></linearGradient>
+    <radialGradient id="h" cx="0.95" cy="0" r="0.7"><stop offset="0" stop-color="#D97757" stop-opacity="0.18"/><stop offset="1" stop-color="#D97757" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect x="1" y="1" width="598" height="162" rx="14" fill="url(#g)" stroke="#2E2A3B"/>
+  <rect x="1" y="1" width="598" height="162" rx="14" fill="url(#h)"/>
+  <g transform="translate(32 32)">
+    <rect width="56" height="56" rx="12" fill="#D97757" fill-opacity="0.14" stroke="#D97757" stroke-opacity="0.45"/>
+    <g transform="translate(6 6)" fill="none" stroke="#D97757" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M14 10 L4 22 L14 34" /><path d="M30 10 L40 22 L30 34" /><path d="M25 6 L19 38" /></g>
+  </g>
+  <g font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+    <text x="108" y="58" font-size="26" font-weight="700" fill="#F4F1EA">Development</text>
+    <text x="108" y="84" font-size="16" fill="#B9B4C4">Debug, refactor, plan, and ship code</text>
+    <text x="568" y="58" font-size="30" font-weight="700" fill="#D97757" text-anchor="end">19</text>
+    <text x="568" y="80" font-size="13" fill="#8B8798" text-anchor="end">skills</text>
+  </g>
+  <line x1="32" y1="106" x2="568" y2="106" stroke="#2E2A3B"/>
+  <text x="32" y="138" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#8B8798">root-cause-debugging · tdd-workflow · git-recovery</text>
+</svg>
