@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="#skills"><img src="https://img.shields.io/badge/skills-62-D97757?style=flat-square&labelColor=16141F" alt="62 skills"></a>
+  <a href="#skills"><img src="https://img.shields.io/badge/skills-70-D97757?style=flat-square&labelColor=16141F" alt="70 skills"></a>
   <a href=".github/workflows/validate-skills.yml"><img src="https://img.shields.io/github/actions/workflow/status/deepaksharma0801/ClaudeCode-Skills/validate-skills.yml?branch=main&style=flat-square&label=validate&labelColor=16141F" alt="Validate skills"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-CC0_1.0-8B8798?style=flat-square&labelColor=16141F" alt="CC0 1.0"></a>
   <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-8B8798?style=flat-square&labelColor=16141F" alt="PRs welcome"></a>
@@ -23,9 +23,33 @@
 
 <br>
 
-A **skill** is a folder with a `SKILL.md` file: a short, focused procedure Claude loads only when a
-request needs it. Every skill here is complete — workflow, anti-patterns, and a worked example —
-follows one [template](templates/SKILL_TEMPLATE.md), and is checked in CI by
+A **skill** is a folder with a `SKILL.md` file: a focused procedure Claude loads only when a
+request needs it. Ask Claude to *"find out why signups dropped"* or *"review this Kubernetes
+manifest"*, and the matching skill gives it a tested way of working instead of a guess.
+
+<table>
+  <tr>
+    <td width="50%"><a href="#development"><img src="assets/cards/development.svg" alt="Development: 19 skills" width="100%"></a></td>
+    <td width="50%"><a href="#data--analysis"><img src="assets/cards/data-and-analysis.svg" alt="Data and Analysis: 17 skills" width="100%"></a></td>
+  </tr>
+  <tr>
+    <td width="50%"><a href="#security--qa"><img src="assets/cards/security-and-qa.svg" alt="Security and QA: 18 skills" width="100%"></a></td>
+    <td width="50%"><a href="#business--communication"><img src="assets/cards/business-and-comms.svg" alt="Business and Comms: 16 skills" width="100%"></a></td>
+  </tr>
+</table>
+
+### What's in every skill
+
+| | |
+|:--|:--|
+| **When to use, and when not** | Clear triggers plus the neighboring skill to use instead |
+| **Workflow rules with reasons** | Ordered steps, exact commands where they matter, and *why* each step exists |
+| **Red flags and rationalizations** | The shortcuts Claude is tempted to take, named and closed |
+| **Worked examples** | A realistic request and the full expected output, with numbers checked |
+| **Evals** | 3+ test prompts per skill in `evals/evals.json`, including one that tempts the main failure |
+| **Scripts, where useful** | Standard-library Python for the deterministic parts (linters, scanners, calculators) |
+
+Every skill follows the [quality bar](docs/QUALITY.md) and is checked in CI by
 [`validate_skills.py`](scripts/validate_skills.py).
 
 <br>
@@ -78,6 +102,8 @@ No build step and no registry. Claude picks the skill up on the next session.
 | [`implementation-plan-writer`](skills/development/implementation-plan-writer/SKILL.md) | Turns a spec into small, ordered, verifiable tasks built from the real codebase |
 | [`readme-writer`](skills/development/readme-writer/SKILL.md) | Writes a README from the real code: a one-line pitch, a quickstart that runs, usage, and config |
 | [`feature-flag-rollout`](skills/development/feature-flag-rollout/SKILL.md) | Ships behind a flag in stages with go/kill criteria, a tested kill switch, and a cleanup date |
+| [`tdd-workflow`](skills/development/tdd-workflow/SKILL.md) | Builds test-first in red-green-refactor cycles, watching every test fail before writing code |
+| [`error-handling-review`](skills/development/error-handling-review/SKILL.md) | Finds swallowed errors, missing timeouts, unsafe retries, partial failures, and leaky messages |
 
 ### Data & Analysis
 
@@ -98,6 +124,8 @@ No build step and no registry. Claude picks the skill up on the next session.
 | [`experiment-design`](skills/data-and-analysis/experiment-design/SKILL.md) | Designs an A/B test before launch: one metric, guardrails, sample size, duration, and a decision rule |
 | [`sql-from-question`](skills/data-and-analysis/sql-from-question/SKILL.md) | Turns a question into correct SQL by confirming grain and join keys, then cross-checks the number |
 | [`dashboard-spec-writer`](skills/data-and-analysis/dashboard-spec-writer/SKILL.md) | Specs a dashboard from the decisions it supports: defined metrics, comparisons, layout, and alerts |
+| [`dbt-model-review`](skills/data-and-analysis/dbt-model-review/SKILL.md) | Reviews dbt models for grain, join fan-out, incremental logic, layering, and tests |
+| [`time-series-forecast`](skills/data-and-analysis/time-series-forecast/SKILL.md) | Forecasts with a seasonal baseline, rolling backtests, and prediction intervals |
 
 ### Security & QA
 
@@ -119,6 +147,8 @@ No build step and no registry. Claude picks the skill up on the next session.
 | [`e2e-test-writer`](skills/security-and-qa/e2e-test-writer/SKILL.md) | Writes stable Playwright tests for critical flows with role locators and per-test data |
 | [`file-upload-review`](skills/security-and-qa/file-upload-review/SKILL.md) | Reviews uploads end to end: type by content, server-side names, private storage, safe serving |
 | [`load-test-planner`](skills/security-and-qa/load-test-planner/SKILL.md) | Plans k6 load tests from real traffic with SLO thresholds, then names the bottleneck |
+| [`kubernetes-manifest-review`](skills/security-and-qa/kubernetes-manifest-review/SKILL.md) | Reviews k8s YAML and Helm for security context, RBAC, secrets, probes, and limits |
+| [`rate-limiting-design`](skills/security-and-qa/rate-limiting-design/SKILL.md) | Designs rate limits with the right key, algorithm, traffic-based limits, and abuse controls |
 
 ### Business & Communication
 
@@ -138,6 +168,8 @@ No build step and no registry. Claude picks the skill up on the next session.
 | [`job-description-writer`](skills/business-and-comms/job-description-writer/SKILL.md) | Writes job postings with the real work, few must-haves, the pay range, and the hiring process |
 | [`interview-scorecard-writer`](skills/business-and-comms/interview-scorecard-writer/SKILL.md) | Builds structured interview kits with behavioral anchors and writes evidence-based feedback |
 | [`okr-writer`](skills/business-and-comms/okr-writer/SKILL.md) | Writes OKRs with outcome objectives, baseline-to-target key results, and separate initiatives |
+| [`onboarding-plan-writer`](skills/business-and-comms/onboarding-plan-writer/SKILL.md) | Writes 30/60/90 onboarding plans with a first win in week one and named contacts |
+| [`talk-outline-writer`](skills/business-and-comms/talk-outline-writer/SKILL.md) | Outlines a talk around one message: hook, three points, timed sections, slide plan |
 
 <br>
 
@@ -184,20 +216,26 @@ Reach for a **skill** when Claude *can* do the task but does it inconsistently. 
 ## Write your own
 
 Copy [`templates/SKILL_TEMPLATE.md`](templates/SKILL_TEMPLATE.md) to
-`skills/<category>/<your-skill>/SKILL.md` and fill in every section:
+`skills/<category>/<your-skill>/SKILL.md` and fill in every section. The
+[quality bar](docs/QUALITY.md) explains what each one needs:
 
 ```markdown
 ---
 name: your-skill                # lowercase + hyphens, same as the folder
 description: What it does, and exactly when Claude should use it. Max 200 characters.
-compatibility: Requires Python 3.8+ with pandas.   # optional
+compatibility: Requires Python 3.8+.   # optional
 ---
 
-# Detailed Instructions        # the one or two rules that matter most
-## Overview                     # the problem this skill fixes
-## Workflow Rules               # numbered, imperative steps
+# Detailed Instructions          # the core rule, and why it matters
+## When to Use                    # triggers, and when NOT to (with the alternative)
+## Overview                       # the failure this skill prevents
+## Workflow Rules                 # ordered steps with reasons and exact commands
+## Checklist                      # copyable - [ ] list
+## Red Flags                      # thoughts that precede a bad shortcut
+## Common Rationalizations        # excuse → reality table
 ## Anti-Patterns (What NOT to do)
-## Examples                     # a real request and the exact expected output
+## Examples                       # 2+: a full worked example and an edge case
+## Quick Reference                # a table to scan
 ```
 
 **The description is the trigger.** Say what the skill does *and* when to use it:
@@ -282,10 +320,11 @@ and keep keys in environment variables, never in a committed config. More in
 ```text
 ClaudeCode-Skills/
 ├── skills/
-│   ├── development/            17 skills
-│   ├── data-and-analysis/      15 skills
-│   ├── security-and-qa/        16 skills
-│   └── business-and-comms/     14 skills
+│   ├── development/            19 skills
+│   ├── data-and-analysis/      17 skills
+│   ├── security-and-qa/        18 skills
+│   └── business-and-comms/     16 skills
+├── docs/QUALITY.md             the quality bar every skill meets
 ├── templates/SKILL_TEMPLATE.md
 ├── scripts/validate_skills.py  runs in CI on every PR
 ├── mcp-servers/                MCP config examples
