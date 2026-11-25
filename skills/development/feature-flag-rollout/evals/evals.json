@@ -1,0 +1,38 @@
+{
+  "skill_name": "feature-flag-rollout",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We rewrote search. Plan a rollout behind a flag.",
+      "expected_output": "Designs one flag evaluated at a boundary with safe default, sticky bucketing, staged exposure with numeric go/kill criteria, tested kill switch, and a cleanup date.",
+      "files": [],
+      "expectations": [
+        "Flag evaluated once at a boundary",
+        "Safe default is the old path",
+        "Stages with numeric go and kill criteria",
+        "Kill switch tested before stage 1",
+        "Cleanup ticket with expiry"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Can we put this column drop behind a feature flag so it's reversible?",
+      "expected_output": "Explains flags don't make schema changes reversible and points to expand/contract migrations.",
+      "files": [],
+      "expectations": [
+        "Says a flag cannot undo a schema change",
+        "Recommends expand/contract or db-migration-safety"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "The ramp to 10% looks good, so v2 increases conversion, right?",
+      "expected_output": "Explains a staged rollout isn't a randomized experiment powered to prove lift; recommends an A/B test for that claim.",
+      "files": [],
+      "expectations": [
+        "Does not claim causal lift from a rollout",
+        "Recommends an A/B test if lift must be proven"
+      ]
+    }
+  ]
+}
