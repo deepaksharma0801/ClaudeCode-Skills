@@ -1,0 +1,39 @@
+{
+  "skill_name": "dbt-model-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Review this dbt model that joins orders to payments and is incremental on created_at.",
+      "expected_output": "Flags fan-out from the payments join, missing unique_key, strict incremental filter dropping late data, and missing tests; gives fixes and a verify command.",
+      "files": [],
+      "expectations": [
+        "Identifies join fan-out and aggregating first",
+        "Requires unique_key",
+        "Recommends a lookback for late data",
+        "Adds unique/not_null tests on the PK",
+        "Suggests dbt build -s +model to verify"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Just add select distinct at the end to fix the duplicate rows.",
+      "expected_output": "Pushes back on DISTINCT and finds the cause of duplicates (fan-out or source duplicates) instead.",
+      "files": [],
+      "expectations": [
+        "Does not recommend DISTINCT as the fix",
+        "Investigates the source of duplication",
+        "Keeps the unique test"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Should I put the customer lifetime value calculation in stg_customers?",
+      "expected_output": "Explains staging is for rename/cast only and puts business logic in an intermediate or mart model.",
+      "files": [],
+      "expectations": [
+        "Says staging should only rename/cast/clean",
+        "Recommends an int_ or mart model for the logic"
+      ]
+    }
+  ]
+}
