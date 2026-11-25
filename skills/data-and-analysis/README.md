@@ -17,3 +17,4 @@ Skills for profiling data, checking queries, and reading experiment results.
 - **[experiment-design](experiment-design)** — Design an A/B test up front: one metric, guardrails, sample size, and a decision rule.
 - **[sql-from-question](sql-from-question)** — Turn a question into correct SQL: confirm grain and keys, build in CTEs, cross-check the number.
 - **[dashboard-spec-writer](dashboard-spec-writer)** — Spec a dashboard from the decisions it supports: defined metrics, comparisons, layout, alerts.
+- **[dbt-model-review](dbt-model-review)** — Review dbt models for grain, fan-out, incremental logic, layering, and tests.
