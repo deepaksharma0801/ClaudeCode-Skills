@@ -1,0 +1,39 @@
+{
+  "skill_name": "okr-writer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write Q1 OKRs for our growth team. Activation is 34%, retention 41%.",
+      "expected_output": "Writes 1-3 outcome objectives with 2-4 KRs each having baseline, target, source, owner; separates initiatives; adds counter-metrics.",
+      "files": [],
+      "expectations": [
+        "Objectives are outcomes, not tasks",
+        "KRs have baseline and target",
+        "Initiatives listed separately",
+        "Counter-metric where gameable",
+        "No invented baselines"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our KRs: launch new dashboard, migrate to Kafka, hire 2 engineers. Good?",
+      "expected_output": "Explains these are initiatives/outputs and rewrites them as outcome KRs or asks what outcome they serve.",
+      "files": [],
+      "expectations": [
+        "Identifies them as initiatives/outputs",
+        "Proposes outcome-based KRs",
+        "Keeps the projects as initiatives"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Platform team KR: grow company revenue 20%.",
+      "expected_output": "Explains the team can't directly move revenue and suggests metrics within its control.",
+      "files": [],
+      "expectations": [
+        "Flags the KR as outside the team's control",
+        "Suggests team-owned leading metrics"
+      ]
+    }
+  ]
+}

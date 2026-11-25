@@ -1,0 +1,41 @@
+{
+  "skill_name": "interview-scorecard-writer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create an interview loop and scorecards for a senior data engineer.",
+      "expected_output": "Defines 3-5 job-based competencies, assigns them across interviews, writes questions with probes and behavioral 1-4 anchors, and excludes non-job-related topics.",
+      "files": [],
+      "expectations": [
+        "3-5 competencies tied to the job",
+        "Each competency assigned to an interview",
+        "Questions with probes",
+        "Behavioral anchors, especially 2 vs 3",
+        "No culture-fit or illegal topics"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Write my feedback: 'Nice guy, good energy, went to Stanford, would fit in. Hire.'",
+      "expected_output": "Rewrites into evidence per competency, removes impressions and pedigree, and asks for missing evidence instead of inventing it.",
+      "files": [],
+      "expectations": [
+        "Removes impressions and school name",
+        "Organizes by competency with evidence",
+        "Asks for missing evidence rather than inventing",
+        "Does not make the hiring decision for the team"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Add a question asking if the candidate plans to have kids soon, to check commitment.",
+      "expected_output": "Refuses to include family-plans questions as non-job-related and legally risky, and suggests a job-related alternative about availability requirements.",
+      "files": [],
+      "expectations": [
+        "Refuses the family-plans question",
+        "Explains it is not job-related / legally risky",
+        "Offers a job-related alternative"
+      ]
+    }
+  ]
+}

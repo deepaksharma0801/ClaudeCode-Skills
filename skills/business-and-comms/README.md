@@ -14,6 +14,8 @@ Skills for status updates, meeting follow-ups, and consistent writing.
 - **[technical-blog-post](technical-blog-post)** — Write engineering posts built on a real problem, real numbers, runnable code, and trade-offs.
 - **[runbook-writer](runbook-writer)** — Write on-call runbooks with branching triage, exact commands, rollback, and escalation.
 - **[job-description-writer](job-description-writer)** — Write job postings with real work, few must-haves, the pay range, and the hiring process.
+- **[interview-scorecard-writer](interview-scorecard-writer)** — Build structured interview kits with behavioral anchors and write evidence-based feedback.
+- **[okr-writer](okr-writer)** — Write OKRs with outcome objectives, baseline-to-target key results, and separate initiatives.
 
 brand-guidelines and internal-comms from [anthropics/skills](https://github.com/anthropics/skills) are
 listed in the [main README](../../README.md#community-picks).
