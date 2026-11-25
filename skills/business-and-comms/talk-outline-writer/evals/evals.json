@@ -1,0 +1,39 @@
+{
+  "skill_name": "talk-outline-writer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Outline a 30-minute conference talk about migrating to Kubernetes.",
+      "expected_output": "Defines audience and one-sentence message, three points with evidence, a hook, ending with takeaways, a timed outline, and slide headlines.",
+      "files": [],
+      "expectations": [
+        "States a one-sentence message",
+        "At most three main points",
+        "Hook in the first minute, not an agenda",
+        "Timed sections that fit 30 minutes with slack",
+        "Ending before Q&A with next steps"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I want to cover 8 lessons we learned in my 20-minute talk.",
+      "expected_output": "Recommends cutting to three points that support one message and moving the rest to a blog post or appendix.",
+      "files": [],
+      "expectations": [
+        "Recommends at most three points",
+        "Suggests where the rest can go"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I'm doing a live demo of our CLI on stage over conference Wi-Fi.",
+      "expected_output": "Plans a scripted demo with pre-loaded data and a recorded fallback.",
+      "files": [],
+      "expectations": [
+        "Scripts the demo steps",
+        "Uses pre-loaded or offline data",
+        "Has a recorded fallback"
+      ]
+    }
+  ]
+}

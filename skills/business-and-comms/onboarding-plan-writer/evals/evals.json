@@ -1,0 +1,40 @@
+{
+  "skill_name": "onboarding-plan-writer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write an onboarding plan for a new data analyst starting Monday. Buddy is Sam.",
+      "expected_output": "Writes a plan with pre-day-one access, a day-by-day first week with a first delivered task, checkable 30/60/90 outcomes, people to meet, and check-ins, with TODOs for unknowns.",
+      "files": [],
+      "expectations": [
+        "Pre-day-one access and setup",
+        "First real deliverable in week one",
+        "30/60/90 outcomes are checkable",
+        "People-to-meet table",
+        "Uses TODO for unknown names/projects"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Just give them the wiki and some docs to read for the first two weeks.",
+      "expected_output": "Recommends a real starter task in week one alongside limited reading, explaining why.",
+      "files": [],
+      "expectations": [
+        "Pushes back on a reading-only start",
+        "Proposes a scoped starter task",
+        "Keeps reading as supporting links"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "My new hire is 6 weeks in and hasn't shipped anything.",
+      "expected_output": "Suggests a reset with a small scoped deliverable, a buddy, and written near-term milestones.",
+      "files": [],
+      "expectations": [
+        "Asks about blockers",
+        "Proposes a small concrete deliverable with a reviewer",
+        "Sets written near-term milestones"
+      ]
+    }
+  ]
+}

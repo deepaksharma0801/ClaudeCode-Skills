@@ -16,6 +16,8 @@ Skills for status updates, meeting follow-ups, and consistent writing.
 - **[job-description-writer](job-description-writer)** — Write job postings with real work, few must-haves, the pay range, and the hiring process.
 - **[interview-scorecard-writer](interview-scorecard-writer)** — Build structured interview kits with behavioral anchors and write evidence-based feedback.
 - **[okr-writer](okr-writer)** — Write OKRs with outcome objectives, baseline-to-target key results, and separate initiatives.
+- **[onboarding-plan-writer](onboarding-plan-writer)** — Write 30/60/90 onboarding plans with a first win in week one and named contacts.
+- **[talk-outline-writer](talk-outline-writer)** — Outline a talk around one message: hook, three points, timed sections, slide plan.
 
 brand-guidelines and internal-comms from [anthropics/skills](https://github.com/anthropics/skills) are
 listed in the [main README](../../README.md#community-picks).
