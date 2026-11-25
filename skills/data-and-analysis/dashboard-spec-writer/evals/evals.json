@@ -1,0 +1,39 @@
+{
+  "skill_name": "dashboard-spec-writer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Design a dashboard for our sales leadership.",
+      "expected_output": "Starts from audience, cadence, and decisions; defines metrics with comparisons; picks charts by comparison; lays out headline numbers first; adds alerts and an owner.",
+      "files": [],
+      "expectations": [
+        "Lists audience, cadence, and decisions",
+        "Each tile maps to a question and a defined metric",
+        "Every number has a comparison",
+        "Headline numbers first, limited tile count",
+        "Includes alerts and an owner/freshness"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Put every metric we have on one dashboard so people can find anything.",
+      "expected_output": "Pushes back on a tile-per-metric dashboard and proposes a focused first screen with drill-downs.",
+      "files": [],
+      "expectations": [
+        "Does not create a tile per metric",
+        "Ties tiles to decisions",
+        "Proposes drill-down pages for detail"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Make the tile turn red when error rate is high, that's our alerting.",
+      "expected_output": "Explains a red tile isn't alerting and specifies an alert with threshold, duration, and recipient.",
+      "files": [],
+      "expectations": [
+        "Says color is not an alert",
+        "Specifies threshold, duration, and recipient"
+      ]
+    }
+  ]
+}
