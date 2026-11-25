@@ -1,0 +1,40 @@
+{
+  "skill_name": "time-series-forecast",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Forecast next quarter's weekly orders. We have 3 years of data.",
+      "expected_output": "Inspects seasonality and breaks, builds a seasonal naive baseline, tries a simple model, backtests with rolling origin, and reports a forecast with intervals and assumptions.",
+      "files": [],
+      "expectations": [
+        "Builds a seasonal naive baseline",
+        "Backtests on held-out periods",
+        "Compares error to the baseline",
+        "Reports prediction intervals",
+        "States assumptions"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Just give me one number for next year's revenue, no ranges.",
+      "expected_output": "Gives the point forecast but insists on including a range and explains why.",
+      "files": [],
+      "expectations": [
+        "Provides a point estimate",
+        "Also provides an interval or scenarios",
+        "Explains why the range matters"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "We launched 4 months ago, forecast the next 12 months with Prophet.",
+      "expected_output": "Explains the history is too short for yearly seasonality and offers scenarios or a short-horizon forecast instead.",
+      "files": [],
+      "expectations": [
+        "States the history is too short",
+        "Does not fit a yearly seasonal model as if reliable",
+        "Offers scenarios or a short horizon"
+      ]
+    }
+  ]
+}
