@@ -19,3 +19,4 @@ Skills for keeping secrets out of repos, finding risky dependencies, and testing
 - **[file-upload-review](file-upload-review)** — Review uploads end to end: type by content, server-side names, private storage, safe serving.
 - **[load-test-planner](load-test-planner)** — Plan k6 load tests from real traffic with SLO thresholds, then find the bottleneck.
 - **[kubernetes-manifest-review](kubernetes-manifest-review)** — Review k8s YAML and Helm for security context, RBAC, secrets, probes, and limits.
+- **[rate-limiting-design](rate-limiting-design)** — Design rate limits with the right key, algorithm, traffic-based limits, and abuse controls.
