@@ -16,3 +16,5 @@ Skills for keeping secrets out of repos, finding risky dependencies, and testing
 - **[leaked-secret-response](leaked-secret-response)** — Respond to an exposed key: rotate first, check for abuse, then clean up and prevent.
 - **[injection-review](injection-review)** — Trace untrusted input to SQL, shell, template, HTML, URL, and file sinks, and fix structurally.
 - **[e2e-test-writer](e2e-test-writer)** — Write stable Playwright tests for critical flows with role locators and per-test data.
+- **[file-upload-review](file-upload-review)** — Review uploads end to end: type by content, server-side names, private storage, safe serving.
+- **[load-test-planner](load-test-planner)** — Plan k6 load tests from real traffic with SLO thresholds, then find the bottleneck.
