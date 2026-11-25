@@ -18,3 +18,4 @@ Skills for profiling data, checking queries, and reading experiment results.
 - **[sql-from-question](sql-from-question)** — Turn a question into correct SQL: confirm grain and keys, build in CTEs, cross-check the number.
 - **[dashboard-spec-writer](dashboard-spec-writer)** — Spec a dashboard from the decisions it supports: defined metrics, comparisons, layout, alerts.
 - **[dbt-model-review](dbt-model-review)** — Review dbt models for grain, fan-out, incremental logic, layering, and tests.
+- **[time-series-forecast](time-series-forecast)** — Forecast with a seasonal baseline, rolling backtests, and prediction intervals.
