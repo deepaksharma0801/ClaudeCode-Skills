@@ -16,3 +16,4 @@ Skills for profiling data, checking queries, and reading experiment results.
 - **[metric-drop-investigation](metric-drop-investigation)** — Explain a metric move: verify the data, size it, decompose by segment, match to events.
 - **[experiment-design](experiment-design)** — Design an A/B test up front: one metric, guardrails, sample size, and a decision rule.
 - **[sql-from-question](sql-from-question)** — Turn a question into correct SQL: confirm grain and keys, build in CTEs, cross-check the number.
+- **[dashboard-spec-writer](dashboard-spec-writer)** — Spec a dashboard from the decisions it supports: defined metrics, comparisons, layout, alerts.
