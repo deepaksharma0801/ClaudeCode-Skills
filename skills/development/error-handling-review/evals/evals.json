@@ -1,0 +1,40 @@
+{
+  "skill_name": "error-handling-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Review this: try: resp = requests.get(url); data = resp.json() except Exception: data = {}",
+      "expected_output": "Flags the swallowed broad exception, missing timeout, unchecked status, and recommends narrow catches and explicit failure handling.",
+      "files": [],
+      "expectations": [
+        "Flags swallowing Exception",
+        "Flags missing timeout",
+        "Flags not checking the HTTP status",
+        "Recommends narrow exception types"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Add retries to our payment POST so it's more reliable.",
+      "expected_output": "Recommends retries only for transient errors with backoff, jitter, a cap, and an idempotency key, warning about double charges.",
+      "files": [],
+      "expectations": [
+        "Warns about double charges on non-idempotent retries",
+        "Requires an idempotency key",
+        "Backoff with jitter and a max attempts cap",
+        "Retries only transient errors"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Our API returns the exception stack trace in 500 responses to help clients debug.",
+      "expected_output": "Recommends a stable error code and safe message for clients with details only in logs, tied by a request id.",
+      "files": [],
+      "expectations": [
+        "Says not to expose stack traces",
+        "Proposes a stable error shape",
+        "Logs details server-side with a request id"
+      ]
+    }
+  ]
+}
