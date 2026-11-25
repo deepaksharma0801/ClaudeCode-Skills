@@ -50,6 +50,19 @@ for a reader who will copy the code and check the numbers.
 6. **Review checklist before publishing:** numbers match sources, code runs, no confidential data,
    claims about other tools are fair and sourced, links work.
 
+## Output shape
+
+```markdown
+# <Specific title naming the result>
+<Opening: problem + why it matters, with a number>
+## Context              just enough system background
+## What we tried        including what failed, and why
+## The solution         runnable code/config, diagram if > 2 parts
+## Results              before/after numbers + how measured
+## Trade-offs           costs, limits, when not to use it
+## Takeaways            2–4 bullets
+```
+
 ## Checklist
 
 ```text

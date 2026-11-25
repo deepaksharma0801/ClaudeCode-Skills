@@ -76,6 +76,15 @@ what the workload really needs, and produces a scoped replacement.
 - `Allow` + `NotAction`.
 - Removing permissions in production without usage data.
 
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "We'll tighten it after launch." | Broad policies rarely get revisited; scope it now with access data. |
+| "It's only read access." | Read on S3 or Secrets Manager is often the breach. |
+| "The role is internal." | Compromised CI or a confused deputy can assume it. |
+| "`*` avoids AccessDenied surprises." | It also allows privilege escalation paths like PassRole and CreatePolicyVersion. |
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not fix `AccessDenied` errors by widening to `service:*` or `Resource: "*"`.

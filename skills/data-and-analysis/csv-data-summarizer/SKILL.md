@@ -82,6 +82,23 @@ skewed, what's related — and writes a short, numbers-backed summary.
 - [ ] "What stands out" ≤ 5 bullets, each with a number
 ```
 
+## Red Flags
+
+- Describing a column before computing its stats.
+- Treating a numeric-looking ID column as a measure.
+- Ignoring that a column is mostly empty strings rather than nulls.
+- Reporting a correlation without n or checking it's mechanical.
+- Profiling only the first 1,000 rows of a large file without saying so.
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "The header tells me what it is." | Headers lie; types and values tell the truth. |
+| "Sampling the head is enough." | Files are often sorted; the head can miss whole categories. |
+| "High correlation is an insight." | It's often mechanical (total vs. subtotal); check before reporting. |
+| "Missing values are just nulls." | Look for blanks, "N/A", 0, and sentinel dates too. |
+
 ## Anti-Patterns (What NOT to do)
 
 * **Asking which columns to analyze** — profile all of them; that's the point.

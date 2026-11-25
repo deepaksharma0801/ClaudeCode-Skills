@@ -75,6 +75,15 @@ headers), ranks the findings, and produces copy-paste config for the user's stac
 - `preload` on HSTS without checking subdomains.
 - The same header set in both the CDN and the app.
 
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "CSP breaks things, so skip it." | Roll it out in report-only mode first, then enforce. |
+| "We're behind a CDN, it handles headers." | Check the response actually served; CDNs often don't add them. |
+| "HSTS preload is free security." | It's hard to undo and breaks any HTTP-only subdomain. |
+| "X-XSS-Protection adds safety." | It's deprecated; CSP is the real control. |
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not enforce a strict CSP without a report-only phase; it will break real pages.

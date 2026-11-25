@@ -98,6 +98,23 @@ Owner / changed: <team>, <date and what changed>
 - [ ] Versioned definition card
 ```
 
+## Red Flags
+
+- "Active user" with no definition of active.
+- No time zone stated.
+- Test, internal, and bot accounts not mentioned.
+- A definition with no reference query.
+- Changing a published definition without a version bump.
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "Everyone knows what DAU means." | Ask three teams; you'll get three numbers. |
+| "Edge cases are rare." | Refunds, merges, and timezone boundaries move the number every month. |
+| "The SQL is the definition." | SQL without written intent can't be reviewed or reimplemented. |
+| "We'll just update it in place." | Silent changes break trend lines; version and note the change. |
+
 ## Anti-Patterns (What NOT to do)
 
 * **Leaving time zone, window, or exclusions implied** — they're the usual source of disagreements.

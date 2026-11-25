@@ -73,6 +73,15 @@ window), computes step and overall conversion, and breaks drop-off down by segme
 - Window "all time".
 - Mixing sessions and users in one table.
 
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "Unordered step counts are close enough." | Without ordering, later steps can include users who skipped earlier ones. |
+| "Use an all-time window." | It inflates conversion and hides recent changes; pick a window from real behavior. |
+| "The biggest drop is the problem." | Some steps are naturally lossy; compare to the step's own history and segments. |
+| "Tracking is fine." | A later step larger than an earlier one means it isn't. |
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not count step events independently of order (a "funnel" where step 3 exceeds step 2).

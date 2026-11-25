@@ -114,6 +114,23 @@ payloads, safety, and compatibility — and returns findings by severity with th
 - [ ] Findings grouped Must / Should / Consider with corrected designs
 ```
 
+## Red Flags
+
+- Reviewing a new endpoint without reading two existing ones first.
+- "It's just renaming a field." (Renames are breaking for every client.)
+- 200 OK with `{"error": ...}` in the body.
+- Offset pagination on a table that grows by millions of rows.
+- Calling a change "non-breaking" without checking enum additions, required fields, and defaults.
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "Only our frontend uses it." | Mobile apps on old versions, scripts, and partners call it too, often unseen. |
+| "We'll version it later." | Without a versioning plan, the first breaking change becomes an outage. |
+| "REST purity doesn't matter." | It doesn't. Consistency with the rest of *this* API does. |
+| "Clients should ignore unknown fields." | Many don't; strict deserializers break on additions to enums. |
+
 ## Anti-Patterns (What NOT to do)
 
 * **Imposing a new convention on one endpoint** — clients now need two code paths; match the API.

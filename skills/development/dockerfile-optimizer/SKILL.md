@@ -94,6 +94,23 @@ exec-form commands — rewrites it, and measures the result.
 - [ ] Rebuilt, measured, run, and non-root confirmed
 ```
 
+## Red Flags
+
+- Claiming "the image is much smaller" without `docker images` numbers.
+- Switching `FROM node:20` to `alpine` without checking native modules and glibc.
+- `COPY . .` before installing dependencies.
+- Secrets passed with `ARG` or `ENV`.
+- Changing `CMD`/`ENTRYPOINT` without calling it a behavior change.
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "Alpine is always smaller and better." | musl can break native deps and DNS behavior; distroless or slim is often safer. |
+| "Running as root is fine in a container." | A container escape or mounted volume then runs as root on the host. |
+| "Layer order doesn't matter much." | It decides whether a code change rebuilds dependencies on every build. |
+| "It works, so it's correct." | Verify the same entrypoint, env, ports, and health check as before. |
+
 ## Anti-Patterns (What NOT to do)
 
 * **Changing the start command, port, or environment silently** — that's a behavior change; call it out.

@@ -67,6 +67,23 @@ tracing across boundaries, and a small set of symptom-based alerts.
 - [ ] Verified: one request shows the same trace_id in log, metric exemplar/trace
 ```
 
+## Red Flags
+
+- A metric label containing user id, email, URL with ids, or request id.
+- Logging whole request or response bodies "for debugging".
+- `console.log` / `print` strings instead of structured fields.
+- Adding traces without propagating context across service and queue boundaries.
+- No alert or dashboard question behind a new metric.
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|---|---|
+| "More logs are always better." | Unstructured volume costs money and buries the line you need. |
+| "A user_id label is useful." | Unbounded label values explode metric cardinality and cost. |
+| "We'll add tracing when there's an incident." | You can't trace an incident that already happened. |
+| "Logging the payload is fine internally." | Logs are widely readable and retained; payloads leak secrets and PII. |
+
 ## Anti-Patterns (What NOT to do)
 
 * Do not log full request or response bodies, headers with tokens, or personal data.
