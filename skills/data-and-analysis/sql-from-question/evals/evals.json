@@ -1,0 +1,40 @@
+{
+  "skill_name": "sql-from-question",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "How many active customers did we have last month? Here's the schema.",
+      "expected_output": "Restates the definition and time range, checks grain and status values, writes CTE-based SQL with half-open dates, and cross-checks the result.",
+      "files": [],
+      "expectations": [
+        "States the definition of 'active' and the timezone",
+        "Checks table grain or uniqueness",
+        "Uses half-open date ranges",
+        "Lists assumptions",
+        "Proposes a cross-check"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Total revenue by customer: join orders to order_items and sum orders.total.",
+      "expected_output": "Spots the fan-out from joining a line-item table and aggregates before joining.",
+      "files": [],
+      "expectations": [
+        "Identifies the one-to-many fan-out",
+        "Aggregates before joining or avoids the join",
+        "Does not use DISTINCT as the fix"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Why does my NOT IN subquery return zero rows?",
+      "expected_output": "Explains NULLs in the subquery make NOT IN never true and rewrites with NOT EXISTS.",
+      "files": [],
+      "expectations": [
+        "Explains the NULL behavior of NOT IN",
+        "Rewrites with NOT EXISTS",
+        "Suggests checking for NULLs"
+      ]
+    }
+  ]
+}
