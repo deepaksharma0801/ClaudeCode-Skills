@@ -60,6 +60,20 @@ feedback that cites evidence per competency and ends with a clear recommendation
 9. End with an overall recommendation (strong no / no / yes / strong yes) and the one thing
    that most drove it. If evidence for a competency is missing, say so instead of guessing.
 
+## Output shape
+
+```markdown
+# Interview: <name> (<length>) — <role, level>
+Competencies assessed: <1–3>
+Exercise / main questions   same for every candidate
+Probes                      2–3 per question
+Anchors                     table per competency: 1 | 2 | 3 | 4 (observable behavior)
+
+Feedback (per candidate)
+<Competency> — <rating>     evidence bullets, concerns with evidence
+Recommendation              strong no / no / yes / strong yes + main reason
+```
+
 ## Checklist
 
 ```text
